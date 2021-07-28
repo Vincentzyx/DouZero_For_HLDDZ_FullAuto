@@ -155,6 +155,7 @@ class GameHelper:
         self.PicsCV = {}
         self.Handle = win32gui.FindWindow("Hlddz", None)
         self.Interrupt = False
+        self.RealRate = (1796, 1047)
         for file in os.listdir("./pics"):
             info = file.split(".")
             if info[1] == "png":
@@ -190,7 +191,11 @@ class GameHelper:
         saveDC.DeleteDC()
         mfcDC.DeleteDC()
         win32gui.ReleaseDC(hwnd, hwndDC)
-        im = im.resize((1796, 1047))
+        im = im.resize((1800, 1050))
+        self.RealRate = (width, height)
+        # print(width, height)
+        # print(self.RealRate)
+        # time.sleep(2)
         if region is not None:
             im = im.crop((region[0], region[1], region[0] + region[2], region[1] + region[3]))
         if result:
@@ -207,7 +212,7 @@ class GameHelper:
         image, _ = self.Screenshot()
         result = pyautogui.locate(needleImage=self.Pics[templateName], haystackImage=image, confidence=confidence, region=region)
         if result is not None:
-            self.LeftClick((result[0],result[1]))
+            self.LeftClick((result[0], result[1]))
 
     def GetCardsState(self, image):
         st = time.time()
@@ -341,6 +346,10 @@ class GameHelper:
 
     def LeftClick(self, pos):
         x, y = pos
+        x = (x / 1800) * self.RealRate[0] * self.ScreenZoomRate
+        y = (y / 1050) * self.RealRate[1] * self.ScreenZoomRate
+        x = int(x)
+        y = int(y)
         lParam = win32api.MAKELONG(x, y)
         win32gui.PostMessage(self.Handle, WM_MOUSEMOVE, MK_LBUTTON, lParam)
         win32gui.PostMessage(self.Handle, WM_LBUTTONDOWN, MK_LBUTTON, lParam)

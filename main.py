@@ -430,6 +430,9 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             if play_btn is not None:
                 helper.LeftClick((play_btn[0], play_btn[1]))
                 self.beforeStart()
+                img, _ = helper.Screenshot()
+                img = gh.DrawRectWithText(img, (play_btn[0], play_btn[1],10,10))
+                gh.ShowImg(img)
 
     def beforeStart(self):
         GameHelper.Interrupt = True
