@@ -8,10 +8,12 @@
 
 ## 说明
 *   欢乐斗地主使用窗口模式运行
+*   **如果觉得这个项目有用，请给一个Star谢谢！**
 *   **本项目仅供学习以及技术交流，请勿用于其它目的，否则后果自负。**
 
 ## 使用步骤
-1. 点击游戏中开始游戏后点击程序的`自动开始`
+1. 修改程序中屏幕缩放比为自己屏幕的缩放比
+2. 点击游戏中开始游戏后点击程序的`自动开始`
 
 ## 潜在Bug
 *   有较低几率把出牌识别为不出，从而卡在自己出牌阶段。
@@ -19,3 +21,10 @@
 
 ## 鸣谢
 *   本项目基于[DouZero](https://github.com/kwai/DouZero)  [DouZero_For_Happy_DouDiZhu](https://github.com/tianqiraf/DouZero_For_HappyDouDiZhu) 
+*   
+
+## 其他
+
+欢迎加入QQ群交流自动化相关：565142377
+
+也可以在原作者[DouZero_For_Happy_DouDiZhu](https://github.com/tianqiraf/DouZero_For_HappyDouDiZhu) 的QQ群交流
