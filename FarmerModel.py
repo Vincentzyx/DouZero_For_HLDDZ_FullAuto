@@ -54,10 +54,16 @@ class Net(nn.Module):
 
 Nets = {"up": Net(), "down": Net()}
 if os.path.exists("landlord_up_weights.pkl"):
-    Nets["up"].load_state_dict(torch.load("landlord_up_weights.pkl"))
+    if torch.cuda.is_available():
+        Nets["up"].load_state_dict(torch.load("landlord_up_weights.pkl"))
+    else:
+        Nets["up"].load_state_dict(torch.load("landlord_up_weights.pkl", map_location=torch.device("cpu")))
     Nets["up"].eval()
 if os.path.exists("landlord_down_weights.pkl"):
-    Nets["down"].load_state_dict(torch.load("landlord_down_weights.pkl"))
+    if torch.cuda.is_available():
+        Nets["up"].load_state_dict(torch.load("landlord_down_weights.pkl"))
+    else:
+        Nets["up"].load_state_dict(torch.load("landlord_down_weights.pkl", map_location=torch.device("cpu")))
     Nets["down"].eval()
 
 def predict(cards, llc, type="up"):
