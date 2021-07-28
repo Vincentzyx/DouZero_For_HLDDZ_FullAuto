@@ -213,6 +213,7 @@ class GameHelper:
 
     def GetCardsState(self, image):
         st = time.time()
+        imgCv = cv2.cvtColor(np.asarray(image), cv2.COLOR_RGB2BGR)
         states = []
         cardStartPos = pyautogui.locate(needleImage=self.Pics["card_edge"], haystackImage=image,
                                         region=(313, 747, 1144, 200), confidence=0.85)
@@ -222,59 +223,19 @@ class GameHelper:
         cardSearchFrom = 0
         sy, sw, sh = 770, 50, 55
         for i in range(0, 20):
-            haveWhite = pyautogui.locate(needleImage=self.Pics["card_white"], haystackImage=image,
-                                         region=(sx + 50 * i, sy, 50, 50), confidence=0.8)
+            haveWhite = LocateOnImage(imgCv, self.PicsCV["card_white"], region=(sx + 50 * i, sy, 60, 60), confidence=0.9)
             if haveWhite is not None:
                 break
-            result = pyautogui.locate(needleImage=self.Pics["card_upper_edge"], haystackImage=image,
-                                      region=(sx + 50 * i, 720, sw, 38), confidence=0.9)
+            result = LocateOnImage(imgCv, self.PicsCV["card_upper_edge"], region=(sx + 50 * i, 720, sw, 50), confidence=0.9)
             checkSelect = 0
             if result is not None:
-                result = pyautogui.locate(needleImage=self.Pics['card_overlap'], haystackImage=image,
-                                          region=(sx + 50 * i, 750, sw, 38), confidence=0.85)
+                result = LocateOnImage(imgCv, self.PicsCV["card_overlap"], region=(sx + 50 * i, 750, sw, 50), confidence=0.85)
                 if result is None:
                     checkSelect = 1
             states.append(checkSelect)
         print("GetStates Costs ", time.time()-st)
         return states
 
-    def GetCardsMulti(self, image):
-        st = time.time()
-        cardStartPos = pyautogui.locate(needleImage=self.Pics["card_edge"], haystackImage=image,
-                                        region=(313, 747, 1144, 200), confidence=0.85)
-        if cardStartPos is None:
-            return [],[]
-        sx = cardStartPos[0] + 10
-        AllCardsNC = ['rD', 'bX', '2', 'A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3']
-        hand_cards = []
-        select_map = []
-        cardSearchFrom = 0
-        sy, sw, sh = 770, 50, 55
-        for i in range(0, 20):
-            haveWhite = pyautogui.locate(needleImage=self.Pics["card_white"], haystackImage=image,
-                                         region=(sx + 50 * i, sy, 60, 60), confidence=0.8)
-            if haveWhite is not None:
-                break
-            result = pyautogui.locate(needleImage=self.Pics["card_upper_edge"], haystackImage=image,
-                                      region=(sx + 50 * i, 720, sw, 50), confidence=0.9)
-            checkSelect = 0
-            if result is not None:
-                result = pyautogui.locate(needleImage=self.Pics['card_overlap'], haystackImage=image,
-                                          region=(sx + 50 * i, 750, sw, 50), confidence=0.85)
-                if result is None:
-                    checkSelect = 1
-            select_map.append(checkSelect)
-            ReqQueue.put((image, i, sx, sy, sw, sh, checkSelect))
-            QtWidgets.QApplication.processEvents(QEventLoop.AllEvents, 10)
-        st = time.time()
-        while len(hand_cards) != len(select_map):
-            while not ResultQueue.empty():
-                hand_cards.append(ResultQueue.get())
-            time.sleep(0.01)
-            QtWidgets.QApplication.processEvents(QEventLoop.AllEvents, 10)
-        hand_cards.sort(key=CompareCardInfo, reverse=True)
-        print("GetCardsMP Costs ", time.time()-st)
-        return hand_cards, select_map
 
     def GetCards(self, image):
         st = time.time()
