@@ -290,16 +290,19 @@ class GameHelper:
         cardSearchFrom = 0
         sy, sw, sh = 770, 50, 55
         for i in range(0, 20):
-            haveWhite = pyautogui.locate(needleImage=self.Pics["card_white"], haystackImage=image,
-                                         region=(sx + 50 * i, sy, 60, 60), confidence=0.8)
+            # haveWhite = pyautogui.locate(needleImage=self.Pics["card_white"], haystackImage=image,
+            #                              region=(sx + 50 * i, sy, 60, 60), confidence=0.8)
+            haveWhite = LocateOnImage(imgCv, self.PicsCV["card_white"], region=(sx + 50 * i, sy, 60, 60), confidence=0.9)
             if haveWhite is not None:
                 break
-            result = pyautogui.locate(needleImage=self.Pics["card_upper_edge"], haystackImage=image,
-                                      region=(sx + 50 * i, 720, sw, 50), confidence=0.9)
+            result = LocateOnImage(imgCv, self.PicsCV["card_upper_edge"], region=(sx + 50 * i, 720, sw, 50), confidence=0.9)
+            # result = pyautogui.locate(needleImage=self.Pics["card_upper_edge"], haystackImage=image,
+            #                           region=(sx + 50 * i, 720, sw, 50), confidence=0.9)
             checkSelect = 0
             if result is not None:
-                result = pyautogui.locate(needleImage=self.Pics['card_overlap'], haystackImage=image,
-                                          region=(sx + 50 * i, 750, sw, 50), confidence=0.85)
+                # result = pyautogui.locate(needleImage=self.Pics['card_overlap'], haystackImage=image,
+                #                           region=(sx + 50 * i, 750, sw, 50), confidence=0.85)
+                result = LocateOnImage(imgCv, self.PicsCV["card_overlap"], region=(sx + 50 * i, 750, sw, 50), confidence=0.85)
                 if result is None:
                     checkSelect = 1
             select_map.append(checkSelect)
