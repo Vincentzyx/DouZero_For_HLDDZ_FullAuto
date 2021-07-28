@@ -155,11 +155,11 @@ class GameHelper:
         self.PicsCV = {}
         self.Handle = win32gui.FindWindow("Hlddz", None)
         self.Interrupt = False
-        for file in os.listdir("pics"):
+        for file in os.listdir("./pics"):
             info = file.split(".")
             if info[1] == "png":
-                tmpImage = Image.open("pics/" + file)
-                imgCv = cv2.imread("pics/" + file)
+                tmpImage = Image.open("./pics/" + file)
+                imgCv = cv2.imread("./pics/" + file)
                 self.Pics.update({info[0]: tmpImage})
                 self.PicsCV.update({info[0]: imgCv})
 

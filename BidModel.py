@@ -57,11 +57,11 @@ net = Net()
 net.eval()
 if UseGPU:
     net = net.to(device)
-if os.path.exists("bid_weights.pkl"):
+if os.path.exists("./bid_weights.pkl"):
     if torch.cuda.is_available():
-        net.load_state_dict(torch.load('bid_weights.pkl'))
+        net.load_state_dict(torch.load('./bid_weights.pkl'))
     else:
-        net.load_state_dict(torch.load('bid_weights.pkl', map_location=torch.device("cpu")))
+        net.load_state_dict(torch.load('./bid_weights.pkl', map_location=torch.device("cpu")))
 
 def predict(cards):
     input = RealToOnehot(cards)
