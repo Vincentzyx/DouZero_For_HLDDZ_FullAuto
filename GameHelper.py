@@ -191,11 +191,8 @@ class GameHelper:
         saveDC.DeleteDC()
         mfcDC.DeleteDC()
         win32gui.ReleaseDC(hwnd, hwndDC)
-        im = im.resize((1800, 1050))
+        im = im.resize((1798, 1047))
         self.RealRate = (width, height)
-        # print(width, height)
-        # print(self.RealRate)
-        # time.sleep(2)
         if region is not None:
             im = im.crop((region[0], region[1], region[0] + region[2], region[1] + region[3]))
         if result:

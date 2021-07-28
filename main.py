@@ -325,7 +325,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         return None
 
     def detect_start_btn(self):
-        result = helper.LocateOnScreen("change_player_btn", region=(667, 741, 934, 404))
+        result = helper.LocateOnScreen("change_player_btn", region=(400, 400, 934, 404))
         if result is not None:
             self.RunGame = False
             self.stop()
@@ -423,9 +423,9 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         except AttributeError as e:
             pass
         if self.AutoPlay:
-            play_btn = helper.LocateOnScreen("change_player_btn", region=(667, 741, 934, 404))
+            play_btn = helper.LocateOnScreen("change_player_btn", region=(400, 400, 934, 404))
             while play_btn is None and self.AutoPlay:
-                play_btn = helper.LocateOnScreen("change_player_btn", region=(667, 741, 934, 404))
+                play_btn = helper.LocateOnScreen("change_player_btn", region=(400, 400, 934, 404))
                 self.sleep(100)
             if play_btn is not None:
                 helper.LeftClick((play_btn[0], play_btn[1]))
