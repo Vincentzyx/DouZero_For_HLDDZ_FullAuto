@@ -55,7 +55,6 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         window_pale = QtGui.QPalette()
         # window_pale.setBrush(self.backgroundRole(), QtGui.QBrush(QtGui.QPixmap("pics/bg.png")))
         self.setPalette(window_pale)
-
         self.Players = [self.RPlayer, self.Player, self.LPlayer]
         self.counter = QTime()
 
