@@ -172,6 +172,7 @@ class GameHelper:
         left, top, right, bot = win32gui.GetWindowRect(hwnd)
         width = right - left
         height = bot - top
+        self.RealRate = (width, height)
         width = int(width / self.ScreenZoomRate)
         height = int(height / self.ScreenZoomRate)
         hwndDC = win32gui.GetWindowDC(hwnd)
@@ -192,7 +193,6 @@ class GameHelper:
         mfcDC.DeleteDC()
         win32gui.ReleaseDC(hwnd, hwndDC)
         im = im.resize((1798, 1047))
-        self.RealRate = (width, height)
         if region is not None:
             im = im.crop((region[0], region[1], region[0] + region[2], region[1] + region[3]))
         if result:
@@ -235,7 +235,6 @@ class GameHelper:
             states.append(checkSelect)
         print("GetStates Costs ", time.time()-st)
         return states
-
 
     def GetCards(self, image):
         st = time.time()
@@ -307,8 +306,8 @@ class GameHelper:
 
     def LeftClick(self, pos):
         x, y = pos
-        x = (x / 1800) * self.RealRate[0] * self.ScreenZoomRate
-        y = (y / 1050) * self.RealRate[1] * self.ScreenZoomRate
+        x = (x / 1798) * self.RealRate[0]
+        y = (y / 1047) * self.RealRate[1]
         x = int(x)
         y = int(y)
         lParam = win32api.MAKELONG(x, y)
