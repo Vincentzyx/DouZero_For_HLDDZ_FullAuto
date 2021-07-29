@@ -30,7 +30,6 @@
 
 ## 鸣谢
 *   本项目基于[DouZero](https://github.com/kwai/DouZero)  [DouZero_For_Happy_DouDiZhu](https://github.com/tianqiraf/DouZero_For_HappyDouDiZhu) 
-*   
 
 ## 其他
 
