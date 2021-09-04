@@ -165,8 +165,9 @@ class GameHelper:
                 self.PicsCV.update({info[0]: imgCv})
 
     def Screenshot(self, region=None):  # -> (im, (left, top))
+        self.Handle = win32gui.FindWindow("Hlddz", None)
         hwnd = self.Handle
-        # im = Image.open(r"C:\Users\q9294\Desktop\llc.png")
+        # im = Image.open(r"C:\Users\q9294\Desktop\Snipaste_2021-09-05_00-52-51.png")
         # im = im.resize((1796, 1047))
         # return im, (0,0)
         left, top, right, bot = win32gui.GetWindowRect(hwnd)
@@ -315,11 +316,14 @@ class GameHelper:
         win32gui.PostMessage(self.Handle, WM_LBUTTONDOWN, MK_LBUTTON, lParam)
         win32gui.PostMessage(self.Handle, WM_LBUTTONUP, MK_LBUTTON, lParam)
 
-    def SelectCards(self, cards):
+    def SelectCards(self, cards, no_check=False):
+        print("选择牌", cards)
         cards = [card for card in cards]
         tobeSelected = []
         tobeSelected.extend(cards)
         image, windowPos = self.Screenshot()
+        while image.size[0] == 0:
+            image, windowPos = self.Screenshot()
         handCardsInfo, states = self.GetCards(image)
         cardSelectMap = []
         for card in handCardsInfo:
@@ -340,11 +344,16 @@ class GameHelper:
             for i in range(0, len(clickMap)):
                 if clickMap[i] == 1:
                     self.LeftClick(handCardsInfo[i][1])
+                    print("点击", handCardsInfo[i][1])
                     break
             time.sleep(0.1)
             if self.Interrupt:
                 break
+            if no_check:
+                return
             image, _ = self.Screenshot()
+            while image.size[0] == 0:
+                image, windowPos = self.Screenshot()
             states = self.GetCardsState(image)
             clickMap = []
             for i in range(0, len(cardSelectMap)):

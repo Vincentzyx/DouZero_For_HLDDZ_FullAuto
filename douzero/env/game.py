@@ -401,13 +401,13 @@ class InfoSet(object):
         self.player_position = player_position
         # The hand cands of the current player. A list.
         self.player_hand_cards = None
-        # The number of cards left for each player. It is a dict with str-->int 
+        # The number of cards left for each player. It is a dict with str-->int
         self.num_cards_left_dict = None
         # The three landload cards. A list.
         self.three_landlord_cards = None
         # The historical moves. It is a list of list
         self.card_play_action_seq = None
-        # The union of the hand cards of the other two players for the current player 
+        # The union of the hand cards of the other two players for the current player
         self.other_hand_cards = None
         # The legal actions for the current move. It is a list of list
         self.legal_actions = None
@@ -419,9 +419,18 @@ class InfoSet(object):
         self.last_move_dict = None
         # The played cands so far. It is a list.
         self.played_cards = None
-        # The hand cards of all the players. It is a dict. 
+        # The hand cards of all the players. It is a dict.
         self.all_handcards = None
         # Last player position that plays a valid move, i.e., not `pass`
         self.last_pid = None
         # The number of bombs played so far
         self.bomb_num = None
+
+        self.bid_info = [[-1, -1, -1],
+                         [-1, -1, -1],
+                         [-1, -1, -1],
+                         [-1, -1, -1]]
+
+        self.multiply_info = [1, 0, 0]
+
+        self.player_id = None

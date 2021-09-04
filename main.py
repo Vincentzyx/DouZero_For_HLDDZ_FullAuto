@@ -21,6 +21,7 @@ from MainWindow import Ui_Form
 
 from douzero.env.game import GameEnv
 from douzero.evaluation.deep_agent import DeepAgent
+import traceback
 
 import BidModel
 import LandlordModel
@@ -83,7 +84,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.shouldExit = 0  # 通知上一轮记牌结束
         self.canRecord = threading.Lock()  # 开始记牌
         self.card_play_model_path_dict = {
-            'landlord': "baselines/douzero_ADP/landlord.ckpt",
+            'landlord': "baselines/resnet/resnet_landlord_1613536300.ckpt",
             'landlord_up': "baselines/douzero_ADP/landlord_up.ckpt",
             'landlord_down': "baselines/douzero_ADP/landlord_down.ckpt"
         }
@@ -199,9 +200,13 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         ai_players[1] = DeepAgent(self.user_position, self.card_play_model_path_dict[self.user_position])
 
         self.env = GameEnv(ai_players)
+
         try:
             self.start()
-        except:
+        except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            print(e)
+            traceback.print_tb(exc_tb)
             self.stop()
 
     def sleep(self, ms):
@@ -225,12 +230,16 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 self.WinRate.setText("评分：" + action_message["win_rate"])
                 print("\n手牌：", str(''.join(
                     [EnvCard2RealCard[c] for c in self.env.info_sets[self.user_position].player_hand_cards])))
-                print("出牌：", action_message["action"] if action_message["action"] else "不出", "， 胜率：",
+                print("出牌：", action_message["action"] if action_message["action"] else "不出", "，得分：",
                       action_message["win_rate"])
                 if action_message["action"] == "":
                     helper.ClickOnImage("pass_btn", region=self.PassBtnPos)
                 else:
-                    helper.SelectCards(action_message["action"])
+                    hand_cards_str = ''.join([EnvCard2RealCard[c] for c in self.env.info_sets[self.user_position].player_hand_cards])
+                    if len(hand_cards_str) == 0 and len(action_message["action"]) == 1:
+                        helper.SelectCards(action_message["action"], True)
+                    else:
+                        helper.SelectCards(action_message["action"])
                     tryCount = 20
                     result = helper.LocateOnScreen("play_card", region=self.PassBtnPos, confidence=0.85)
                     while result is None and tryCount > 0:
@@ -248,14 +257,14 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             elif self.play_order == 1:
                 self.RPlayedCard.setText("...")
                 pass_flag = helper.LocateOnScreen('pass',
-                                                       region=self.RPlayedCardsPos,
-                                                       confidence=self.PassConfidence)
+                                                  region=self.RPlayedCardsPos,
+                                                  confidence=self.PassConfidence)
                 self.detect_start_btn()
                 while self.RunGame and self.have_white(self.RPlayedCardsPos) == 0 and pass_flag is None:
                     print("等待下家出牌")
                     self.sleep(100)
                     pass_flag = helper.LocateOnScreen('pass', region=self.RPlayedCardsPos,
-                                                           confidence=self.PassConfidence)
+                                                      confidence=self.PassConfidence)
                     self.detect_start_btn()
                 self.sleep(200)
                 # 未找到"不出"
@@ -281,13 +290,13 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 self.LPlayedCard.setText("...")
                 self.detect_start_btn()
                 pass_flag = helper.LocateOnScreen('pass', region=self.LPlayedCardsPos,
-                                                       confidence=self.PassConfidence)
+                                                  confidence=self.PassConfidence)
                 while self.RunGame and self.have_white(self.LPlayedCardsPos) == 0 and pass_flag is None:
                     print("等待上家出牌")
                     self.detect_start_btn()
                     self.sleep(100)
                     pass_flag = helper.LocateOnScreen('pass', region=self.LPlayedCardsPos,
-                                                           confidence=self.PassConfidence)
+                                                      confidence=self.PassConfidence)
                 self.sleep(200)
                 # 不出
                 # 未找到"不出"
@@ -319,7 +328,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
     def find_landlord(self, landlord_flag_pos):
         for pos in landlord_flag_pos:
             result = helper.LocateOnScreen("landlord_words", region=pos,
-                                                confidence=self.LandlordFlagConfidence)
+                                           confidence=self.LandlordFlagConfidence)
             if result is not None:
                 return landlord_flag_pos.index(pos)
         return None
