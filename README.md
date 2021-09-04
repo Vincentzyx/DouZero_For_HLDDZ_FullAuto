@@ -2,7 +2,7 @@
 *   本项目基于[DouZero](https://github.com/kwai/DouZero) 和  [DouZero_For_Happy_DouDiZhu](https://github.com/tianqiraf/DouZero_For_HappyDouDiZhu) 
 *   环境配置请移步项目DouZero
 *   模型默认为ADP，更换模型请修改main.py中的模型路径
-*   运行main.py即可
+*   **如果需要更换新模型类型，请把Resnet新版模型或者General新版模型放置到对应目录中**
 *   在原 [DouZero_For_Happy_DouDiZhu](https://github.com/tianqiraf/DouZero_For_HappyDouDiZhu) 的基础上加入了自动出牌，基于手牌自动叫牌，加倍，同时修改截屏方式为窗口区域截屏，游戏原窗口遮挡不影响游戏进行。
 *   **请勿把游戏界面最小化，否则无法使用**
 
@@ -19,6 +19,7 @@
 3. 点击游戏中开始游戏后点击程序的 `自动开始`
 
 4. 如果需要自动继续下一把，点击单局按钮，使其变为自动
+
 
 ## 自动叫牌/加倍原理
 
