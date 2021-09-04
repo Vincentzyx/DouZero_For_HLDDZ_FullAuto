@@ -1,6 +1,7 @@
 from copy import deepcopy
 from . import move_detector as md, move_selector as ms
 from .move_generator import MovesGener
+import random
 
 EnvCard2RealCard = {3: '3', 4: '4', 5: '5', 6: '6', 7: '7',
                     8: '8', 9: '9', 10: 'T', 11: 'J', 12: 'Q',
@@ -18,7 +19,6 @@ bombs = [[3, 3, 3, 3], [4, 4, 4, 4], [5, 5, 5, 5], [6, 6, 6, 6],
          [7, 7, 7, 7], [8, 8, 8, 8], [9, 9, 9, 9], [10, 10, 10, 10],
          [11, 11, 11, 11], [12, 12, 12, 12], [13, 13, 13, 13], [14, 14, 14, 14],
          [17, 17, 17, 17], [20, 30]]
-
 
 class GameEnv(object):
 
@@ -52,12 +52,22 @@ class GameEnv(object):
                            'farmer': 0}
 
         self.info_sets = {'landlord': InfoSet('landlord'),
-                         'landlord_up': InfoSet('landlord_up'),
-                         'landlord_down': InfoSet('landlord_down')}
+                          'landlord_up': InfoSet('landlord_up'),
+                          'landlord_down': InfoSet('landlord_down')}
 
         self.bomb_num = 0
         self.last_pid = 'landlord'
-        self.winner = ""
+
+        self.bid_info = [[-1, -1, -1],
+                         [-1, -1, -1],
+                         [-1, -1, -1],
+                         [-1, -1, -1]]
+        self.bid_count = 0
+        self.multiply_count = {'landlord': 1,
+                               'landlord_up': 1,
+                               'landlord_down': 1}
+        self.step_count = 0
+
 
     def card_play_init(self, card_play_data):
         self.info_sets['landlord'].player_hand_cards = \
@@ -69,6 +79,7 @@ class GameEnv(object):
         self.three_landlord_cards = card_play_data['three_landlord_cards']
         self.get_acting_player_position()
         self.game_infoset = self.get_infoset()
+
 
     def game_done(self):
         if len(self.info_sets['landlord'].player_hand_cards) == 0 or \
@@ -147,7 +158,7 @@ class GameEnv(object):
         self.last_move_dict[
             self.acting_player_position] = action.copy()
 
-        self.card_play_action_seq.append(action)
+        self.card_play_action_seq.append((position, action))
         self.update_acting_player_hand_cards(action)
 
         self.played_cards[self.acting_player_position] += action
@@ -173,17 +184,17 @@ class GameEnv(object):
     def get_last_move(self):
         last_move = []
         if len(self.card_play_action_seq) != 0:
-            if len(self.card_play_action_seq[-1]) == 0:
-                last_move = self.card_play_action_seq[-2]
+            if len(self.card_play_action_seq[-1][1]) == 0:
+                last_move = self.card_play_action_seq[-2][1]
             else:
-                last_move = self.card_play_action_seq[-1]
+                last_move = self.card_play_action_seq[-1][1]
 
         return last_move
 
     def get_last_two_moves(self):
         last_two_moves = [[], []]
         for card in self.card_play_action_seq[-2:]:
-            last_two_moves.insert(0, card)
+            last_two_moves.insert(0, card[1])
             last_two_moves = last_two_moves[:2]
         return last_two_moves
 
@@ -203,7 +214,6 @@ class GameEnv(object):
 
         return self.acting_player_position
 
-    # 更新手牌
     def update_acting_player_hand_cards(self, action):
         if action != []:
             # 更新玩家手牌，删除对应的牌
@@ -223,10 +233,10 @@ class GameEnv(object):
 
         rival_move = []
         if len(action_sequence) != 0:
-            if len(action_sequence[-1]) == 0:
-                rival_move = action_sequence[-2]
+            if len(action_sequence[-1][1]) == 0:
+                rival_move = action_sequence[-2][1]
             else:
-                rival_move = action_sequence[-1]
+                rival_move = action_sequence[-1][1]
 
         rival_type = md.get_move_type(rival_move)
         rival_move_type = rival_type['type']
@@ -324,11 +334,20 @@ class GameEnv(object):
         self.last_two_moves = []
 
         self.info_sets = {'landlord': InfoSet('landlord'),
-                         'landlord_up': InfoSet('landlord_up'),
-                         'landlord_down': InfoSet('landlord_down')}
+                          'landlord_up': InfoSet('landlord_up'),
+                          'landlord_down': InfoSet('landlord_down')}
 
         self.bomb_num = 0
         self.last_pid = 'landlord'
+        self.bid_info = [[-1, -1, -1],
+                         [-1, -1, -1],
+                         [-1, -1, -1],
+                         [-1, -1, -1]]
+        self.bid_count = 0
+        self.multiply_count = {'landlord': 0,
+                               'landlord_up': 0,
+                               'landlord_down': 0}
+        self.step_count = 0
 
     def get_infoset(self):
         self.info_sets[

@@ -147,6 +147,19 @@ def LocateOnImage(image, template, region=None, confidence=0.9):
     else:
         return None
 
+def LocateAllOnImage(image, template, region=None, confidence=0.9):
+    if region is not None:
+        x, y, w, h = region
+        imgShape = image.shape
+        image = image[y:y+h, x:x+w,:]
+    w, h = image.shape[1], image.shape[0]
+    res = cv2.matchTemplate(image, template, cv2.TM_CCOEFF_NORMED)
+    loc = np.where( res >= confidence)
+    points = []
+    for pt in zip(*loc[::-1]):
+        points.append((pt[0], pt[1], w, h))
+    return points
+
 
 class GameHelper:
     def __init__(self):
