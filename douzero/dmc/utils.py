@@ -26,7 +26,7 @@ shandle.setFormatter(
     logging.Formatter(
         '[%(levelname)s:%(process)d %(module)s:%(lineno)d %(asctime)s] '
         '%(message)s'))
-log = logging.getLogger('doudzero')
+log = logging.getLogger('douzero')
 log.propagate = False
 log.addHandler(shandle)
 log.setLevel(logging.INFO)

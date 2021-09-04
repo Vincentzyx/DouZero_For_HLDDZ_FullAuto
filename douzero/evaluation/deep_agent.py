@@ -3,9 +3,21 @@ import numpy as np
 
 from douzero.env.env import get_obs
 
+<<<<<<< Updated upstream
 def _load_model(position, model_path):
     from douzero.dmc.models import model_dict
     model = model_dict[position]()
+=======
+def _load_model(position, model_path, model_type):
+    from douzero.dmc.models import model_dict_general, model_dict, model_dict_resnet
+    model = None
+    if model_type == "general":
+        model = model_dict_general[position]()
+    elif model_type == "resnet":
+        model = model_dict_resnet[position]()
+    else:
+        model = model_dict[position]()
+>>>>>>> Stashed changes
     model_state_dict = model.state_dict()
     if torch.cuda.is_available():
         pretrained = torch.load(model_path, map_location='cuda:0')
@@ -22,14 +34,27 @@ def _load_model(position, model_path):
 class DeepAgent:
 
     def __init__(self, position, model_path):
+<<<<<<< Updated upstream
         self.model = _load_model(position, model_path)
+=======
+        self.model_type = "old"
+        if "general" in model_path:
+            self.model_type = "general"
+        elif "resnet" in model_path:
+            self.model_type = "resnet"
+        self.model = _load_model(position, model_path, self.model_type)
+>>>>>>> Stashed changes
 
     def act(self, infoset):
         # 只有一个合法动作时直接返回，这样会得不到胜率信息
         # if len(infoset.legal_actions) == 1:
         #     return infoset.legal_actions[0], 0
 
+<<<<<<< Updated upstream
         obs = get_obs(infoset)
+=======
+        obs = get_obs(infoset, self.model_type)
+>>>>>>> Stashed changes
         z_batch = torch.from_numpy(obs['z_batch']).float()
         x_batch = torch.from_numpy(obs['x_batch']).float()
         if torch.cuda.is_available():

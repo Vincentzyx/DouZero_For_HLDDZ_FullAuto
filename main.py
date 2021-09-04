@@ -199,9 +199,17 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         ai_players[1] = DeepAgent(self.user_position, self.card_play_model_path_dict[self.user_position])
 
         self.env = GameEnv(ai_players)
+
         try:
             self.start()
+<<<<<<< Updated upstream
         except:
+=======
+        except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            print(e)
+            traceback.print_tb(exc_tb)
+>>>>>>> Stashed changes
             self.stop()
 
     def sleep(self, ms):
@@ -225,7 +233,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 self.WinRate.setText("评分：" + action_message["win_rate"])
                 print("\n手牌：", str(''.join(
                     [EnvCard2RealCard[c] for c in self.env.info_sets[self.user_position].player_hand_cards])))
-                print("出牌：", action_message["action"] if action_message["action"] else "不出", "， 胜率：",
+                print("出牌：", action_message["action"] if action_message["action"] else "不出", "，得分：",
                       action_message["win_rate"])
                 if action_message["action"] == "":
                     helper.ClickOnImage("pass_btn", region=self.PassBtnPos)
