@@ -165,9 +165,8 @@ class GameHelper:
                 self.PicsCV.update({info[0]: imgCv})
 
     def Screenshot(self, region=None):  # -> (im, (left, top))
-        self.Handle = win32gui.FindWindow("Hlddz", None)
         hwnd = self.Handle
-        # im = Image.open(r"C:\Users\q9294\Desktop\Snipaste_2021-09-05_00-52-51.png")
+        # im = Image.open(r"C:\Users\q9294\Desktop\llc.png")
         # im = im.resize((1796, 1047))
         # return im, (0,0)
         left, top, right, bot = win32gui.GetWindowRect(hwnd)
