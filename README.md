@@ -1,9 +1,24 @@
 # DouZero_For_HLDDZ_FullAuto: 将DouZero用于欢乐斗地主自动化
-*   本项目基于[DouZero](https://github.com/kwai/DouZero) 和  [DouZero_For_Happy_DouDiZhu](https://github.com/tianqiraf/DouZero_For_HappyDouDiZhu) 
-*   环境配置请移步项目DouZero
-*   模型默认为ADP，更换模型请修改main.py中的模型路径
-*   运行main.py即可
-*   在原 [DouZero_For_Happy_DouDiZhu](https://github.com/tianqiraf/DouZero_For_HappyDouDiZhu) 的基础上加入了自动出牌，基于手牌自动叫牌，加倍，同时修改截屏方式为窗口区域截屏，游戏原窗口遮挡不影响游戏进行。
+* 本项目基于[DouZero](https://github.com/kwai/DouZero) 和  [DouZero_For_Happy_DouDiZhu](https://github.com/tianqiraf/DouZero_For_HappyDouDiZhu) 
+
+* 环境配置请移步项目DouZero
+
+* 模型默认为ADP，更换模型请修改main.py中的模型路径，如果需要加载Resnet新模型，请保证游戏路径或文件名中存在关键词 "resnet"
+
+  ```python
+  self.card_play_model_path_dict = {
+      'landlord': "baselines/resnet_landlord.ckpt",
+      'landlord_up': "baselines/resnet_landlord_up.ckpt",
+      'landlord_down': "baselines/resnet_landlord_down.ckpt"
+  }
+  ```
+
+* 
+
+* 运行main.py即可
+
+* 在原 [DouZero_For_Happy_DouDiZhu](https://github.com/tianqiraf/DouZero_For_HappyDouDiZhu) 的基础上加入了自动出牌，基于手牌自动叫牌，加倍，同时修改截屏方式为窗口区域截屏，游戏原窗口遮挡不影响游戏进行。
+
 *   **请勿把游戏界面最小化，否则无法使用**
 
 ## 说明
