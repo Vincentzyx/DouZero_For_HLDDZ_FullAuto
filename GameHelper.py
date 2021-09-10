@@ -253,8 +253,16 @@ class GameHelper:
     def GetCards(self, image):
         st = time.time()
         imgCv = cv2.cvtColor(np.asarray(image), cv2.COLOR_RGB2BGR)
+        tryCount = 10
         cardStartPos = pyautogui.locate(needleImage=self.Pics["card_edge"], haystackImage=image,
-                                        region=(313, 747, 1144, 200), confidence=0.85)
+                                        region=(313, 747, 1144, 200), confidence=0.80)
+        while cardStartPos is None and tryCount > 0:
+            cardStartPos = pyautogui.locate(needleImage=self.Pics["card_edge"], haystackImage=image,
+                                            region=(313, 747, 1144, 200), confidence=0.80)
+            print("找不到手牌起始位置")
+            tryCount -= 1
+            self.sleep(150)
+        print("start pos", cardStartPos)
         if cardStartPos is None:
             return [],[]
         sx = cardStartPos[0] + 10
@@ -266,25 +274,27 @@ class GameHelper:
         for i in range(0, 20):
             # haveWhite = pyautogui.locate(needleImage=self.Pics["card_white"], haystackImage=image,
             #                              region=(sx + 50 * i, sy, 60, 60), confidence=0.8)
-            haveWhite = LocateOnImage(imgCv, self.PicsCV["card_white"], region=(sx + 50 * i, sy, 60, 60), confidence=0.9)
+            haveWhite = LocateOnImage(imgCv, self.PicsCV["card_white"], region=(sx + 50 * i, sy, 60, 60), confidence=0.88)
             if haveWhite is not None:
                 break
-            result = LocateOnImage(imgCv, self.PicsCV["card_upper_edge"], region=(sx + 50 * i, 720, sw, 50), confidence=0.9)
+            result = LocateOnImage(imgCv, self.PicsCV["card_upper_edge"], region=(sx + 50 * i, 720, sw, 50), confidence=0.88)
             # result = pyautogui.locate(needleImage=self.Pics["card_upper_edge"], haystackImage=image,
             #                           region=(sx + 50 * i, 720, sw, 50), confidence=0.9)
             checkSelect = 0
             if result is not None:
                 # result = pyautogui.locate(needleImage=self.Pics['card_overlap'], haystackImage=image,
                 #                           region=(sx + 50 * i, 750, sw, 50), confidence=0.85)
-                result = LocateOnImage(imgCv, self.PicsCV["card_overlap"], region=(sx + 50 * i, 750, sw, 50), confidence=0.85)
+                result = LocateOnImage(imgCv, self.PicsCV["card_overlap"], region=(sx + 50 * i, 750, sw, 50), confidence=0.83)
                 if result is None:
                     checkSelect = 1
             select_map.append(checkSelect)
             currCard = ""
+            forBreak = False
             ci = cardSearchFrom
             while ci < len(AllCardsNC):
                 if "r" in AllCardsNC[ci] or "b" in AllCardsNC[ci]:
-                    result = LocateOnImage(imgCv, self.PicsCV["m" + AllCardsNC[ci]], region=(sx + 50 * i, sy - checkSelect * 25, sw, sh), confidence=0.91)
+                    outerBreak = False
+                    result = LocateOnImage(imgCv, self.PicsCV["m" + AllCardsNC[ci]], region=(sx + 50 * i, sy - checkSelect * 25, sw, sh), confidence=0.89)
                     # result = pyautogui.locate(needleImage=self.Pics["m" + AllCardsNC[ci]], haystackImage=image,
                     #                           region=(sx + 50 * i, sy - checkSelect * 25, sw, sh), confidence=0.9)
                     if result is not None:
@@ -293,6 +303,8 @@ class GameHelper:
                         currCard = AllCardsNC[ci][1]
                         cardInfo = (currCard, cardPos)
                         hand_cards.append(cardInfo)
+                        outerBreak = True
+                        break
                 else:
                     outerBreak = False
                     for card_type in ["r", "b"]:
@@ -314,6 +326,10 @@ class GameHelper:
                         checkSelect = 1
                         ci = cardSearchFrom - 1
                 ci += 1
+                if ci == len(AllCardsNC):
+                    forBreak = True
+            if forBreak:
+                break
             QtWidgets.QApplication.processEvents(QEventLoop.AllEvents, 10)
         print("GetCards Costs ", time.time()-st)
         return hand_cards, select_map

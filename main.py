@@ -96,9 +96,6 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             'landlord_up': "baselines/douzero_ADP/landlord_up.ckpt",
             'landlord_down': "baselines/douzero_ADP/landlord_down.ckpt"
         }
-        # cards = self.find_three_landlord_cards(self.ThreeLandlordCardsPos)
-        # print(cards)
-        # exit()
 
     def init_display(self):
         self.WinRate.setText("评分")
