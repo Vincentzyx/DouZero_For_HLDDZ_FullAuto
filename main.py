@@ -74,12 +74,13 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.SleepTime = 0.1  # 循环中睡眠时间
         self.RunGame = False
         self.AutoPlay = False
-        self.BidThreshold1 = 65  # 叫地主阈值
-        self.BidThreshold2 = 75  # 抢地主阈值
+        self.BidThreshold1 = 65 # 叫地主阈值
+        self.BidThreshold2 = 72  # 抢地主阈值
         self.JiabeiThreshold = (
-            (80, 65),  # 叫地主 超级加倍 加倍 阈值
-            (85, 70)   # 叫地主 超级加倍 加倍 阈值  (在地主是抢来的情况下)
+            (85, 72),  # 叫地主 超级加倍 加倍 阈值
+            (85, 75)   # 叫地主 超级加倍 加倍 阈值  (在地主是抢来的情况下)
         )
+        self.MingpaiThreshold = 92
         # 坐标
         self.MyHandCardsPos = (250, 764, 1141, 70)  # 我的截图区域
         self.LPlayedCardsPos = (463, 355, 380, 250)  # 左边截图区域
@@ -286,6 +287,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     self.other_played_cards_real = ""
                 print("\n下家出牌：", self.other_played_cards_real)
                 self.other_played_cards_env = [RealCard2EnvCard[c] for c in list(self.other_played_cards_real)]
+                self.other_played_cards_env.sort()
                 self.env.step(self.user_position, self.other_played_cards_env)
                 # 更新界面
                 self.RPlayedCard.setText(self.other_played_cards_real if self.other_played_cards_real else "不出")
@@ -316,6 +318,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     self.other_played_cards_real = ""
                 print("\n上家出牌：", self.other_played_cards_real)
                 self.other_played_cards_env = [RealCard2EnvCard[c] for c in list(self.other_played_cards_real)]
+                self.other_played_cards_env.sort()
                 self.env.step(self.user_position, self.other_played_cards_env)
                 self.play_order = 0
                 # 更新界面
@@ -559,6 +562,8 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             self.sleep(7000)
         else:
             self.sleep(2000)
+        if win_rate > self.MingpaiThreshold:
+            helper.ClickOnImage("mingpai_btn", region=self.GeneralBtnPos)
         self.init_cards()
 
 

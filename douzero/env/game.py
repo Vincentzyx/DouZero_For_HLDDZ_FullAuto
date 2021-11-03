@@ -58,10 +58,10 @@ class GameEnv(object):
         self.bomb_num = 0
         self.last_pid = 'landlord'
 
-        self.bid_info = [[-1, -1, -1],
-                         [-1, -1, -1],
-                         [-1, -1, -1],
-                         [-1, -1, -1]]
+        self.bid_info = [[1, 1, 1],
+                         [1, 1, 1],
+                         [1, 1, 1],
+                         [1, 1, 1]]
         self.bid_count = 0
         self.multiply_count = {'landlord': 1,
                                'landlord_up': 1,
@@ -339,10 +339,10 @@ class GameEnv(object):
 
         self.bomb_num = 0
         self.last_pid = 'landlord'
-        self.bid_info = [[-1, -1, -1],
-                         [-1, -1, -1],
-                         [-1, -1, -1],
-                         [-1, -1, -1]]
+        self.bid_info = [[1, 1, 1],
+                         [1, 1, 1],
+                         [1, 1, 1],
+                         [1, 1, 1]]
         self.bid_count = 0
         self.multiply_count = {'landlord': 0,
                                'landlord_up': 0,
@@ -445,11 +445,11 @@ class InfoSet(object):
         # The number of bombs played so far
         self.bomb_num = None
 
-        self.bid_info = [[-1, -1, -1],
-                         [-1, -1, -1],
-                         [-1, -1, -1],
-                         [-1, -1, -1]]
+        self.bid_info = [[1, 1, 1],
+                         [1, 1, 1],
+                         [1, 1, 1],
+                         [1, 1, 1]]
 
-        self.multiply_info = [1, 0, 0]
+        self.multiply_info = [1, 1, 1]
 
         self.player_id = None
