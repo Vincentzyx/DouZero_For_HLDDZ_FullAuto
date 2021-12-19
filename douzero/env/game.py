@@ -20,6 +20,21 @@ bombs = [[3, 3, 3, 3], [4, 4, 4, 4], [5, 5, 5, 5], [6, 6, 6, 6],
          [11, 11, 11, 11], [12, 12, 12, 12], [13, 13, 13, 13], [14, 14, 14, 14],
          [17, 17, 17, 17], [20, 30]]
 
+bid_infos = {
+    "landlord": [[1,1,1],
+                [1,1,1],
+                [1,1,1],
+                [1,1,1]],
+    "landlord_up": [[1,1,1],
+                [1,1,1],
+                [1,1,1],
+                [1,1,1]],
+    "landlord_down": [[1,1,1],
+                [1,1,1],
+                [1,1,1],
+                [1,1,1]]
+}
+
 class GameEnv(object):
 
     def __init__(self, players):
@@ -118,28 +133,6 @@ class GameEnv(object):
         return self.bomb_num
 
     def step(self, position, action=[]):
-        '''
-        # 是玩家角色就调用act函数通过智能体获取action，否则通过玩家输入获取action
-        if self.acting_player_position == self.players[0]:
-            action, actions_confidence = self.players[1].act(self.game_infoset)
-            # 计算胜率
-            win_rates = {}
-            win_rate = action
-            win_rate = max(actions_confidence, -1)
-            win_rate = min(win_rate, 1)
-            win_rate = str(round(float((win_rate + 1) / 2), 4))
-            print("你出牌: " + str([EnvCard2RealCard[c] for c in action]) + "， 预计胜率" + str(
-                round(float(win_rate) * 100, 2)) + "%\n")
-        else:
-            try:
-                action = [RealCard2EnvCard[c] for c in list(input("地主{}出牌:".format(
-                    "上家" if self.acting_player_position == "landlord_up" else
-                    "下家" if self.acting_player_position == "landlord_down" else "")))]
-                print(action, end="\n\n")
-            # “要不起”，返回空列表
-            except ValueError as e:
-                action = []
-        '''
         win_rate = 0
         if self.acting_player_position == position:
             action, actions_confidence = self.players[1].act(self.game_infoset)
@@ -178,7 +171,7 @@ class GameEnv(object):
             self.game_infoset = self.get_infoset()
         # 返回动作和胜率,只有玩家角色会接受返回值
         action_message = {"action": str(''.join([EnvCard2RealCard[c] for c in action])),
-                          "win_rate": str(round(float(win_rate) * 100, 4))}
+                          "win_rate": str(round(float(win_rate), 4))}
         return action_message
 
     def get_last_move(self):
@@ -405,6 +398,9 @@ class GameEnv(object):
             self.acting_player_position].all_handcards = \
             {pos: self.info_sets[pos].player_hand_cards
              for pos in ['landlord', 'landlord_up', 'landlord_down']}
+
+        # Custom bid info
+        self.info_sets[self.acting_player_position].bid_info = bid_infos[self.acting_player_position]
 
         return deepcopy(self.info_sets[self.acting_player_position])
 

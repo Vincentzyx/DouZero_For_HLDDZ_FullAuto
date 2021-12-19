@@ -93,9 +93,9 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.shouldExit = 0  # 通知上一轮记牌结束
         self.canRecord = threading.Lock()  # 开始记牌
         self.card_play_model_path_dict = {
-            'landlord': "baselines/douzero_ADP/landlord.ckpt",
-            'landlord_up': "baselines/douzero_ADP/landlord_up.ckpt",
-            'landlord_down': "baselines/douzero_ADP/landlord_down.ckpt"
+            'landlord': "baselines/resnet/resnet_landlord.ckpt",
+            'landlord_up': "baselines/resnet/resnet_landlord_up.ckpt",
+            'landlord_down': "baselines/resnet/resnet_landlord_down.ckpt"
         }
 
     def init_display(self):
@@ -224,11 +224,12 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.env.card_play_init(self.card_play_data_list)
         print("开始出牌\n")
         while not self.env.game_over:
-            # 玩家出牌时就通过智能体获取action，否则通过识别获取其他玩家出牌
             if self.play_order == 0:
                 self.PredictedCard.setText("...")
                 action_message = self.env.step(self.user_position)
-                # 更新界面
+                score = float(action_message['win_rate'])
+                if "resnet" in self.card_play_model_path_dict[self.user_position]:
+                    score *= 8
                 self.UserHandCards.setText("手牌：" + str(''.join(
                     [EnvCard2RealCard[c] for c in self.env.info_sets[self.user_position].player_hand_cards]))[::-1])
 
@@ -576,6 +577,7 @@ if __name__ == '__main__':
         font: bold;
         border-color: gray;
         border-width: 2px;
+        
         border-radius: 10px;
         padding: 6px;
         height : 14px;
