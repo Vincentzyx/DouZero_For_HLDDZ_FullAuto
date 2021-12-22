@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>703</width>
+    <width>706</width>
     <height>421</height>
    </rect>
   </property>
@@ -20,7 +20,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>Hi</string>
+   <string>Douzero Automation By Vincentzyx@Github</string>
   </property>
   <property name="windowOpacity">
    <double>0.800000000000000</double>
@@ -31,13 +31,13 @@
      <x>480</x>
      <y>150</y>
      <width>201</width>
-     <height>61</height>
+     <height>161</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>等线</family>
-     <pointsize>14</pointsize>
+     <pointsize>11</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
@@ -62,7 +62,7 @@
    <property name="font">
     <font>
      <family>等线</family>
-     <pointsize>14</pointsize>
+     <pointsize>10</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
@@ -78,16 +78,16 @@
   <widget class="QLabel" name="UserHandCards">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>160</y>
-     <width>421</width>
+     <x>50</x>
+     <y>170</y>
+     <width>271</width>
      <height>41</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>等线</family>
-     <pointsize>14</pointsize>
+     <pointsize>11</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
@@ -97,7 +97,7 @@
     <string>手牌</string>
    </property>
    <property name="alignment">
-    <set>Qt::AlignCenter</set>
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
    </property>
   </widget>
   <widget class="QFrame" name="LPlayer">
@@ -112,7 +112,7 @@
    <property name="font">
     <font>
      <family>等线</family>
-     <pointsize>9</pointsize>
+     <pointsize>11</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
@@ -136,7 +136,7 @@
     <property name="font">
      <font>
       <family>等线</family>
-      <pointsize>14</pointsize>
+      <pointsize>11</pointsize>
       <weight>50</weight>
       <italic>false</italic>
       <bold>false</bold>
@@ -162,7 +162,7 @@
    <property name="font">
     <font>
      <family>等线</family>
-     <pointsize>16</pointsize>
+     <pointsize>11</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
@@ -186,7 +186,7 @@
     <property name="font">
      <font>
       <family>等线</family>
-      <pointsize>14</pointsize>
+      <pointsize>11</pointsize>
       <weight>50</weight>
       <italic>false</italic>
       <bold>false</bold>
@@ -212,7 +212,7 @@
    <property name="font">
     <font>
      <family>等线</family>
-     <pointsize>9</pointsize>
+     <pointsize>11</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
@@ -236,7 +236,7 @@
     <property name="font">
      <font>
       <family>等线</family>
-      <pointsize>14</pointsize>
+      <pointsize>11</pointsize>
       <weight>50</weight>
       <italic>false</italic>
       <bold>false</bold>
@@ -271,7 +271,7 @@
    <property name="font">
     <font>
      <family>等线</family>
-     <pointsize>16</pointsize>
+     <pointsize>11</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
@@ -296,7 +296,7 @@
    <property name="font">
     <font>
      <family>等线</family>
-     <pointsize>14</pointsize>
+     <pointsize>10</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
@@ -321,7 +321,7 @@
    <property name="font">
     <font>
      <family>等线</family>
-     <pointsize>14</pointsize>
+     <pointsize>10</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
@@ -346,7 +346,7 @@
    <property name="font">
     <font>
      <family>等线</family>
-     <pointsize>14</pointsize>
+     <pointsize>10</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
@@ -364,21 +364,21 @@
     <rect>
      <x>50</x>
      <y>220</y>
-     <width>241</width>
+     <width>411</width>
      <height>41</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>等线</family>
-     <pointsize>12</pointsize>
+     <pointsize>11</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
     </font>
    </property>
    <property name="text">
-    <string>叫牌预估胜率：</string>
+    <string>叫牌预估得分：</string>
    </property>
   </widget>
   <widget class="QLabel" name="PreWinrate">
@@ -386,21 +386,21 @@
     <rect>
      <x>50</x>
      <y>270</y>
-     <width>241</width>
+     <width>411</width>
      <height>41</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>等线</family>
-     <pointsize>12</pointsize>
+     <pointsize>11</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
     </font>
    </property>
    <property name="text">
-    <string>局前预估胜率：</string>
+    <string>局前预估得分：</string>
    </property>
   </widget>
  </widget>
@@ -458,7 +458,7 @@
    <sender>AutoStart</sender>
    <signal>clicked()</signal>
    <receiver>Form</receiver>
-   <slot>beforeStart()</slot>
+   <slot>game_loop()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>613</x>
@@ -476,6 +476,6 @@
   <slot>start()</slot>
   <slot>stop()</slot>
   <slot>switch_mode()</slot>
-  <slot>beforeStart()</slot>
+  <slot>game_loop()</slot>
  </slots>
 </ui>

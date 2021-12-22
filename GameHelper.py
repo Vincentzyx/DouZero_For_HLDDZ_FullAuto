@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 # Created by: Vincentzyx
+import ctypes
+
 import win32gui
 import win32ui
 import win32api
@@ -11,27 +13,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import time
-import threading
 from win32con import WM_LBUTTONDOWN, MK_LBUTTON, WM_LBUTTONUP, WM_MOUSEMOVE
-import multiprocessing as mp
 
 from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtCore import QTime, QEventLoop
 
 Pics = {}
-ReqQueue = mp.Queue()
-ResultQueue = mp.Queue()
-Processes = []
-
-def GetSingleCardQueue(reqQ, resQ, Pics):
-    while True:
-        while not reqQ.empty():
-            image, i, sx, sy, sw, sh, checkSelect = reqQ.get()
-            result = GetSingleCard(image, i, sx, sy, sw, sh, checkSelect, Pics)
-            del image
-            if result is not None:
-                resQ.put(result)
-        time.sleep(0.01)
 
 def ShowImg(image):
     plt.imshow(image)
@@ -125,17 +112,6 @@ def GetSingleCard(image, i, sx, sy, sw, sh, checkSelect, Pics):
         ci += 1
     return None
 
-def RunThreads():
-    for file in os.listdir("pics"):
-        info = file.split(".")
-        if info[1] == "png":
-            tmpImage = Image.open("pics/" + file)
-            Pics.update({info[0]: tmpImage})
-    for ti in range(20):
-        p = mp.Process(target=GetSingleCardQueue, args=(ReqQueue, ResultQueue, Pics))
-        p.start()
-
-
 def LocateOnImage(image, template, region=None, confidence=0.9):
     if region is not None:
         x, y, w, h = region
@@ -160,15 +136,17 @@ def LocateAllOnImage(image, template, region=None, confidence=0.9):
         points.append((pt[0], pt[1], w, h))
     return points
 
-
 class GameHelper:
     def __init__(self):
+        self.counter = QTime()
         self.ScreenZoomRate = 1.25
         self.Pics = {}
         self.PicsCV = {}
+        st = time.time()
         self.Handle = win32gui.FindWindow("Hlddz", None)
         self.Interrupt = False
         self.RealRate = (1796, 1047)
+        self.GetZoomRate()
         for file in os.listdir("./pics"):
             info = file.split(".")
             if info[1] == "png":
@@ -177,50 +155,78 @@ class GameHelper:
                 self.Pics.update({info[0]: tmpImage})
                 self.PicsCV.update({info[0]: imgCv})
 
+    def sleep(self, ms):
+        self.counter.restart()
+        while self.counter.elapsed() < ms:
+            QtWidgets.QApplication.processEvents(QEventLoop.AllEvents, 50)
+
     def Screenshot(self, region=None):  # -> (im, (left, top))
-        self.Handle = win32gui.FindWindow("Hlddz", None)
-        hwnd = self.Handle
-        # im = Image.open(r"C:\Users\q9294\Desktop\Snipaste_2021-09-05_00-52-51.png")
-        # im = im.resize((1796, 1047))
-        # return im, (0,0)
-        left, top, right, bot = win32gui.GetWindowRect(hwnd)
-        width = right - left
-        height = bot - top
-        self.RealRate = (width, height)
-        width = int(width / self.ScreenZoomRate)
-        height = int(height / self.ScreenZoomRate)
-        hwndDC = win32gui.GetWindowDC(hwnd)
-        mfcDC = win32ui.CreateDCFromHandle(hwndDC)
-        saveDC = mfcDC.CreateCompatibleDC()
-        saveBitMap = win32ui.CreateBitmap()
-        saveBitMap.CreateCompatibleBitmap(mfcDC, width, height)
-        saveDC.SelectObject(saveBitMap)
-        result = windll.user32.PrintWindow(hwnd, saveDC.GetSafeHdc(), 0)
-        bmpinfo = saveBitMap.GetInfo()
-        bmpstr = saveBitMap.GetBitmapBits(True)
-        im = Image.frombuffer(
-            "RGB",
-            (bmpinfo['bmWidth'], bmpinfo['bmHeight']),
-            bmpstr, 'raw', 'BGRX', 0, 1)
-        win32gui.DeleteObject(saveBitMap.GetHandle())
-        saveDC.DeleteDC()
-        mfcDC.DeleteDC()
-        win32gui.ReleaseDC(hwnd, hwndDC)
-        im = im.resize((1798, 1047))
-        if region is not None:
-            im = im.crop((region[0], region[1], region[0] + region[2], region[1] + region[3]))
-        if result:
-            return im, (left, top)
+        try_count = 3
+        success = False
+        while try_count > 0 and not success:
+            try:
+                try_count -= 1
+                # im = Image.open(r"C:\Users\Vincentzyx\Desktop\Snipaste_2021-12-22_22-58-02.png")
+                # im = im.resize((1796, 1047))
+                # if region is not None:
+                #     im = im.crop((region[0], region[1], region[0] + region[2], region[1] + region[3]))
+                # ShowImg(im)
+                # return im, (0,0)
+                # self.GetZoomRate()
+                self.Handle = win32gui.FindWindow("Hlddz", None)
+                hwnd = self.Handle
+                left, top, right, bot = win32gui.GetWindowRect(hwnd)
+                width = right - left
+                height = bot - top
+                self.RealRate = (width, height)
+                width = int(width / self.ScreenZoomRate)
+                height = int(height / self.ScreenZoomRate)
+                hwndDC = win32gui.GetWindowDC(hwnd)
+                mfcDC = win32ui.CreateDCFromHandle(hwndDC)
+                saveDC = mfcDC.CreateCompatibleDC()
+                saveBitMap = win32ui.CreateBitmap()
+                saveBitMap.CreateCompatibleBitmap(mfcDC, width, height)
+                saveDC.SelectObject(saveBitMap)
+                result = windll.user32.PrintWindow(hwnd, saveDC.GetSafeHdc(), 0)
+                bmpinfo = saveBitMap.GetInfo()
+                bmpstr = saveBitMap.GetBitmapBits(True)
+                im = Image.frombuffer(
+                    "RGB",
+                    (bmpinfo['bmWidth'], bmpinfo['bmHeight']),
+                    bmpstr, 'raw', 'BGRX', 0, 1)
+                win32gui.DeleteObject(saveBitMap.GetHandle())
+                saveDC.DeleteDC()
+                mfcDC.DeleteDC()
+                win32gui.ReleaseDC(hwnd, hwndDC)
+                im = im.resize((1796, 1047))
+                if region is not None:
+                    im = im.crop((region[0], region[1], region[0] + region[2], region[1] + region[3]))
+                if result:
+                    success = True
+                    return im, (left, top)
+            except Exception as e:
+                print("截图时出现错误:", repr(e))
+                self.sleep(200)
+        return None, (0,0)
+
+    def GetZoomRate(self):
+        self.ScreenZoomRate = ctypes.windll.shcore.GetScaleFactorForDevice(0) / 100
+
+    def LocateOnScreen(self, templateName, region, confidence=0.9, img=None):
+        if img is not None:
+            image = img
         else:
-            return None, (0, 0)
+            image, _ = self.Screenshot()
+        imgcv = cv2.cvtColor(np.asarray(image), cv2.COLOR_RGB2BGR)
+        return LocateOnImage(imgcv, self.PicsCV[templateName], region=region, confidence=confidence)
+        # return pyautogui.locate(needleImage=self.Pics[templateName],
+        #                         haystackImage=image, region=region, confidence=confidence)
 
-    def LocateOnScreen(self, templateName, region, confidence=0.9):
-        image, _ = self.Screenshot()
-        return pyautogui.locate(needleImage=self.Pics[templateName],
-                                haystackImage=image, region=region, confidence=confidence)
-
-    def ClickOnImage(self, templateName, region=None, confidence=0.9):
-        image, _ = self.Screenshot()
+    def ClickOnImage(self, templateName, region=None, confidence=0.9, img=None):
+        if img is not None:
+            image = img
+        else:
+            image, _ = self.Screenshot()
         result = pyautogui.locate(needleImage=self.Pics[templateName], haystackImage=image, confidence=confidence, region=region)
         if result is not None:
             self.LeftClick((result[0], result[1]))
@@ -229,8 +235,16 @@ class GameHelper:
         st = time.time()
         imgCv = cv2.cvtColor(np.asarray(image), cv2.COLOR_RGB2BGR)
         states = []
+        tryCount = 10
         cardStartPos = pyautogui.locate(needleImage=self.Pics["card_edge"], haystackImage=image,
-                                        region=(313, 747, 1144, 200), confidence=0.85)
+                                        region=(313, 747, 1144, 200), confidence=0.80)
+        while cardStartPos is None and tryCount > 0:
+            self.LeftClick((900, 550))
+            self.sleep(150)
+            cardStartPos = pyautogui.locate(needleImage=self.Pics["card_edge"], haystackImage=image,
+                                            region=(313, 747, 1144, 200), confidence=0.80)
+            print("找不到手牌起始位置")
+            tryCount -= 1
         if cardStartPos is None:
             return []
         sx = cardStartPos[0] + 10
@@ -247,7 +261,6 @@ class GameHelper:
                 if result is None:
                     checkSelect = 1
             states.append(checkSelect)
-        print("GetStates Costs ", time.time()-st)
         return states
 
     def GetCards(self, image):
@@ -257,12 +270,12 @@ class GameHelper:
         cardStartPos = pyautogui.locate(needleImage=self.Pics["card_edge"], haystackImage=image,
                                         region=(313, 747, 1144, 200), confidence=0.80)
         while cardStartPos is None and tryCount > 0:
+            self.LeftClick((900, 550))
+            self.sleep(150)
             cardStartPos = pyautogui.locate(needleImage=self.Pics["card_edge"], haystackImage=image,
                                             region=(313, 747, 1144, 200), confidence=0.80)
             print("找不到手牌起始位置")
             tryCount -= 1
-            self.sleep(150)
-        print("start pos", cardStartPos)
         if cardStartPos is None:
             return [],[]
         sx = cardStartPos[0] + 10
@@ -331,12 +344,11 @@ class GameHelper:
             if forBreak:
                 break
             QtWidgets.QApplication.processEvents(QEventLoop.AllEvents, 10)
-        print("GetCards Costs ", time.time()-st)
         return hand_cards, select_map
 
     def LeftClick(self, pos):
         x, y = pos
-        x = (x / 1798) * self.RealRate[0]
+        x = (x / 1796) * self.RealRate[0]
         y = (y / 1047) * self.RealRate[1]
         x = int(x)
         y = int(y)
@@ -346,7 +358,6 @@ class GameHelper:
         win32gui.PostMessage(self.Handle, WM_LBUTTONUP, MK_LBUTTON, lParam)
 
     def SelectCards(self, cards, no_check=False):
-        print("选择牌", cards)
         cards = [card for card in cards]
         tobeSelected = []
         tobeSelected.extend(cards)
@@ -355,13 +366,16 @@ class GameHelper:
             image, windowPos = self.Screenshot()
         handCardsInfo, states = self.GetCards(image)
         cardSelectMap = []
-        for card in handCardsInfo:
+        for card_i in range(len(handCardsInfo)-1, -1, -1):
+            card = handCardsInfo[card_i]
             c = card[0]
             if c in tobeSelected:
-                cardSelectMap.append(1)
+                # cardSelectMap.append(1)
+                cardSelectMap.insert(0, 1)
                 tobeSelected.remove(c)
             else:
-                cardSelectMap.append(0)
+                # cardSelectMap.append(0)
+                cardSelectMap.insert(0, 0)
         clickMap = []
         handcards = [c[0] for c in handCardsInfo]
         for i in range(0, len(cardSelectMap)):
@@ -373,7 +387,6 @@ class GameHelper:
             for i in range(0, len(clickMap)):
                 if clickMap[i] == 1:
                     self.LeftClick(handCardsInfo[i][1])
-                    print("点击", handCardsInfo[i][1])
                     break
             time.sleep(0.1)
             if self.Interrupt:
