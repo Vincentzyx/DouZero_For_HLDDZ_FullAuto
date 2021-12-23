@@ -821,8 +821,6 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         threshold_index = 2
                     if win_rate > self.BidThresholds[
                         threshold_index] and compare_winrate > farmer_score and landlord_requirement:
-                        if threshold_index == 1:
-                            self.give_coffee("both")
                         helper.ClickOnImage("qiangdizhu_btn", region=(783, 663, 116, 50), confidence=0.9)
                     else:
                         helper.ClickOnImage("buqiang_btn", region=self.GeneralBtnPos)
