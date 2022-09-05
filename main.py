@@ -280,6 +280,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             ani = self.haveAnimation(ms)
         if iter_cnt > 0:
             print("\t动画结束", end="")
+        print()
         self.sleep(600)
 
     def real_to_env(self, cards):
