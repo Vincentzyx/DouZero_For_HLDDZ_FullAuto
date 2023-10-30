@@ -2,30 +2,20 @@
 # Created by: Raf
 # Modify by: Vincentzyx
 import collections
-import random
 
-import PIL
 
 import GameHelper as gh
 from GameHelper import GameHelper
-import os
 import sys
 import time
-from threading import Thread
 import pyautogui
-import win32gui
 from PIL import Image
 import numpy as np
 import cv2
 import traceback
-import datetime
-import re
 import warnings
-import requests
 
 from PyQt5 import QtGui, QtWidgets, QtCore
-from PyQt5.QtWidgets import QMessageBox, QTextBrowser, QTextEdit
-from PyQt5.QtGui import QTextCursor
 from PyQt5.QtCore import QTime, QEventLoop
 from MainWindow import Ui_Form
 
@@ -279,15 +269,17 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
 
     def waitUntilNoAnimation(self, ms=150):
         ani = self.haveAnimation(ms)
-        first_run = 0
-        while ani:
-            if first_run == 0:
+        iter_cnt = 0
+        # wait at most (3 * 2 * 150)ms, about 1 sec
+        while ani and iter_cnt < 3:
+            if iter_cnt == 0:
                 print("等待动画", end="")
-            else:
-                if first_run % 2 == 0:
-                    print(".", end="")
-            first_run += 1
+            elif iter_cnt % 2 == 0:
+                print(".", end="")
+            iter_cnt += 1
             ani = self.haveAnimation(ms)
+        if iter_cnt > 0:
+            print("\t动画结束", end="")
         print()
         self.sleep(600)
 
