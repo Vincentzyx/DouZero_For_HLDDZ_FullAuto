@@ -49,3 +49,5 @@
 ## 其他
 
 欢迎加入QQ群交流自动化相关：565142377  密码 douzero
+
+也可以在原作者[DouZero_For_Happy_DouDiZhu](https://github.com/tianqiraf/DouZero_For_HappyDouDiZhu) 的QQ群交流
