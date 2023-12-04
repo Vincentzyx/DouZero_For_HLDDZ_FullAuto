@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>747</width>
-    <height>428</height>
+    <width>730</width>
+    <height>462</height>
    </rect>
   </property>
   <property name="font">
@@ -29,7 +29,7 @@
    <property name="geometry">
     <rect>
      <x>250</x>
-     <y>160</y>
+     <y>220</y>
      <width>201</width>
      <height>61</height>
     </rect>
@@ -54,8 +54,8 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>260</y>
-     <width>361</width>
+     <y>300</y>
+     <width>431</width>
      <height>41</height>
     </rect>
    </property>
@@ -72,14 +72,14 @@
     <string>手牌</string>
    </property>
    <property name="alignment">
-    <set>Qt::AlignCenter</set>
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
    </property>
   </widget>
   <widget class="QFrame" name="LPlayer">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>80</y>
+     <y>140</y>
      <width>201</width>
      <height>61</height>
     </rect>
@@ -104,7 +104,7 @@
    <property name="geometry">
     <rect>
      <x>250</x>
-     <y>80</y>
+     <y>140</y>
      <width>201</width>
      <height>61</height>
     </rect>
@@ -129,7 +129,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>160</y>
+     <y>220</y>
      <width>201</width>
      <height>61</height>
     </rect>
@@ -187,9 +187,9 @@
   <widget class="QLabel" name="ThreeLandlordCards">
    <property name="geometry">
     <rect>
-     <x>270</x>
-     <y>20</y>
-     <width>161</width>
+     <x>160</x>
+     <y>80</y>
+     <width>151</width>
      <height>41</height>
     </rect>
    </property>
@@ -213,7 +213,7 @@
    <property name="geometry">
     <rect>
      <x>460</x>
-     <y>170</y>
+     <y>230</y>
      <width>241</width>
      <height>41</height>
     </rect>
@@ -235,7 +235,7 @@
    <property name="geometry">
     <rect>
      <x>460</x>
-     <y>250</y>
+     <y>300</y>
      <width>241</width>
      <height>41</height>
     </rect>
@@ -257,7 +257,7 @@
    <property name="geometry">
     <rect>
      <x>70</x>
-     <y>350</y>
+     <y>370</y>
      <width>111</width>
      <height>41</height>
     </rect>
@@ -279,7 +279,7 @@
    <property name="geometry">
     <rect>
      <x>540</x>
-     <y>350</y>
+     <y>370</y>
      <width>111</width>
      <height>41</height>
     </rect>
@@ -301,7 +301,7 @@
    <property name="geometry">
     <rect>
      <x>530</x>
-     <y>80</y>
+     <y>70</y>
      <width>131</width>
      <height>61</height>
     </rect>
@@ -326,7 +326,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>80</y>
+     <y>140</y>
      <width>201</width>
      <height>61</height>
     </rect>
@@ -351,7 +351,7 @@
    <property name="geometry">
     <rect>
      <x>250</x>
-     <y>80</y>
+     <y>140</y>
      <width>201</width>
      <height>61</height>
     </rect>
@@ -376,7 +376,7 @@
    <property name="geometry">
     <rect>
      <x>310</x>
-     <y>350</y>
+     <y>370</y>
      <width>111</width>
      <height>41</height>
     </rect>
@@ -392,6 +392,31 @@
    </property>
    <property name="text">
     <string> 连续</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="OtherHandCards">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>20</y>
+     <width>641</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>等线</family>
+     <pointsize>14</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>记牌器</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
    </property>
   </widget>
  </widget>
