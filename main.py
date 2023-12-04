@@ -75,7 +75,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                             QtCore.Qt.WindowStaysOnTopHint |  # 窗体总在最前端
                             QtCore.Qt.WindowCloseButtonHint)
         self.setWindowIcon(QIcon(':/favicon.ico'))
-        self.setWindowTitle("（新）欢乐斗地主修复版v1.2")
+        self.setWindowTitle("（新）欢乐斗地主修复版v1.3")
         self.setFixedSize(self.width(), self.height())  # 固定窗体大小
         self.move(240, 100)
         # self.setWindowIcon(QIcon('pics/favicon.ico'))
@@ -291,7 +291,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             exc_type, exc_obj, exc_tb = sys.exc_info()
             print(e)
             traceback.print_tb(exc_tb)
-            self.stop()
+            # self.stop()
 
     def sleep(self, ms):
         self.counter.restart()
@@ -349,24 +349,22 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
 
                     # if len(hand_cards_str) >= len(action_message["action"]):
                     self.click_cards(action_message["action"])
+                    self.sleep(200)
 
-                    tryCount = 20
+                    # tryCount = 20
                     result = helper.LocateOnScreen("play_card", region=self.PassBtnPos)
-                    while result is None and tryCount > 0:
+                    while result is None:
                         self.detect_start_btn()
                         if not self.RunGame:
                             break
                         print("等待出牌按钮")
-                        tryCount -= 1
-                        result = helper.LocateOnScreen("play_card", region=self.PassBtnPos)
-                        if result is not None:
-                            break
                         self.sleep(200)
-                    if tryCount <= 0:
-                        print("未找到出牌按钮")
-                        break
+                        result = helper.LocateOnScreen("play_card", region=self.PassBtnPos)
 
-                    elif result is not None:
+                    helper.ClickOnImage("play_card", region=self.PassBtnPos)
+                    self.sleep(200)
+                    result = helper.LocateOnScreen("play_card", region=self.PassBtnPos)
+                    if result is not None:
                         helper.ClickOnImage("play_card", region=self.PassBtnPos)
 
                     ani = self.animation(action_message["action"])
@@ -374,7 +372,16 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         self.sleep(1000)
                     if len(hand_cards_str) == 0:
                         self.RunGame = False
-                        self.env.game_over = True
+                        try:
+                            if self.env is not None:
+                                self.env.game_over = True
+                                self.env.reset()
+                            self.init_display()
+                            self.PreWinrate.setText("局前预估得分: ")
+                            self.BidWinrate.setText("叫牌预估得分: ")
+                            print("程序走到这里")
+                        except AttributeError as e:
+                            traceback.print_exc()
                         break
 
                 self.detect_start_btn()
@@ -410,6 +417,9 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         rightTwo = self.find_other_cards(self.RPlayedCardsPos)
                         if rightOne == rightTwo:
                             self.other_played_cards_real = rightOne
+                            if "X" in rightOne or "D" in rightOne:
+                                self.sleep(500)
+                                self.other_played_cards_real = self.find_other_cards(self.RPlayedCardsPos)
                             ani = self.animation(rightOne)
                             if ani:
                                 self.sleep(1000)
@@ -465,6 +475,9 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         leftTwo = self.find_other_cards(self.LPlayedCardsPos)
                         if leftOne == leftTwo:
                             self.other_played_cards_real = leftOne
+                            if "X" in leftOne or "D" in leftOne:
+                                self.sleep(500)
+                                self.other_played_cards_real = self.find_other_cards(self.LPlayedCardsPos)
                             ani = self.animation(leftOne)
                             if ani:
                                 self.sleep(1000)
@@ -489,7 +502,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 self.play_order = 0
             self.sleep(10)
 
-        if self.stop_sign == 1 or self.loop_sign == 0:
+        if self.loop_sign == 0:
             self.stop()
             print("这里有问题")
         self.label.setText("游戏结束")
@@ -506,10 +519,12 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     print("检测到本局游戏已结束")
                     self.label.setText("游戏已结束")
                     self.stop()
+
+                self.RunGame = False
                 try:
                     if self.env is not None:
                         self.env.game_over = True
-                        # self.env.reset()
+                        self.env.reset()
                     self.init_display()
                     self.PreWinrate.setText("局前预估得分: ")
                     self.BidWinrate.setText("叫牌预估得分: ")
@@ -525,6 +540,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 self.label.setText("游戏已结束")
                 self.stop()
             else:
+                self.RunGame = True
                 helper.ClickOnImage("continue", region=(1317, 686, 410, 268))
                 self.sleep(100)
                 try:
@@ -540,16 +556,27 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         result = helper.LocateOnScreen("start_game", region=(874, 574, 386, 185))
         if result is not None:
             helper.ClickOnImage("start_game", region=(874, 574, 386, 185))
-            self.sleep(100)
+            self.sleep(1000)
+
+        result = helper.LocateOnScreen("lingdou", region=(687, 715, 400, 185))
+        if result is not None:
+            helper.ClickOnImage("lingdou", region=(687, 715, 400, 185))
+            self.sleep(1000)
+
+        result = helper.LocateOnScreen("wozhidao", region=(698, 629, 400, 235))
+        if result is not None:
+            helper.ClickOnImage("wozhidao", region=(698, 629, 400, 235))
+            self.sleep(1000)
+
         result = helper.LocateOnScreen("chacha", region=(1120, 96, 623, 805), confidence=0.7)
         if result is not None:
             helper.ClickOnImage("chacha", region=(1120, 96, 623, 805), confidence=0.7)
-            self.sleep(100)
+            self.sleep(1000)
 
         result = helper.LocateOnScreen("good", region=(481, 673, 841, 267))
         if result is not None:
             helper.ClickOnImage("good", region=(481, 673, 841, 267))
-            self.sleep(100)
+            self.sleep(1000)
 
     def cards_filter(self, location, distance):  # 牌检测结果滤波
         if len(location) == 0:
@@ -637,8 +664,11 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             print("未找到手牌区域")
             self.sleep(500)
             res1 = helper.LocateOnScreen("top_left_corner", region=self.MyHandCardsPos, confidence=0.7)
-
         pos = res1[0] + 15, res1[1] + 10, 57 * len(cards), 200
+
+        res2 = helper.LocateOnScreen("top_left_corner", region=(192, 720, 1448, 200), confidence=0.7)
+        if res2 is not None:
+            pos = res2[0] + 15, res2[1] + 10, 57 * len(cards), 200
         return pos
 
     def click_cards(self, out_cards):
@@ -663,13 +693,14 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             point = cars_pos[0] + 30, cars_pos[1] + 50
             img, _ = helper.Screenshot()
             img = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2RGB)
-            check_one = self.find_cards(img=img, pos=(cars_pos[0], 700, 60, 90), mark="m", confidence=0.85)
-            # check_white = helper.LocateOnScreen("selected", region=(cars_pos[0], 700, 82, 90), confidence=0.6)
+            check_one = self.find_cards(img=img, pos=(cars_pos[0], 700, 60, 90), mark="m", confidence=0.8)
+            print("系统帮你点的牌：", check_one, "你要出的牌：", i)
 
-            # print("检查要出的牌上面有没有牌：", check_white)
-
-            if check_one == i and i != "D":
+            if check_one == i and check_one != "D":
                 print("腾讯自动提示帮你选牌")
+                img, _ = helper.Screenshot()
+                img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
+                cv2.imwrite("debug.png", img)
 
             else:
                 helper.LeftClick(point)
@@ -690,10 +721,11 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             for n in cards:
                 print("字典里还剩的牌： ", cards_dict)
                 cars_pos2 = cards_dict[n][-1][0:2]
-                # print("准备点击的牌：", cards_dict[i])
+                print("准备点回来的牌：", cars_pos2)
                 point2 = cars_pos2[0] + 30, cars_pos2[1] + 50
                 helper.LeftClick(point2)
-                self.sleep(1000)
+                self.sleep(100)
+                cards_dict[n].remove(cards_dict[n][-1])
 
     def find_landlord(self, landlord_flag_pos):
         tryCount = 3
@@ -781,15 +813,15 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     is_stolen = 1
                     helper.ClickOnImage("jiaodizhu_btn", region=self.GeneralBtnPos)
                 else:
-                    helper.ClickOnImage("bujiao_btn", region=self.GeneralBtnPos, confidence=0.6)
+                    helper.ClickOnImage("bujiao_btn", region=self.GeneralBtnPos)
 
-            elif qiangdizhu_btn is not None:
+            if qiangdizhu_btn is not None:
                 HaveBid = True
                 if win_rate > self.BidThreshold2:
                     helper.ClickOnImage("qiangdizhu_btn", region=self.GeneralBtnPos)
                 else:
-                    helper.ClickOnImage("buqiang_btn", region=self.GeneralBtnPos, confidence=0.6)
-            elif jiabei_btn is not None:
+                    helper.ClickOnImage("buqiang_btn", region=self.GeneralBtnPos)
+            if jiabei_btn is not None:
                 break
 
         jiabei_btn = helper.LocateOnScreen("jiabei_btn", region=self.GeneralBtnPos)
@@ -866,8 +898,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         elif win_rate > self.JiabeiThreshold[is_stolen][1]:
             helper.ClickOnImage("jiabei_btn", region=self.GeneralBtnPos)
         else:
-            helper.ClickOnImage("bujiabei_btn", region=self.GeneralBtnPos, confidence=0.6)
-            print("点击不加倍！！！！！！！！")
+            helper.ClickOnImage("bujiabei_btn", region=self.GeneralBtnPos)
 
         if win_rate > self.MingpaiThreshold:
             mingpai_btn = helper.LocateOnScreen("mingpai_btn", region=self.GeneralBtnPos)

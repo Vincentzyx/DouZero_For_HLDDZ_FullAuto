@@ -36,7 +36,7 @@ def main():
 
     # img, _ = GameHelper.Screenshot()
     # img.save("111.png")
-    img = cv2.imread("11.png")
+    img = cv2.imread("6.png")
     # img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
 
     cv2.namedWindow('image')
