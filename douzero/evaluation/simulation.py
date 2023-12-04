@@ -1,5 +1,5 @@
 from douzero.env.game import GameEnv
-from douzero.evaluation.deep_agent import DeepAgent
+from .deep_agent import DeepAgent
 
 EnvCard2RealCard = {3: '3', 4: '4', 5: '5', 6: '6', 7: '7',
                     8: '8', 9: '9', 10: 'T', 11: 'J', 12: 'Q',
@@ -14,37 +14,11 @@ AllEnvCard = [3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7,
               12, 12, 12, 13, 13, 13, 13, 14, 14, 14, 14, 17, 17, 17, 17, 20, 30]
 
 
-def get_card_play_data(user_hand_cards_real, three_landlord_cards_real, user_position_code):
-    use_hand_cards_env = [RealCard2EnvCard[c] for c in user_hand_cards_real]
-    three_landlord_cards_env = [RealCard2EnvCard[c] for c in list(three_landlord_cards_real)]
-    other_hand_cards = []
-    for i in set(AllEnvCard):
-        other_hand_cards.extend([i] * (AllEnvCard.count(i) - use_hand_cards_env.count(i)))
-
-    card_play_data = {}
-    card_play_data.update({
-        'three_landlord_cards': three_landlord_cards_env,
-        ['landlord_up', 'landlord', 'landlord_down'][(user_position_code + 0) % 3]: use_hand_cards_env,
-        ['landlord_up', 'landlord', 'landlord_down'][(user_position_code + 1) % 3]: other_hand_cards[0:17] if (user_position_code + 1) % 3 != 1 else other_hand_cards[17:],
-        ['landlord_up', 'landlord', 'landlord_down'][(user_position_code + 2) % 3]: other_hand_cards[0:17] if (user_position_code + 1) % 3 == 1 else other_hand_cards[17:]
-    })
-    # 生成手牌结束，校验手牌数量
-    if len(card_play_data_list["three_landlord_cards"]) != 3:
-        raise Exception("底牌必须是三张")
-    if len(card_play_data_list["landlord_up"]) != 17 or \
-        len(card_play_data_list["landlord_down"]) != 17 or \
-        len(card_play_data_list["landlord"]) != 20:
-        raise Exception("手牌数量有误")
-    return card_play_data
-
-
-
-
 def evaluate(landlord, landlord_up, landlord_down):
     # 输入玩家的牌
     user_hand_cards_real = input("请输入你的手牌, 例如 333456789TJQKA2XD:")
     # user_hand_cards_real = "34666777899TJJKA22XD"
-    use_hand_cards_env = [RealCard2EnvCard[c] for c in user_hand_cards_real]
+    use_hand_cards_env = [RealCard2EnvCard[c] for c in list(user_hand_cards_real)]
     # 输入玩家角色
     user_position_code = int(input("请输入你的角色[0：地主上家, 1：地主, 2：地主下家]:"))
     # user_position_code = 1
@@ -84,28 +58,16 @@ def evaluate(landlord, landlord_up, landlord_down):
 
     print("创建代表玩家的AI...")
     players = {}
-    players = (user_position, DeepAgent(user_position, card_play_model_path_dict[user_position]))
+    players[user_position] = DeepAgent(user_position, card_play_model_path_dict[user_position])
 
     env = GameEnv(players)
     for idx, card_play_data in enumerate(card_play_data_list):
         env.card_play_init(card_play_data)
         print("开始出牌\n")
         while not env.game_over:
-            if env.acting_player_position == user_position:
-                msg, alist = env.step(user_position)
-                print(msg)
-                print(alist)
-            else:
-                action_str = input()
-                action_env = [RealCard2EnvCard[c] for c in action_str]
-                action_env.sort()
-                env.step(user_position, action_env)
-                action_str = input()
-                action_env = [RealCard2EnvCard[c] for c in action_str]
-                action_env.sort()
-                env.step(user_position, action_env)
+            env.step()
         print("{}胜，本局结束!\n".format("农民" if env.winner == "farmer" else "地主"))
         env.reset()
 
-if __name__ == "__main__":
-    evaluate(r"E:\DouZero\DouZero_For_HappyDouDiZhu-master/baselines/ultimate/resnet_landlord.ckpt", "./baselines/ultimate/resnet_landlord.ckpt", "./baselines/ultimate/resnet_landlord.ckpt")
+
+

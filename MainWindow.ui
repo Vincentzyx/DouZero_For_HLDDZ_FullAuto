@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>706</width>
-    <height>421</height>
+    <width>730</width>
+    <height>462</height>
    </rect>
   </property>
   <property name="font">
@@ -20,7 +20,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>Douzero Automation By Vincentzyx@Github</string>
+   <string>Hi</string>
   </property>
   <property name="windowOpacity">
    <double>0.800000000000000</double>
@@ -28,16 +28,16 @@
   <widget class="QLabel" name="WinRate">
    <property name="geometry">
     <rect>
-     <x>480</x>
-     <y>150</y>
+     <x>250</x>
+     <y>220</y>
      <width>201</width>
-     <height>161</height>
+     <height>61</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>等线</family>
-     <pointsize>11</pointsize>
+     <pointsize>14</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
@@ -50,44 +50,19 @@
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QPushButton" name="InitCard">
-   <property name="geometry">
-    <rect>
-     <x>80</x>
-     <y>360</y>
-     <width>121</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>等线</family>
-     <pointsize>10</pointsize>
-     <weight>50</weight>
-     <italic>false</italic>
-     <bold>false</bold>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true"/>
-   </property>
-   <property name="text">
-    <string>开始</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="UserHandCards">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>170</y>
-     <width>271</width>
+     <x>20</x>
+     <y>300</y>
+     <width>431</width>
      <height>41</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>等线</family>
-     <pointsize>11</pointsize>
+     <pointsize>14</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
@@ -104,7 +79,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>80</y>
+     <y>140</y>
      <width>201</width>
      <height>61</height>
     </rect>
@@ -112,7 +87,7 @@
    <property name="font">
     <font>
      <family>等线</family>
-     <pointsize>11</pointsize>
+     <pointsize>9</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
@@ -124,37 +99,12 @@
    <property name="frameShadow">
     <enum>QFrame::Raised</enum>
    </property>
-   <widget class="QLabel" name="LPlayedCard">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>201</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>等线</family>
-      <pointsize>11</pointsize>
-      <weight>50</weight>
-      <italic>false</italic>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>上家出牌区域</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
   </widget>
   <widget class="QFrame" name="RPlayer">
    <property name="geometry">
     <rect>
      <x>250</x>
-     <y>80</y>
+     <y>140</y>
      <width>201</width>
      <height>61</height>
     </rect>
@@ -162,7 +112,7 @@
    <property name="font">
     <font>
      <family>等线</family>
-     <pointsize>11</pointsize>
+     <pointsize>16</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
@@ -174,37 +124,12 @@
    <property name="frameShadow">
     <enum>QFrame::Raised</enum>
    </property>
-   <widget class="QLabel" name="RPlayedCard">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>201</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>等线</family>
-      <pointsize>11</pointsize>
-      <weight>50</weight>
-      <italic>false</italic>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>下家出牌区域</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
   </widget>
   <widget class="QFrame" name="Player">
    <property name="geometry">
     <rect>
-     <x>480</x>
-     <y>80</y>
+     <x>20</x>
+     <y>220</y>
      <width>201</width>
      <height>61</height>
     </rect>
@@ -212,7 +137,7 @@
    <property name="font">
     <font>
      <family>等线</family>
-     <pointsize>11</pointsize>
+     <pointsize>9</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
@@ -236,7 +161,7 @@
     <property name="font">
      <font>
       <family>等线</family>
-      <pointsize>11</pointsize>
+      <pointsize>14</pointsize>
       <weight>50</weight>
       <italic>false</italic>
       <bold>false</bold>
@@ -262,16 +187,16 @@
   <widget class="QLabel" name="ThreeLandlordCards">
    <property name="geometry">
     <rect>
-     <x>270</x>
-     <y>20</y>
-     <width>161</width>
+     <x>160</x>
+     <y>80</y>
+     <width>151</width>
      <height>41</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>等线</family>
-     <pointsize>11</pointsize>
+     <pointsize>16</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
@@ -284,198 +209,226 @@
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QPushButton" name="Stop">
-   <property name="geometry">
-    <rect>
-     <x>230</x>
-     <y>360</y>
-     <width>111</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>等线</family>
-     <pointsize>10</pointsize>
-     <weight>50</weight>
-     <italic>false</italic>
-     <bold>false</bold>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true"/>
-   </property>
-   <property name="text">
-    <string>停止</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="SwitchMode">
-   <property name="geometry">
-    <rect>
-     <x>370</x>
-     <y>360</y>
-     <width>121</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>等线</family>
-     <pointsize>10</pointsize>
-     <weight>50</weight>
-     <italic>false</italic>
-     <bold>false</bold>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true"/>
-   </property>
-   <property name="text">
-    <string>单局</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="AutoStart">
-   <property name="geometry">
-    <rect>
-     <x>520</x>
-     <y>360</y>
-     <width>111</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>等线</family>
-     <pointsize>10</pointsize>
-     <weight>50</weight>
-     <italic>false</italic>
-     <bold>false</bold>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true"/>
-   </property>
-   <property name="text">
-    <string>自动开始</string>
-   </property>
-  </widget>
   <widget class="QLabel" name="BidWinrate">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>220</y>
-     <width>411</width>
+     <x>460</x>
+     <y>230</y>
+     <width>241</width>
      <height>41</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>等线</family>
-     <pointsize>11</pointsize>
+     <pointsize>12</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
     </font>
    </property>
    <property name="text">
-    <string>叫牌预估得分：</string>
+    <string>叫牌预估胜率：</string>
    </property>
   </widget>
   <widget class="QLabel" name="PreWinrate">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>270</y>
-     <width>411</width>
+     <x>460</x>
+     <y>300</y>
+     <width>241</width>
      <height>41</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>等线</family>
-     <pointsize>11</pointsize>
+     <pointsize>12</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
     </font>
    </property>
    <property name="text">
-    <string>局前预估得分：</string>
+    <string>局前预估胜率：</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="SingleButton">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>370</y>
+     <width>111</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>等线</family>
+     <pointsize>14</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>单局</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="StopButton">
+   <property name="geometry">
+    <rect>
+     <x>540</x>
+     <y>370</y>
+     <width>111</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>等线</family>
+     <pointsize>14</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>停止</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>530</x>
+     <y>70</y>
+     <width>131</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>等线</family>
+     <pointsize>14</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>游戏状态</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="LPlayedCard">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>140</y>
+     <width>201</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>等线</family>
+     <pointsize>14</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>上家出牌区域</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="RPlayedCard">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>140</y>
+     <width>201</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>等线</family>
+     <pointsize>14</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>下家出牌区域</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="LoopButton">
+   <property name="geometry">
+    <rect>
+     <x>310</x>
+     <y>370</y>
+     <width>111</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>等线</family>
+     <pointsize>14</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string> 连续</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="OtherHandCards">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>20</y>
+     <width>641</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>等线</family>
+     <pointsize>14</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>记牌器</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
    </property>
   </widget>
  </widget>
- <resources/>
- <connections>
-  <connection>
-   <sender>InitCard</sender>
-   <signal>clicked()</signal>
-   <receiver>Form</receiver>
-   <slot>init_cards()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>200</x>
-     <y>360</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>250</x>
-     <y>292</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>Stop</sender>
-   <signal>clicked()</signal>
-   <receiver>Form</receiver>
-   <slot>stop()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>230</x>
-     <y>360</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>233</x>
-     <y>220</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>SwitchMode</sender>
-   <signal>clicked()</signal>
-   <receiver>Form</receiver>
-   <slot>switch_mode()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>472</x>
-     <y>366</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>480</x>
-     <y>277</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>AutoStart</sender>
-   <signal>clicked()</signal>
-   <receiver>Form</receiver>
-   <slot>game_loop()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>613</x>
-     <y>372</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>646</x>
-     <y>291</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <resources>
+  <include location="picture.qrc"/>
+ </resources>
+ <connections/>
  <slots>
   <slot>init_cards()</slot>
   <slot>start()</slot>
   <slot>stop()</slot>
   <slot>switch_mode()</slot>
-  <slot>game_loop()</slot>
+  <slot>beforeStart()</slot>
  </slots>
 </ui>
