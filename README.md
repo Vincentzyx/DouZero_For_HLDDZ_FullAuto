@@ -1,5 +1,6 @@
 # DouZero_For_HLDDZ_FullAuto: 将DouZero用于欢乐斗地主自动化
-* 本项目基于[DouZero](https://github.com/kwai/DouZero) 和  [DouZero_For_Happy_DouDiZhu](https://github.com/tianqiraf/DouZero_For_HappyDouDiZhu) 
+* 本项目基于[DouZero](https://github.com/kwai/DouZero) 和  [DouZero_For_Happy_DouDiZhu](https://github.com/tianqiraf/DouZero_For_HappyDouDiZhu)
+* 感谢 girgle（QQ群马云）对新版欢乐斗地主进行了适配，现在仓库代码已支持新版欢乐斗地主
 
 * 环境配置请移步项目DouZero
 
