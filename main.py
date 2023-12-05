@@ -114,9 +114,9 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         )
         self.MingpaiThreshold = 92
         # 坐标
-        self.MyHandCardsPos = (192, 692, 1448, 221)  # 我的截图区域
-        self.LPlayedCardsPos = (400, 428, 472, 170)  # 左边出牌截图区域
-        self.RPlayedCardsPos = (889, 428, 475, 170)  # 右边出牌截图区域
+        self.MyHandCardsPos = (192, 692, 1448, 120)  # 我的截图区域
+        self.LPlayedCardsPos = (400, 300, 500, 270)  # 左边出牌截图区域
+        self.RPlayedCardsPos = (880, 300, 500, 270)  # 右边出牌截图区域
         self.LandlordCardsPos = (704, 36, 368, 142)  # 地主底牌截图区域，resize成349x168
         self.LPassPos = (462, 475, 138, 78)  # 左边不出截图区域
         self.RPassPos = (1320, 524, 65, 63)  # 右边不出截图区域
@@ -656,17 +656,20 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
 
     def my_cards_area(self):
         cards = self.find_my_cards()
-        res1 = helper.LocateOnScreen("top_left_corner", region=self.MyHandCardsPos, confidence=0.7)
+        res1 = helper.LocateOnScreen("top_left_corner", region=self.MyHandCardsPos, confidence=0.65)
         while res1 is None:
             self.detect_start_btn()
             if not self.RunGame:
                 break
             print("未找到手牌区域")
+            img, _ = helper.Screenshot()
+            img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
+            cv2.imwrite("hand_cards_debug.png", img)
             self.sleep(500)
-            res1 = helper.LocateOnScreen("top_left_corner", region=self.MyHandCardsPos, confidence=0.7)
+            res1 = helper.LocateOnScreen("top_left_corner", region=self.MyHandCardsPos, confidence=0.65)
         pos = res1[0] + 15, res1[1] + 10, 57 * len(cards), 200
 
-        res2 = helper.LocateOnScreen("top_left_corner", region=(192, 720, 1448, 200), confidence=0.7)
+        res2 = helper.LocateOnScreen("top_left_corner", region=(192, 720, 1448, 100), confidence=0.65)
         if res2 is not None:
             pos = res2[0] + 15, res2[1] + 10, 57 * len(cards), 200
         return pos
@@ -685,47 +688,72 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             cards_dict[key].append(value)
         # 转换为普通的字典
         cards_dict = dict(cards_dict)
+        remove_dict = {key: [] for key in cards_dict.keys()}
         # print(cards_dict)
-        for i in out_cards:
-            cars_pos = cards_dict[i][-1][0:2]
+        if out_cards == "DX":
+            helper.LeftClick((cards_dict["X"][0][0] + 30, 600))
+            self.sleep(500)
 
-            # print("准备点击的牌：", cards_dict[i])
-            point = cars_pos[0] + 30, cars_pos[1] + 50
+        else:
+            for i in out_cards:
+                cars_pos = cards_dict[i][-1][0:2]
+
+                # print("准备点击的牌：", cards_dict[i])
+                point = cars_pos[0] + 30, cars_pos[1] + 100
+                img, _ = helper.Screenshot()
+                img = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2RGB)
+                check_one = self.find_cards(img=img, pos=(cars_pos[0] + 5, 700, 60, 85), mark="m", confidence=0.8)
+                print("系统帮你点的牌：", check_one, "你要出的牌：", i)
+
+                if check_one == i and check_one != "D" and check_one != "X":
+                    print("腾讯自动提示帮你选牌")
+                    img, _ = helper.Screenshot()
+                    img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
+                    cv2.imwrite("debug.png", img)
+
+                else:
+                    helper.LeftClick(point)
+                    print(point)
+                    self.sleep(100)
+                remove_dict[i].append(cards_dict[i][-1])
+                cards_dict[i].remove(cards_dict[i][-1])
+                print("remove_dict", remove_dict)
+                self.sleep(100)
+            self.sleep(200)
             img, _ = helper.Screenshot()
-            img = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2RGB)
-            check_one = self.find_cards(img=img, pos=(cars_pos[0], 700, 60, 90), mark="m", confidence=0.8)
-            print("系统帮你点的牌：", check_one, "你要出的牌：", i)
-
-            if check_one == i and check_one != "D":
-                print("腾讯自动提示帮你选牌")
+            img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
+            check_cards = self.find_cards(img, (192, 730, 1448, 200), mark="m")
+            for i in out_cards:
+                cards = cards.replace(i, "", 1)
+            print("检查剩的牌： ", check_cards, "应该剩的牌： ", cards)
+            if len(check_cards) < len(cards):
+                for m in check_cards:
+                    cards = cards.replace(m, "", 1)
+                print("系统多点的牌： ", cards)
+                for n in cards:
+                    print("字典里还剩的牌： ", cards_dict)
+                    cars_pos2 = cards_dict[n][-1][0:2]
+                    print("准备点回来的牌：", cars_pos2)
+                    point2 = cars_pos2[0] + 30, cars_pos2[1] + 100
+                    helper.LeftClick(point2)
+                    self.sleep(100)
+                    remove_dict[n].append(cards_dict[n][-1])
+                    cards_dict[n].remove(cards_dict[n][-1])
+            elif len(check_cards) > len(cards):
                 img, _ = helper.Screenshot()
                 img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
-                cv2.imwrite("debug.png", img)
-
-            else:
-                helper.LeftClick(point)
-                self.sleep(100)
-            cards_dict[i].remove(cards_dict[i][-1])
-            self.sleep(100)
-        self.sleep(200)
-        img, _ = helper.Screenshot()
-        img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
-        check_cards = self.find_cards(img, (192, 730, 1448, 200), mark="m")
-        for i in out_cards:
-            cards = cards.replace(i, "", 1)
-        print("检查剩的牌： ", check_cards, "应该剩的牌： ", cards)
-        if len(check_cards) < len(cards):
-            for m in check_cards:
-                cards = cards.replace(m, "", 1)
-            print("系统多点的牌： ", cards)
-            for n in cards:
-                print("字典里还剩的牌： ", cards_dict)
-                cars_pos2 = cards_dict[n][-1][0:2]
-                print("准备点回来的牌：", cars_pos2)
-                point2 = cars_pos2[0] + 30, cars_pos2[1] + 50
-                helper.LeftClick(point2)
-                self.sleep(100)
-                cards_dict[n].remove(cards_dict[n][-1])
+                cv2.imwrite("debug2.png", img)
+                for m in cards:
+                    check_cards = check_cards.replace(m, "", 1)
+                print("系统少点的牌： ", check_cards)
+                for n in check_cards:
+                    print("删除的字典： ", remove_dict)
+                    cars_pos3 = remove_dict[n][-1][0:2]
+                    print("准备再点出去的牌：", cars_pos3)
+                    point3 = cars_pos3[0] + 30, cars_pos3[1] + 100
+                    helper.LeftClick(point3)
+                    self.sleep(100)
+                    remove_dict[n].remove(remove_dict[n][-1])
 
     def find_landlord(self, landlord_flag_pos):
         tryCount = 3
@@ -807,6 +835,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             print("叫牌预估胜率：", win_rate)
             self.BidWinrate.setText("叫牌预估胜率：" + str(round(win_rate, 2)) + "%")
             if jiaodizhu_btn is not None:
+                print("XXXXXXXXXXXXXXXXX")
                 HaveBid = True
                 print(win_rate, self.BidThreshold1)
                 if win_rate > self.BidThreshold1:
@@ -814,23 +843,19 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     helper.ClickOnImage("jiaodizhu_btn", region=self.GeneralBtnPos)
                 else:
                     helper.ClickOnImage("bujiao_btn", region=self.GeneralBtnPos)
-
+            self.sleep(1000)
+            print("抢地主标志", qiangdizhu_btn)
+            qiangdizhu_btn = helper.LocateOnScreen("qiangdizhu_btn", region=self.GeneralBtnPos)
             if qiangdizhu_btn is not None:
+                print(0000000000000000000)
                 HaveBid = True
                 if win_rate > self.BidThreshold2:
                     helper.ClickOnImage("qiangdizhu_btn", region=self.GeneralBtnPos)
                 else:
                     helper.ClickOnImage("buqiang_btn", region=self.GeneralBtnPos)
+            self.sleep(500)
             if jiabei_btn is not None:
                 break
-
-        jiabei_btn = helper.LocateOnScreen("jiabei_btn", region=self.GeneralBtnPos)
-        while jiabei_btn is None:
-            self.detect_start_btn()
-            if not self.RunGame:
-                break
-            self.sleep(200)
-            jiabei_btn = helper.LocateOnScreen("jiabei_btn", region=self.GeneralBtnPos)
 
         self.label.setText("游戏开始")
         self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0.5);')
@@ -887,25 +912,32 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             self.PreWinrate.setText("局前预估胜率：" + str(round(win_rate, 2)) + "%")
 
         if win_rate > self.JiabeiThreshold[is_stolen][0]:
-            chaojijiabei_btn = helper.LocateOnScreen("chaojijiabei_btn", region=self.GeneralBtnPos)
+            chaojijiabei_btn = helper.LocateOnScreen("chaojijiabei_btn", region=self.GeneralBtnPos, confidence=0.6)
+            img, _ = helper.Screenshot()
+            img = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2RGB)
+            cv2.imwrite("chaojijiabei.png", img)
             while chaojijiabei_btn is None:
                 self.sleep(200)
+                print("没找到《超级加倍》按钮")
                 chaojijiabei_btn = helper.LocateOnScreen("chaojijiabei_btn", region=self.GeneralBtnPos)
             if chaojijiabei_btn is not None:
                 helper.ClickOnImage("chaojijiabei_btn", region=self.GeneralBtnPos)
             else:
                 helper.ClickOnImage("jiabei_btn", region=self.GeneralBtnPos)
+
         elif win_rate > self.JiabeiThreshold[is_stolen][1]:
             helper.ClickOnImage("jiabei_btn", region=self.GeneralBtnPos)
         else:
             helper.ClickOnImage("bujiabei_btn", region=self.GeneralBtnPos)
 
-        if win_rate > self.MingpaiThreshold:
+        """if win_rate > self.MingpaiThreshold:
+            self.sleep(1000)
             mingpai_btn = helper.LocateOnScreen("mingpai_btn", region=self.GeneralBtnPos)
             while mingpai_btn is None:
+                print('没找到《明牌》按钮')
                 self.sleep(200)
                 mingpai_btn = helper.LocateOnScreen("mingpai_btn", region=self.GeneralBtnPos)
-            helper.ClickOnImage("mingpai_btn", region=self.GeneralBtnPos)
+            helper.ClickOnImage("mingpai_btn", region=self.GeneralBtnPos)"""
         print("加倍环节已结束")
 
     def animation(self, cards):
