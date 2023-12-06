@@ -374,12 +374,10 @@ class GameHelper:
 
     def LeftClick(self, pos):
         x, y = pos
-        x = (x * self.RealRate[0]) / 1796
-        y = (y * self.RealRate[1]) / 1047
+        x = (x / 1796) * self.RealRate[0]
+        y = (y / 1047) * self.RealRate[1]
         x = int(x)
         y = int(y)
-
-
 
         pyautogui.mouseDown(x, y, button='left')
         time.sleep(0.1)
