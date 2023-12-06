@@ -10,6 +10,6 @@ img = cv2.imread("1.png")
 img = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2RGB)
 
 # img, _ = GameHelper.Screenshot()
-img = gh.DrawRectWithText(img, (268, 550, 1240, 180), "test")
+img = gh.DrawRectWithText(img, (400, 380, 500, 200), "test")
 # cv2.imwrite("111.png", img)
 gh.ShowImg(img)
