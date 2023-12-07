@@ -356,18 +356,18 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         [EnvCard2RealCard[c] for c in self.env.info_sets[self.user_position].player_hand_cards])
 
                     # if len(hand_cards_str) >= len(action_message["action"]):
-                    result = helper.LocateOnScreen("play_card", region=self.PassBtnPos)
+                    result = helper.LocateOnScreen("play_card", region=self.PassBtnPos, confidence=0.7)
                     while result is None:
                         self.detect_start_btn()
                         if not self.RunGame:
                             break
                         print("等待出牌按钮")
                         self.sleep(200)
-                        result = helper.LocateOnScreen("play_card", region=self.PassBtnPos)
-                    self.sleep(200)
+                        result = helper.LocateOnScreen("play_card", region=self.PassBtnPos, confidence=0.7)
                     self.click_cards(action_message["action"])
-                    self.sleep(50)
-                    helper.ClickOnImage("play_card", region=self.PassBtnPos)
+                    self.sleep(200)
+        
+                    helper.ClickOnImage("play_card", region=self.PassBtnPos, confidence=0.7)
 
                     ani = self.animation(action_message["action"])
                     if ani:
@@ -439,8 +439,8 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                                                                    self.other_played_cards_real)
                 # print("记牌器：", self.other_hands_cards_str)
                 self.cards_recorder(self.other_hands_cards_str)
+                self.sleep(50)
                 self.play_order = 2
-                self.sleep(10)
 
             elif self.play_order == 2:
                 self.LPlayedCard.setText("等待上家出牌")
@@ -493,8 +493,8 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                                                                    self.other_played_cards_real)
                 # print("记牌器：", self.other_hands_cards_str)
                 self.cards_recorder(self.other_hands_cards_str)
+                self.sleep(500)
                 self.play_order = 0
-            self.sleep(10)
 
         if self.loop_sign == 0:
             self.stop()
