@@ -802,7 +802,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             if not self.RunGame:
                 break
             jiaodizhu_btn = helper.LocateOnScreen("jiaodizhu_btn", region=self.GeneralBtnPos, confidence=0.7)
-            qiangdizhu_btn = helper.LocateOnScreen("qiangdizhu_btn", region=self.GeneralBtnPos, confidence=0.7)
+            qiangdizhu_btn = helper.LocateOnScreen("qiangdizhu_btn", region=self.GeneralBtnPos, confidence=0.6)
             jiabei_btn = helper.LocateOnScreen("jiabei_btn", region=self.GeneralBtnPos, confidence=0.7)
             while jiaodizhu_btn is None and qiangdizhu_btn is None and jiabei_btn is None:
                 self.detect_start_btn()
@@ -814,7 +814,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 img = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2RGB)
 
                 jiaodizhu_btn = helper.LocateOnScreen("jiaodizhu_btn", region=self.GeneralBtnPos, confidence=0.7)
-                qiangdizhu_btn = helper.LocateOnScreen("qiangdizhu_btn", region=self.GeneralBtnPos, confidence=0.7)
+                qiangdizhu_btn = helper.LocateOnScreen("qiangdizhu_btn", region=self.GeneralBtnPos, confidence=0.6)
                 jiabei_btn = helper.LocateOnScreen("jiabei_btn", region=self.GeneralBtnPos, confidence=0.7)
             print("jiaodizhu_btn, qiangdizhu_btn, jiabei_btn", jiaodizhu_btn, qiangdizhu_btn, jiabei_btn)
 
@@ -849,7 +849,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 print("找到《抢地主》按钮", qiangdizhu_btn)
                 HaveBid = True
                 if win_rate > self.BidThreshold2:
-                    helper.ClickOnImage("qiangdizhu_btn", region=self.GeneralBtnPos, confidence=0.7)
+                    helper.ClickOnImage("qiangdizhu_btn", region=self.GeneralBtnPos, confidence=0.6)
                 else:
                     helper.ClickOnImage("buqiang_btn", region=self.GeneralBtnPos, confidence=0.7)
                 self.sleep(500)
