@@ -27,7 +27,7 @@ class Main(QMainWindow, Ui_MainWindow):
 
     def save_pic(self, date):
         img, _ = GameHelper.Screenshot()
-        img.save(str(4 + self.i) + ".png")
+        img.save(str(3 + self.i) + ".png")
         self.label.setText(str(self.i))
         self.i += 1
 

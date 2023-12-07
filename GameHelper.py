@@ -122,7 +122,7 @@ def GetSingleCard(image, i, sx, sy, sw, sh, checkSelect, Pics):
     return None
 
 
-def LocateOnImage(image, template, region=None, confidence=0.9):
+def LocateOnImage(image, template, region=None, confidence=0.8):
     if region is not None:
         x, y, w, h = region
         imgShape = image.shape
@@ -135,7 +135,7 @@ def LocateOnImage(image, template, region=None, confidence=0.9):
         return None
 
 
-def LocateAllOnImage(image, template, region=None, confidence=0.9):
+def LocateAllOnImage(image, template, region=None, confidence=0.8):
     if region is not None:
         x, y, w, h = region
         imgShape = image.shape
@@ -241,13 +241,12 @@ class GameHelper:
             image = img
         else:
             image, _ = self.Screenshot()
-        # imgcv = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
-        result = pyautogui.locate(needleImage=self.Pics[templateName], haystackImage=image, confidence=confidence,
-                                  region=region)
+        imgcv = cv2.cvtColor(np.asarray(image), cv2.COLOR_RGB2BGR)
+        result = LocateOnImage(imgcv, self.PicsCV[templateName], region=region, confidence=confidence)
+
         if result is not None:
-            x, y = result[0] + result[2] / 2, result[1] + result[3] / 2
-            self.LeftClick((x, y))
-            print(x, y)
+            self.LeftClick(result)
+            print(result)
 
     def GetCardsState(self, image):
         st = time.time()

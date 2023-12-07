@@ -75,7 +75,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                             QtCore.Qt.WindowStaysOnTopHint |  # 窗体总在最前端
                             QtCore.Qt.WindowCloseButtonHint)
         self.setWindowIcon(QIcon(':/pics/favicon.ico'))
-        self.setWindowTitle("（新）欢乐斗地主修复版v1.5")
+        self.setWindowTitle("DouZero(新)欢乐斗地主v1.5")
         self.setFixedSize(self.width(), self.height())  # 固定窗体大小
         self.move(240, 100)
         # self.setWindowIcon(QIcon('pics/favicon.ico'))
@@ -130,7 +130,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.PassBtnPos = (322, 508, 1124, 213)
         self.LPassPos = (462, 475, 138, 78)  # 左边不出截图区域
         self.RPassPos = (1173, 469, 142, 87)  # 右边不出截图区域
-        self.GeneralBtnPos = (268, 550, 1240, 180)
+        self.GeneralBtnPos = (300, 600, 1200, 100)  # 叫地主、抢地主、加倍按钮截图区域
         self.LandlordFlagPos = [(1561, 317, 56, 44), (18, 817, 58, 65), (152, 312, 65, 62)]  # 地主标志截图区域(右-我-左)
         # 信号量
         self.shouldExit = 0  # 通知上一轮记牌结束
@@ -781,7 +781,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         HaveBid = False
         isTaodou = False
         is_stolen = 0
-        in_game = helper.LocateOnScreen("chat", region=(1500, 986, 286, 56), confidence=0.8)
+        in_game = helper.LocateOnScreen("chat", region=(1500, 986, 286, 56))
 
         while self.RunGame and in_game is None:
             self.sleep(1000)
@@ -791,7 +791,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
 
             if self.loop_sign == 1:
                 self.detect_start_btn()
-            in_game = helper.LocateOnScreen("chat", region=(1500, 986, 286, 56), confidence=0.8)
+            in_game = helper.LocateOnScreen("chat", region=(1500, 986, 286, 56))
         self.detect_start_btn()
         self.sleep(300)
         print(in_game, "进入到游戏中")
@@ -801,21 +801,18 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             self.detect_start_btn()
             if not self.RunGame:
                 break
-            jiaodizhu_btn = helper.LocateOnScreen("jiaodizhu_btn", region=self.GeneralBtnPos, confidence=0.7)
-            qiangdizhu_btn = helper.LocateOnScreen("qiangdizhu_btn", region=self.GeneralBtnPos, confidence=0.6)
-            jiabei_btn = helper.LocateOnScreen("jiabei_btn", region=self.GeneralBtnPos, confidence=0.7)
+            jiaodizhu_btn = helper.LocateOnScreen("jiaodizhu_btn", region=self.GeneralBtnPos)
+            qiangdizhu_btn = helper.LocateOnScreen("qiangdizhu_btn", region=self.GeneralBtnPos)
+            jiabei_btn = helper.LocateOnScreen("jiabei_btn", region=self.GeneralBtnPos)
             while jiaodizhu_btn is None and qiangdizhu_btn is None and jiabei_btn is None:
                 self.detect_start_btn()
                 if not self.RunGame:
                     break
                 print("等待加倍或叫地主")
                 self.sleep(200)
-                img, _ = helper.Screenshot()
-                img = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2RGB)
-
-                jiaodizhu_btn = helper.LocateOnScreen("jiaodizhu_btn", region=self.GeneralBtnPos, confidence=0.7)
-                qiangdizhu_btn = helper.LocateOnScreen("qiangdizhu_btn", region=self.GeneralBtnPos, confidence=0.6)
-                jiabei_btn = helper.LocateOnScreen("jiabei_btn", region=self.GeneralBtnPos, confidence=0.7)
+                jiaodizhu_btn = helper.LocateOnScreen("jiaodizhu_btn", region=self.GeneralBtnPos)
+                qiangdizhu_btn = helper.LocateOnScreen("qiangdizhu_btn", region=self.GeneralBtnPos)
+                jiabei_btn = helper.LocateOnScreen("jiabei_btn", region=self.GeneralBtnPos)
             print("jiaodizhu_btn, qiangdizhu_btn, jiabei_btn", jiaodizhu_btn, qiangdizhu_btn, jiabei_btn)
 
             cards = self.find_my_cards()
@@ -840,18 +837,18 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 print(win_rate, self.BidThreshold1)
                 if win_rate > self.BidThreshold1:
                     is_stolen = 1
-                    helper.ClickOnImage("jiaodizhu_btn", region=self.GeneralBtnPos, confidence=0.7)
+                    helper.ClickOnImage("jiaodizhu_btn", region=self.GeneralBtnPos)
                 else:
-                    helper.ClickOnImage("bujiao_btn", region=self.GeneralBtnPos, confidence=0.7)
+                    helper.ClickOnImage("bujiao_btn", region=self.GeneralBtnPos)
                 self.sleep(500)
 
             if qiangdizhu_btn is not None:
                 print("找到《抢地主》按钮", qiangdizhu_btn)
                 HaveBid = True
                 if win_rate > self.BidThreshold2:
-                    helper.ClickOnImage("qiangdizhu_btn", region=self.GeneralBtnPos, confidence=0.6)
+                    helper.ClickOnImage("qiangdizhu_btn", region=self.GeneralBtnPos)
                 else:
-                    helper.ClickOnImage("buqiang_btn", region=self.GeneralBtnPos, confidence=0.7)
+                    helper.ClickOnImage("buqiang_btn", region=self.GeneralBtnPos)
                 self.sleep(500)
             if jiabei_btn is not None:
                 self.sleep(500)
@@ -859,7 +856,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
 
         self.label.setText("游戏开始")
         self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0.5);')
-        laotou = helper.LocateOnScreen("laotou", region=(761, 45, 255, 100), confidence=0.8)
+        laotou = helper.LocateOnScreen("laotou", region=(761, 45, 255, 100))
         while laotou is not None:
             self.detect_start_btn()
             if not self.RunGame:
@@ -920,35 +917,35 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.sleep(500)
 
         if win_rate > self.JiabeiThreshold[is_stolen][0]:
-            chaojijiabei_btn = helper.LocateOnScreen("chaojijiabei_btn", region=self.GeneralBtnPos, confidence=0.6)
+            chaojijiabei_btn = helper.LocateOnScreen("chaojijiabei_btn", region=self.GeneralBtnPos)
             img, _ = helper.Screenshot()
             img = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2RGB)
-            cv2.imwrite("chaojijiabei.png", img)
+            cv2.imwrite("debug3.png", img)
             while chaojijiabei_btn is None:
                 self.sleep(200)
                 print("没找到《超级加倍》按钮")
-                chaojijiabei_btn = helper.LocateOnScreen("chaojijiabei_btn", region=self.GeneralBtnPos, confidence=0.7)
+                chaojijiabei_btn = helper.LocateOnScreen("chaojijiabei_btn", region=self.GeneralBtnPos)
             if chaojijiabei_btn is not None:
-                helper.ClickOnImage("chaojijiabei_btn", region=self.GeneralBtnPos, confidence=0.7)
+                helper.ClickOnImage("chaojijiabei_btn", region=self.GeneralBtnPos)
             else:
-                helper.ClickOnImage("jiabei_btn", region=self.GeneralBtnPos, confidence=0.7)
+                helper.ClickOnImage("jiabei_btn", region=self.GeneralBtnPos)
             self.sleep(500)
 
         elif win_rate > self.JiabeiThreshold[is_stolen][1]:
-            helper.ClickOnImage("jiabei_btn", region=self.GeneralBtnPos, confidence=0.7)
+            helper.ClickOnImage("jiabei_btn", region=self.GeneralBtnPos)
             self.sleep(500)
         else:
-            helper.ClickOnImage("bujiabei_btn", region=self.GeneralBtnPos, confidence=0.7)
+            helper.ClickOnImage("bujiabei_btn", region=self.GeneralBtnPos)
             self.sleep(500)
 
         if win_rate > self.MingpaiThreshold:
             self.sleep(1000)
-            mingpai_btn = helper.LocateOnScreen("mingpai_btn", region=self.GeneralBtnPos, confidence=0.7)
+            mingpai_btn = helper.LocateOnScreen("mingpai_btn", region=self.GeneralBtnPos)
             while mingpai_btn is None:
                 print('没找到《明牌》按钮')
                 self.sleep(200)
-                mingpai_btn = helper.LocateOnScreen("mingpai_btn", region=self.GeneralBtnPos, confidence=0.7)
-            helper.ClickOnImage("mingpai_btn", region=self.GeneralBtnPos, confidence=0.7)
+                mingpai_btn = helper.LocateOnScreen("mingpai_btn", region=self.GeneralBtnPos)
+            helper.ClickOnImage("mingpai_btn", region=self.GeneralBtnPos)
             self.sleep(500)
         print("加倍环节已结束")
 
