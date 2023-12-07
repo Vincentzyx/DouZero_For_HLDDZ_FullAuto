@@ -356,9 +356,6 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         [EnvCard2RealCard[c] for c in self.env.info_sets[self.user_position].player_hand_cards])
 
                     # if len(hand_cards_str) >= len(action_message["action"]):
-                    self.click_cards(action_message["action"])
-                    self.sleep(200)
-
                     result = helper.LocateOnScreen("play_card", region=self.PassBtnPos)
                     while result is None:
                         self.detect_start_btn()
@@ -367,12 +364,10 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         print("等待出牌按钮")
                         self.sleep(200)
                         result = helper.LocateOnScreen("play_card", region=self.PassBtnPos)
-
-                    helper.ClickOnImage("play_card", region=self.PassBtnPos)
                     self.sleep(200)
-                    result = helper.LocateOnScreen("play_card", region=self.PassBtnPos)
-                    if result is not None:
-                        helper.ClickOnImage("play_card", region=self.PassBtnPos)
+                    self.click_cards(action_message["action"])
+                    self.sleep(50)
+                    helper.ClickOnImage("play_card", region=self.PassBtnPos)
 
                     ani = self.animation(action_message["action"])
                     if ani:
@@ -391,7 +386,6 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                             traceback.print_exc()
                         break
 
-                self.detect_start_btn()
                 self.PredictedCard.setStyleSheet('background-color: rgba(0, 255, 0, 0);')
                 self.play_order = 1
                 self.sleep(10)
@@ -401,7 +395,6 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 self.RPlayer.setStyleSheet('background-color: rgba(0, 255, 0, 0.5);')
                 pass_flag = helper.LocateOnScreen('buchu', region=self.RPlayedCardsPos)
                 rightCards = self.find_other_cards(self.RPlayedCardsPos)
-                self.detect_start_btn()
                 while self.RunGame and len(rightCards) == 0 and pass_flag is None:
                     self.detect_start_btn()
                     print("等待下家出牌")
@@ -454,7 +447,6 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 self.LPlayer.setStyleSheet('background-color: rgba(0, 255, 0, 0.5);')
                 pass_flag = helper.LocateOnScreen('buchu', region=self.LPlayedCardsPos)
                 leftCards = self.find_other_cards(self.LPlayedCardsPos)
-                self.detect_start_btn()
                 while len(leftCards) == 0 and pass_flag is None:
                     self.detect_start_btn()
                     if not self.RunGame:
@@ -809,23 +801,33 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             self.detect_start_btn()
             if not self.RunGame:
                 break
-            jiaodizhu_btn = helper.LocateOnScreen("jiaodizhu_btn", region=self.GeneralBtnPos)
-            qiangdizhu_btn = helper.LocateOnScreen("qiangdizhu_btn", region=self.GeneralBtnPos)
-            jiabei_btn = helper.LocateOnScreen("jiabei_btn", region=self.GeneralBtnPos)
+            jiaodizhu_btn = helper.LocateOnScreen("jiaodizhu_btn", region=self.GeneralBtnPos, confidence=0.7)
+            qiangdizhu_btn = helper.LocateOnScreen("qiangdizhu_btn", region=self.GeneralBtnPos, confidence=0.7)
+            jiabei_btn = helper.LocateOnScreen("jiabei_btn", region=self.GeneralBtnPos, confidence=0.7)
             while jiaodizhu_btn is None and qiangdizhu_btn is None and jiabei_btn is None:
                 self.detect_start_btn()
                 if not self.RunGame:
                     break
                 print("等待加倍或叫地主")
-                self.sleep(100)
-                jiaodizhu_btn = helper.LocateOnScreen("jiaodizhu_btn", region=self.GeneralBtnPos)
-                qiangdizhu_btn = helper.LocateOnScreen("qiangdizhu_btn", region=self.GeneralBtnPos)
-                jiabei_btn = helper.LocateOnScreen("jiabei_btn", region=self.GeneralBtnPos)
+                self.sleep(200)
+                img, _ = helper.Screenshot()
+                img = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2RGB)
+
+                jiaodizhu_btn = helper.LocateOnScreen("jiaodizhu_btn", region=self.GeneralBtnPos, confidence=0.7)
+                qiangdizhu_btn = helper.LocateOnScreen("qiangdizhu_btn", region=self.GeneralBtnPos, confidence=0.7)
+                jiabei_btn = helper.LocateOnScreen("jiabei_btn", region=self.GeneralBtnPos, confidence=0.7)
             print("jiaodizhu_btn, qiangdizhu_btn, jiabei_btn", jiaodizhu_btn, qiangdizhu_btn, jiabei_btn)
 
             cards = self.find_my_cards()
+            while len(cards) != 17 and len(cards) != 20:
+                self.detect_start_btn()
+                if not self.RunGame:
+                    break
+                self.sleep(200)
+                cards = self.find_my_cards()
             cards_str = "".join([card[0] for card in cards])
             self.UserHandCards.setText("手牌：" + cards_str)
+            print("手牌：" + cards_str)
             win_rate = BidModel.predict(cards_str)
             if not HaveBid:
                 with open("cardslog.txt", "a") as f:
@@ -838,22 +840,21 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 print(win_rate, self.BidThreshold1)
                 if win_rate > self.BidThreshold1:
                     is_stolen = 1
-                    helper.ClickOnImage("jiaodizhu_btn", region=self.GeneralBtnPos)
+                    helper.ClickOnImage("jiaodizhu_btn", region=self.GeneralBtnPos, confidence=0.7)
                 else:
-                    helper.ClickOnImage("bujiao_btn", region=self.GeneralBtnPos)
-            self.sleep(500)
-            print("抢地主标志1", qiangdizhu_btn)
-            qiangdizhu_btn = helper.LocateOnScreen("qiangdizhu_btn", region=self.GeneralBtnPos, confidence=0.7)
-            print("抢地主标志2", qiangdizhu_btn)
+                    helper.ClickOnImage("bujiao_btn", region=self.GeneralBtnPos, confidence=0.7)
+                self.sleep(500)
+
             if qiangdizhu_btn is not None:
                 print("找到《抢地主》按钮", qiangdizhu_btn)
                 HaveBid = True
                 if win_rate > self.BidThreshold2:
-                    helper.ClickOnImage("qiangdizhu_btn", region=self.GeneralBtnPos)
+                    helper.ClickOnImage("qiangdizhu_btn", region=self.GeneralBtnPos, confidence=0.7)
                 else:
-                    helper.ClickOnImage("buqiang_btn", region=self.GeneralBtnPos)
-            self.sleep(500)
+                    helper.ClickOnImage("buqiang_btn", region=self.GeneralBtnPos, confidence=0.7)
+                self.sleep(500)
             if jiabei_btn is not None:
+                self.sleep(500)
                 break
 
         self.label.setText("游戏开始")
@@ -890,8 +891,15 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.ThreeLandlordCards.setText("底牌：" + llcards)
         print("地主牌:", llcards)
         cards = self.find_my_cards()
+        while len(cards) != 17 and len(cards) != 20:
+            self.detect_start_btn()
+            if not self.RunGame:
+                break
+            self.sleep(200)
+            cards = self.find_my_cards()
         cards_str = "".join([card[0] for card in cards])
         self.UserHandCards.setText("手牌：" + cards_str)
+        print("手牌：" + cards_str)
 
         if len(cards_str) == 20:
             win_rate = LandlordModel.predict(cards_str)
@@ -909,34 +917,39 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             win_rate = FarmerModel.predict(cards_str, llcards, user_position) - 5
             print("预估农民胜率:", win_rate)
             self.PreWinrate.setText("局前胜率：" + str(round(win_rate, 2)) + "%")
+        self.sleep(500)
 
         if win_rate > self.JiabeiThreshold[is_stolen][0]:
             chaojijiabei_btn = helper.LocateOnScreen("chaojijiabei_btn", region=self.GeneralBtnPos, confidence=0.6)
             img, _ = helper.Screenshot()
             img = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2RGB)
-            cv2.imwrite("debug3.png", img)
+            cv2.imwrite("chaojijiabei.png", img)
             while chaojijiabei_btn is None:
                 self.sleep(200)
                 print("没找到《超级加倍》按钮")
-                chaojijiabei_btn = helper.LocateOnScreen("chaojijiabei_btn", region=self.GeneralBtnPos)
+                chaojijiabei_btn = helper.LocateOnScreen("chaojijiabei_btn", region=self.GeneralBtnPos, confidence=0.7)
             if chaojijiabei_btn is not None:
-                helper.ClickOnImage("chaojijiabei_btn", region=self.GeneralBtnPos)
+                helper.ClickOnImage("chaojijiabei_btn", region=self.GeneralBtnPos, confidence=0.7)
             else:
-                helper.ClickOnImage("jiabei_btn", region=self.GeneralBtnPos)
+                helper.ClickOnImage("jiabei_btn", region=self.GeneralBtnPos, confidence=0.7)
+            self.sleep(500)
 
         elif win_rate > self.JiabeiThreshold[is_stolen][1]:
-            helper.ClickOnImage("jiabei_btn", region=self.GeneralBtnPos)
+            helper.ClickOnImage("jiabei_btn", region=self.GeneralBtnPos, confidence=0.7)
+            self.sleep(500)
         else:
-            helper.ClickOnImage("bujiabei_btn", region=self.GeneralBtnPos)
+            helper.ClickOnImage("bujiabei_btn", region=self.GeneralBtnPos, confidence=0.7)
+            self.sleep(500)
 
         if win_rate > self.MingpaiThreshold:
             self.sleep(1000)
-            mingpai_btn = helper.LocateOnScreen("mingpai_btn", region=self.GeneralBtnPos)
+            mingpai_btn = helper.LocateOnScreen("mingpai_btn", region=self.GeneralBtnPos, confidence=0.7)
             while mingpai_btn is None:
                 print('没找到《明牌》按钮')
                 self.sleep(200)
-                mingpai_btn = helper.LocateOnScreen("mingpai_btn", region=self.GeneralBtnPos)
-            helper.ClickOnImage("mingpai_btn", region=self.GeneralBtnPos)
+                mingpai_btn = helper.LocateOnScreen("mingpai_btn", region=self.GeneralBtnPos, confidence=0.7)
+            helper.ClickOnImage("mingpai_btn", region=self.GeneralBtnPos, confidence=0.7)
+            self.sleep(500)
         print("加倍环节已结束")
 
     def animation(self, cards):
