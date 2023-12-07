@@ -75,7 +75,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                             QtCore.Qt.WindowStaysOnTopHint |  # 窗体总在最前端
                             QtCore.Qt.WindowCloseButtonHint)
         self.setWindowIcon(QIcon(':/pics/favicon.ico'))
-        self.setWindowTitle("（新）欢乐斗地主修复版v1.4")
+        self.setWindowTitle("（新）欢乐斗地主修复版v1.5")
         self.setFixedSize(self.width(), self.height())  # 固定窗体大小
         self.move(240, 100)
         # self.setWindowIcon(QIcon('pics/favicon.ico'))
@@ -366,7 +366,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         result = helper.LocateOnScreen("play_card", region=self.PassBtnPos, confidence=0.7)
                     self.click_cards(action_message["action"])
                     self.sleep(200)
-        
+
                     helper.ClickOnImage("play_card", region=self.PassBtnPos, confidence=0.7)
 
                     ani = self.animation(action_message["action"])
