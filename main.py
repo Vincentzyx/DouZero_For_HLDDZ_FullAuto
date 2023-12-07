@@ -914,7 +914,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             chaojijiabei_btn = helper.LocateOnScreen("chaojijiabei_btn", region=self.GeneralBtnPos, confidence=0.6)
             img, _ = helper.Screenshot()
             img = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2RGB)
-            cv2.imwrite("chaojijiabei.png", img)
+            cv2.imwrite("debug3.png", img)
             while chaojijiabei_btn is None:
                 self.sleep(200)
                 print("没找到《超级加倍》按钮")
