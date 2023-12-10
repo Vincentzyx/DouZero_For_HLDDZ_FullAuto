@@ -1,0 +1,11 @@
+torch
+GitPython
+gitdb2
+PyAutoGUI
+PyQt5
+PyQt5-sip
+rlcard
+pywin32
+matplotlib
+opencv-python
+scikit-image
