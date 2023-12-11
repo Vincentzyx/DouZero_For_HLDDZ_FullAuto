@@ -34,6 +34,7 @@
 - 本项目基于 [DouZero](https://github.com/kwai/DouZero) 和 [DouZero_For_Happy_DouDiZhu](https://github.com/tianqiraf/DouZero_For_HappyDouDiZhu)
 - 在原 [DouZero_For_Happy_DouDiZhu](https://github.com/tianqiraf/DouZero_For_HappyDouDiZhu) 的基础上加入了自动出牌，基于手牌自动叫牌，加倍，同时修改截屏方式为窗口区域截屏，游戏原窗口遮挡不影响游戏进行。
 - 感谢 girgle（QQ 群马云）对新版欢乐斗地主进行了适配，现在仓库代码已支持新版欢乐斗地主
+- 感谢 Moxiner（一只莫欣儿）实现了用户友好的自定义截图引导界面同时完善了使用文档
 
 ## 演示视频
 
