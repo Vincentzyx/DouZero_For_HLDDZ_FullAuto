@@ -25,7 +25,7 @@
 
 ## 截图
 
-![软件截图](doc\pics\PrintScreen.png)
+![软件截图](./doc/pics/PrintScreen.png)
 
 ## 特性
 
