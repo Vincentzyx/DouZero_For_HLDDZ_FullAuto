@@ -50,17 +50,14 @@ git clone https://github.com/Vincentzyx/DouZero_For_HLDDZ_FullAuto.git
 4. 打开向导程序
 
 #### 第二步 安装运行环境
-1. 下载 Python 
-
-推荐使用 🐍 Python 3.8.10，您可以 [点击此处 ⬇️](https://www.python.org/ftp/python/3.8.10/python-3.8.10-amd64.exe) 下载，也可以点击向导程序中的 下载 Python 按钮。软件会唤醒浏览器进行下载
+1. 下载 Python
+   推荐使用 🐍 Python 3.8.10，您可以 [点击此处 ⬇️](https://www.python.org/ftp/python/3.8.10/python-3.8.10-amd64.exe) 下载，也可以点击向导程序中的 下载 Python 按钮。软件会唤醒浏览器进行下载
 
 2. 安装 Python
-
-安装时请务必勾选 **add Python to PATH**
+   安装时请务必勾选 **add Python to PATH**
 
 3. 安装 Python 第三方库
-
-点击向导软件中的 安装 Python 第三方库 按钮，等待脚本运行完成
+   点击向导软件中的 安装 Python 第三方库 按钮，等待脚本运行完成
 
 #### 第三步 配置识图环境
 
