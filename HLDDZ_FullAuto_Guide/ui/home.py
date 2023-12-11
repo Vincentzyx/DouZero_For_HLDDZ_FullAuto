@@ -64,7 +64,7 @@ class Home(Ui_Home, QWidget):
         self.initmenu()
         self.renew_selectlist()
         self.MenuWidget.setCurrentItem("Onepage")
-        pixmap = QtGui.QPixmap("./pics/OneImage.jpg")
+        pixmap = QtGui.QPixmap("./pics/OneImage.png")
         pixmap = pixmap.scaledToWidth(540)
 
         self.OneImage.setImage(pixmap)
