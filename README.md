@@ -38,7 +38,7 @@
 
 ## 演示视频
 
-正在录，别急 ⌛
+[点击此处 🎞️](https://www.bilibili.com/video/BV1Va4y1R7mR/)，前往 Bilibili 观看演示视频
 
 ## 安装与部属
 #### 第一步 下载本项目及其向导程序
