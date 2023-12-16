@@ -672,7 +672,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 point = cars_pos[0] + 20, cars_pos[1] + 100
                 img, _ = helper.Screenshot()
                 img = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2RGB)
-                check_one = self.find_cards(img=img, pos=(cars_pos[0] - 2, 567, 45, 60), mark="m", confidence=0.8)
+                check_one = self.find_cards(img=img, pos=(cars_pos[0] - 2, 567, 50, 60), mark="m", confidence=0.8)
                 # print("系统帮你点的牌：", check_one, "你要出的牌：", i)
 
                 if check_one == i and check_one != "D" and check_one != "X":
@@ -788,19 +788,19 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 jiabei_btn = helper.LocateOnScreen("jiabei_btn", region=self.GeneralBtnPos)
             print("《叫地主》, 《抢地主》, 《加倍》", jiaodizhu_btn, qiangdizhu_btn, jiabei_btn)
 
-            if not HaveBid:
+            cards = self.find_my_cards()
+            while len(cards) != 17 and len(cards) != 20:
+                self.detect_start_btn()
+                if not self.RunGame:
+                    break
+                self.sleep(200)
                 cards = self.find_my_cards()
-                while len(cards) != 17 and len(cards) != 20:
-                    self.detect_start_btn()
-                    if not self.RunGame:
-                        break
-                    self.sleep(200)
-                    cards = self.find_my_cards()
-                cards_str = "".join([card[0] for card in cards])
-                self.UserHandCards.setText("手牌：" + cards_str)
-                print("手牌：" + cards_str)
-                win_rate = BidModel.predict(cards_str)
+            cards_str = "".join([card[0] for card in cards])
+            self.UserHandCards.setText("手牌：" + cards_str)
+            print("手牌：" + cards_str)
+            win_rate = BidModel.predict(cards_str)
 
+            if not HaveBid:
                 with open("cardslog.txt", "a") as f:
                     f.write(str(int(time.time())) + " " + cards_str + " " + str(round(win_rate, 2)) + "\n")
                 print("叫牌预估胜率：", win_rate)
