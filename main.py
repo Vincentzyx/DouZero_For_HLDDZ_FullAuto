@@ -374,7 +374,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         break
 
                 self.PredictedCard.setStyleSheet('background-color: rgba(0, 255, 0, 0);')
-                self.sleep(500)
+                self.sleep(200)
                 self.play_order = 1
 
             elif self.play_order == 1:
@@ -426,7 +426,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                                                                    self.other_played_cards_real)
                 # print("记牌器：", self.other_hands_cards_str)
                 self.cards_recorder(self.other_hands_cards_str)
-                self.sleep(400)
+                self.sleep(200)
                 self.play_order = 2
 
             elif self.play_order == 2:
@@ -480,7 +480,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                                                                    self.other_played_cards_real)
                 # print("记牌器：", self.other_hands_cards_str)
                 self.cards_recorder(self.other_hands_cards_str)
-                self.sleep(600)
+                self.sleep(300)
                 self.play_order = 0
 
         if self.loop_sign == 0:
@@ -897,13 +897,6 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
 
         if win_rate > self.JiabeiThreshold[is_stolen][0]:
             chaojijiabei_btn = helper.LocateOnScreen("chaojijiabei_btn", region=self.GeneralBtnPos)
-            img, _ = helper.Screenshot()
-            img = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2RGB)
-            cv2.imwrite("debug3.png", img)
-            while chaojijiabei_btn is None:
-                self.sleep(200)
-                print("没找到《超级加倍》按钮")
-                chaojijiabei_btn = helper.LocateOnScreen("chaojijiabei_btn", region=self.GeneralBtnPos)
             if chaojijiabei_btn is not None:
                 helper.ClickOnImage("chaojijiabei_btn", region=self.GeneralBtnPos)
             else:
