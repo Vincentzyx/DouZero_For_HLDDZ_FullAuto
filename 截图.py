@@ -4,7 +4,7 @@ from GameHelper import GameHelper
 import numpy as np
 
 helper = GameHelper()
-helper.ScreenZoomRate = 1.0
+helper.ScreenZoomRate = 1.25
 global img
 global point1, point2
 
@@ -35,7 +35,7 @@ def main():
     global img
     # img, _ = helper.Screenshot()
     # img.save("111.png")
-    img = cv2.imread("111.png")
+    img = cv2.imread("0.png")
     # img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
 
     cv2.namedWindow('image')

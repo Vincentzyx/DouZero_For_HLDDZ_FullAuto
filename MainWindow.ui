@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>716</width>
-    <height>448</height>
+    <width>677</width>
+    <height>450</height>
    </rect>
   </property>
   <property name="font">
@@ -28,16 +28,16 @@
   <widget class="QLabel" name="WinRate">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>280</y>
-     <width>201</width>
-     <height>61</height>
+     <x>320</x>
+     <y>190</y>
+     <width>121</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <family>等线</family>
-     <pointsize>14</pointsize>
+     <family>微软雅黑</family>
+     <pointsize>10</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
@@ -53,16 +53,16 @@
   <widget class="QLabel" name="UserHandCards">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>210</y>
-     <width>421</width>
-     <height>41</height>
+     <x>30</x>
+     <y>330</y>
+     <width>351</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <family>等线</family>
-     <pointsize>14</pointsize>
+     <family>微软雅黑</family>
+     <pointsize>10</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
@@ -75,153 +75,19 @@
     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
    </property>
   </widget>
-  <widget class="QFrame" name="LPlayer">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>80</y>
-     <width>201</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>等线</family>
-     <pointsize>9</pointsize>
-     <weight>50</weight>
-     <italic>false</italic>
-     <bold>false</bold>
-    </font>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::StyledPanel</enum>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Raised</enum>
-   </property>
-  </widget>
-  <widget class="QFrame" name="RPlayer">
-   <property name="geometry">
-    <rect>
-     <x>290</x>
-     <y>80</y>
-     <width>201</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>等线</family>
-     <pointsize>16</pointsize>
-     <weight>50</weight>
-     <italic>false</italic>
-     <bold>false</bold>
-    </font>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::StyledPanel</enum>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Raised</enum>
-   </property>
-   <widget class="QLabel" name="RPlayedCard">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>201</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>等线</family>
-      <pointsize>14</pointsize>
-      <weight>50</weight>
-      <italic>false</italic>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>下家出牌区域</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-  </widget>
-  <widget class="QFrame" name="Player">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>200</y>
-     <width>201</width>
-     <height>61</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>等线</family>
-     <pointsize>9</pointsize>
-     <weight>50</weight>
-     <italic>false</italic>
-     <bold>false</bold>
-    </font>
-   </property>
-   <property name="frameShape">
-    <enum>QFrame::StyledPanel</enum>
-   </property>
-   <property name="frameShadow">
-    <enum>QFrame::Raised</enum>
-   </property>
-   <widget class="QLabel" name="PredictedCard">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>201</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>等线</family>
-      <pointsize>14</pointsize>
-      <weight>50</weight>
-      <italic>false</italic>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::Panel</enum>
-    </property>
-    <property name="lineWidth">
-     <number>1</number>
-    </property>
-    <property name="text">
-     <string>AI出牌区域</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-  </widget>
   <widget class="QLabel" name="ThreeLandlordCards">
    <property name="geometry">
     <rect>
-     <x>520</x>
-     <y>80</y>
-     <width>151</width>
-     <height>61</height>
+     <x>20</x>
+     <y>120</y>
+     <width>81</width>
+     <height>51</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <family>等线</family>
-     <pointsize>16</pointsize>
+     <family>微软雅黑</family>
+     <pointsize>10</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
@@ -237,16 +103,16 @@
   <widget class="QLabel" name="BidWinrate">
    <property name="geometry">
     <rect>
-     <x>260</x>
-     <y>290</y>
-     <width>171</width>
-     <height>41</height>
+     <x>30</x>
+     <y>220</y>
+     <width>161</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <family>等线</family>
-     <pointsize>12</pointsize>
+     <family>微软雅黑</family>
+     <pointsize>10</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
@@ -259,16 +125,16 @@
   <widget class="QLabel" name="PreWinrate">
    <property name="geometry">
     <rect>
-     <x>500</x>
-     <y>290</y>
-     <width>171</width>
-     <height>41</height>
+     <x>30</x>
+     <y>280</y>
+     <width>161</width>
+     <height>31</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <family>等线</family>
-     <pointsize>12</pointsize>
+     <family>微软雅黑</family>
+     <pointsize>10</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
@@ -281,16 +147,16 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>520</x>
-     <y>10</y>
-     <width>151</width>
+     <x>470</x>
+     <y>310</y>
+     <width>141</width>
      <height>51</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <family>等线</family>
-     <pointsize>14</pointsize>
+     <family>微软雅黑</family>
+     <pointsize>10</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
@@ -306,16 +172,16 @@
   <widget class="QLabel" name="LPlayedCard">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>80</y>
-     <width>201</width>
-     <height>61</height>
+     <x>170</x>
+     <y>120</y>
+     <width>102</width>
+     <height>51</height>
     </rect>
    </property>
    <property name="font">
     <font>
-     <family>等线</family>
-     <pointsize>14</pointsize>
+     <family>微软雅黑</family>
+     <pointsize>10</pointsize>
      <weight>50</weight>
      <italic>false</italic>
      <bold>false</bold>
@@ -328,40 +194,12 @@
     <set>Qt::AlignCenter</set>
    </property>
   </widget>
-  <widget class="QLabel" name="CardsRecorder">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>10</y>
-     <width>431</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <family>黑体</family>
-     <pointsize>16</pointsize>
-     <weight>50</weight>
-     <italic>false</italic>
-     <bold>false</bold>
-    </font>
-   </property>
-   <property name="styleSheet">
-    <string notr="true"/>
-   </property>
-   <property name="text">
-    <string>D X 2 A K Q J 10 9 8 7 6 5 4 3</string>
-   </property>
-   <property name="alignment">
-    <set>Qt::AlignCenter</set>
-   </property>
-  </widget>
   <widget class="QSplitter" name="splitter_2">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>370</y>
-     <width>651</width>
+     <y>380</y>
+     <width>621</width>
      <height>41</height>
     </rect>
    </property>
@@ -371,8 +209,8 @@
    <widget class="QPushButton" name="SingleButton">
     <property name="font">
      <font>
-      <family>等线</family>
-      <pointsize>14</pointsize>
+      <family>微软雅黑</family>
+      <pointsize>10</pointsize>
       <weight>50</weight>
       <italic>false</italic>
       <bold>false</bold>
@@ -385,8 +223,8 @@
    <widget class="QPushButton" name="LoopButton">
     <property name="font">
      <font>
-      <family>等线</family>
-      <pointsize>14</pointsize>
+      <family>微软雅黑</family>
+      <pointsize>10</pointsize>
       <weight>50</weight>
       <italic>false</italic>
       <bold>false</bold>
@@ -399,8 +237,8 @@
    <widget class="QPushButton" name="StopButton">
     <property name="font">
      <font>
-      <family>等线</family>
-      <pointsize>14</pointsize>
+      <family>微软雅黑</family>
+      <pointsize>10</pointsize>
       <weight>50</weight>
       <italic>false</italic>
       <bold>false</bold>
@@ -411,318 +249,527 @@
     </property>
    </widget>
   </widget>
-  <widget class="QSplitter" name="splitter">
+  <widget class="QTableWidget" name="tableWidget">
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>50</y>
-     <width>431</width>
-     <height>31</height>
+     <y>10</y>
+     <width>611</width>
+     <height>75</height>
     </rect>
    </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>75</height>
+    </size>
    </property>
-   <widget class="QLabel" name="label_D">
-    <property name="font">
-     <font>
-      <family>黑体</family>
-      <pointsize>16</pointsize>
-      <weight>75</weight>
-      <italic>false</italic>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(255, 0, 0);</string>
-    </property>
+   <property name="font">
+    <font>
+     <family>微软雅黑</family>
+     <pointsize>12</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">QTableWidget{
+color:#DCDCDC;
+background:#444444;
+border:1px solid #242424;
+alternate-background-color:#525252;
+gridline-color:#242424;
+}
+ 
+QTableWidget::item:selected{
+color:#DCDCDC;
+background:qlineargradient(spread:pad,x1:0,y1:0,x2:0,y2:1,stop:0 #484848,stop:1 #383838);
+}
+ 
+QTableWidget::item:hover{
+background:#5B5B5B;
+}
+QHeaderView::section{
+text-align:center;
+background:#5E5E5E;
+padding:3px;
+margin:0px;
+color:#DCDCDC;
+border:1px solid #242424;
+border-left-width:0;
+}
+ 
+QScrollBar:vertical{
+background:#484848;
+padding:0px;
+border-radius:6px;
+max-width:12px;
+}
+ 
+ 
+QScrollBar::handle:vertical{
+background:#CCCCCC;
+}
+ 
+QScrollBar::handle:hover:vertical,QScrollBar::handle:pressed:vertical{
+background:#A7A7A7;
+}
+QScrollBar::sub-page:vertical{
+background:444444;
+}
+ 
+ 
+QScrollBar::add-page:vertical{
+background:5B5B5B;
+}
+ 
+QScrollBar::add-line:vertical{
+background:none;
+}
+QScrollBar::sub-line:vertical{
+background:none;
+}</string>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Sunken</enum>
+   </property>
+   <property name="midLineWidth">
+    <number>-1</number>
+   </property>
+   <property name="verticalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="horizontalScrollBarPolicy">
+    <enum>Qt::ScrollBarAlwaysOff</enum>
+   </property>
+   <property name="autoScroll">
+    <bool>false</bool>
+   </property>
+   <property name="editTriggers">
+    <set>QAbstractItemView::NoEditTriggers</set>
+   </property>
+   <property name="selectionMode">
+    <enum>QAbstractItemView::NoSelection</enum>
+   </property>
+   <property name="selectionBehavior">
+    <enum>QAbstractItemView::SelectRows</enum>
+   </property>
+   <property name="textElideMode">
+    <enum>Qt::ElideNone</enum>
+   </property>
+   <attribute name="horizontalHeaderVisible">
+    <bool>true</bool>
+   </attribute>
+   <attribute name="horizontalHeaderCascadingSectionResizes">
+    <bool>true</bool>
+   </attribute>
+   <attribute name="horizontalHeaderDefaultSectionSize">
+    <number>41</number>
+   </attribute>
+   <attribute name="horizontalHeaderStretchLastSection">
+    <bool>true</bool>
+   </attribute>
+   <attribute name="verticalHeaderVisible">
+    <bool>false</bool>
+   </attribute>
+   <attribute name="verticalHeaderCascadingSectionResizes">
+    <bool>false</bool>
+   </attribute>
+   <attribute name="verticalHeaderMinimumSectionSize">
+    <number>40</number>
+   </attribute>
+   <attribute name="verticalHeaderDefaultSectionSize">
+    <number>40</number>
+   </attribute>
+   <attribute name="verticalHeaderHighlightSections">
+    <bool>true</bool>
+   </attribute>
+   <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+    <bool>false</bool>
+   </attribute>
+   <row>
     <property name="text">
      <string/>
     </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
+   </row>
+   <column>
+    <property name="text">
+     <string>大</string>
     </property>
-   </widget>
-   <widget class="QLabel" name="label_X">
     <property name="font">
      <font>
-      <family>黑体</family>
-      <pointsize>16</pointsize>
+      <family>微软雅黑</family>
+      <pointsize>10</pointsize>
       <weight>75</weight>
-      <italic>false</italic>
       <bold>true</bold>
      </font>
     </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(255, 0, 0);</string>
-    </property>
+   </column>
+   <column>
     <property name="text">
-     <string/>
+     <string>小</string>
     </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_2">
     <property name="font">
      <font>
-      <family>黑体</family>
-      <pointsize>16</pointsize>
+      <family>微软雅黑</family>
+      <pointsize>10</pointsize>
       <weight>75</weight>
-      <italic>false</italic>
       <bold>true</bold>
      </font>
     </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(255, 0, 0);</string>
-    </property>
+   </column>
+   <column>
     <property name="text">
-     <string/>
+     <string>2</string>
     </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_A">
     <property name="font">
      <font>
-      <family>黑体</family>
-      <pointsize>16</pointsize>
+      <family>微软雅黑</family>
+      <pointsize>10</pointsize>
       <weight>75</weight>
-      <italic>false</italic>
       <bold>true</bold>
      </font>
     </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(255, 0, 0);</string>
-    </property>
+   </column>
+   <column>
     <property name="text">
-     <string/>
+     <string>A</string>
     </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_K">
     <property name="font">
      <font>
-      <family>黑体</family>
-      <pointsize>16</pointsize>
+      <family>微软雅黑</family>
+      <pointsize>10</pointsize>
       <weight>75</weight>
-      <italic>false</italic>
       <bold>true</bold>
      </font>
     </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(255, 0, 0);</string>
-    </property>
+   </column>
+   <column>
     <property name="text">
-     <string/>
+     <string>K</string>
     </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_Q">
     <property name="font">
      <font>
-      <family>黑体</family>
-      <pointsize>16</pointsize>
+      <family>微软雅黑</family>
+      <pointsize>10</pointsize>
       <weight>75</weight>
-      <italic>false</italic>
       <bold>true</bold>
      </font>
     </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(255, 0, 0);</string>
-    </property>
+   </column>
+   <column>
     <property name="text">
-     <string/>
+     <string>Q</string>
     </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_J">
     <property name="font">
      <font>
-      <family>黑体</family>
-      <pointsize>16</pointsize>
+      <family>微软雅黑</family>
+      <pointsize>10</pointsize>
       <weight>75</weight>
-      <italic>false</italic>
       <bold>true</bold>
      </font>
     </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(255, 0, 0);</string>
-    </property>
+   </column>
+   <column>
     <property name="text">
-     <string/>
+     <string>J</string>
     </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_T">
     <property name="font">
      <font>
-      <family>黑体</family>
-      <pointsize>16</pointsize>
+      <family>微软雅黑</family>
+      <pointsize>10</pointsize>
       <weight>75</weight>
-      <italic>false</italic>
       <bold>true</bold>
      </font>
     </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(255, 0, 0);</string>
-    </property>
+   </column>
+   <column>
     <property name="text">
-     <string/>
+     <string>10</string>
     </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_9">
     <property name="font">
      <font>
-      <family>黑体</family>
-      <pointsize>16</pointsize>
+      <family>微软雅黑</family>
+      <pointsize>10</pointsize>
       <weight>75</weight>
-      <italic>false</italic>
       <bold>true</bold>
      </font>
     </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(255, 0, 0);</string>
-    </property>
+   </column>
+   <column>
     <property name="text">
-     <string/>
+     <string>9</string>
     </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_8">
     <property name="font">
      <font>
-      <family>黑体</family>
-      <pointsize>16</pointsize>
+      <family>微软雅黑</family>
+      <pointsize>10</pointsize>
       <weight>75</weight>
-      <italic>false</italic>
       <bold>true</bold>
      </font>
     </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(255, 0, 0);</string>
-    </property>
+   </column>
+   <column>
     <property name="text">
-     <string/>
+     <string>8</string>
     </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_7">
     <property name="font">
      <font>
-      <family>黑体</family>
-      <pointsize>16</pointsize>
+      <family>微软雅黑</family>
+      <pointsize>10</pointsize>
       <weight>75</weight>
-      <italic>false</italic>
       <bold>true</bold>
      </font>
     </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(255, 0, 0);</string>
-    </property>
+   </column>
+   <column>
     <property name="text">
-     <string/>
+     <string>7</string>
     </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_6">
     <property name="font">
      <font>
-      <family>黑体</family>
-      <pointsize>16</pointsize>
+      <family>微软雅黑</family>
+      <pointsize>10</pointsize>
       <weight>75</weight>
-      <italic>false</italic>
       <bold>true</bold>
      </font>
     </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(255, 0, 0);</string>
-    </property>
+   </column>
+   <column>
     <property name="text">
-     <string/>
+     <string>6</string>
     </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_5">
     <property name="font">
      <font>
-      <family>黑体</family>
-      <pointsize>16</pointsize>
+      <family>微软雅黑</family>
+      <pointsize>10</pointsize>
       <weight>75</weight>
-      <italic>false</italic>
       <bold>true</bold>
      </font>
     </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(255, 0, 0);</string>
-    </property>
+   </column>
+   <column>
     <property name="text">
-     <string/>
+     <string>5</string>
     </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_4">
     <property name="font">
      <font>
-      <family>黑体</family>
-      <pointsize>16</pointsize>
+      <family>微软雅黑</family>
+      <pointsize>10</pointsize>
       <weight>75</weight>
-      <italic>false</italic>
       <bold>true</bold>
      </font>
     </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(255, 0, 0);</string>
-    </property>
+   </column>
+   <column>
     <property name="text">
-     <string/>
+     <string>4</string>
     </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_3">
     <property name="font">
      <font>
-      <family>黑体</family>
-      <pointsize>16</pointsize>
+      <family>微软雅黑</family>
+      <pointsize>10</pointsize>
       <weight>75</weight>
-      <italic>false</italic>
       <bold>true</bold>
      </font>
     </property>
-    <property name="styleSheet">
-     <string notr="true">color: rgb(255, 0, 0);</string>
-    </property>
+   </column>
+   <column>
     <property name="text">
-     <string/>
+     <string>3</string>
     </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
+    <property name="font">
+     <font>
+      <family>微软雅黑</family>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
-   </widget>
+   </column>
+   <item row="0" column="0">
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </item>
+   <item row="0" column="1">
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </item>
+   <item row="0" column="2">
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </item>
+   <item row="0" column="3">
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </item>
+   <item row="0" column="4">
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </item>
+   <item row="0" column="5">
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </item>
+   <item row="0" column="6">
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </item>
+   <item row="0" column="7">
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </item>
+   <item row="0" column="8">
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </item>
+   <item row="0" column="9">
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </item>
+   <item row="0" column="10">
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </item>
+   <item row="0" column="11">
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </item>
+   <item row="0" column="12">
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </item>
+   <item row="0" column="13">
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </item>
+   <item row="0" column="14">
+    <property name="text">
+     <string>0</string>
+    </property>
+    <property name="textAlignment">
+     <set>AlignCenter</set>
+    </property>
+   </item>
+  </widget>
+  <widget class="QLabel" name="RPlayedCard">
+   <property name="geometry">
+    <rect>
+     <x>484</x>
+     <y>120</y>
+     <width>102</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>微软雅黑</family>
+     <pointsize>10</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="text">
+    <string>下家出牌区域</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLabel" name="PredictedCard">
+   <property name="geometry">
+    <rect>
+     <x>319</x>
+     <y>120</y>
+     <width>121</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>微软雅黑</family>
+     <pointsize>10</pointsize>
+     <weight>50</weight>
+     <italic>false</italic>
+     <bold>false</bold>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Panel</enum>
+   </property>
+   <property name="lineWidth">
+    <number>1</number>
+   </property>
+   <property name="text">
+    <string>AI出牌区域</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
   </widget>
  </widget>
  <resources>

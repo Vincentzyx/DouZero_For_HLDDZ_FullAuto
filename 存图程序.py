@@ -9,7 +9,7 @@ from PIL import Image
 import cv2
 
 GameHelper = GameHelper()
-GameHelper.ScreenZoomRate = 1.0
+# GameHelper.ScreenZoomRate = 1.0
 
 
 class Main(QMainWindow, Ui_MainWindow):
@@ -27,7 +27,7 @@ class Main(QMainWindow, Ui_MainWindow):
 
     def save_pic(self, date):
         img, _ = GameHelper.Screenshot()
-        img.save(str(3 + self.i) + ".png")
+        img.save(str(8 + self.i) + ".png")
         self.label.setText(str(self.i))
         self.i += 1
 
