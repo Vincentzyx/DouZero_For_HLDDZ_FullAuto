@@ -225,7 +225,7 @@ class GameHelper:
         time.sleep(0.1)
         pyautogui.mouseUp(x, y, button='left')
         time.sleep(0.1)
-        pyautogui.moveTo(int(left + 1000), int(top + 580))
+        pyautogui.moveTo(int(left + 1000), int(top + 550))
 
         '''win32gui.SetActiveWindow(self.Handle)
         lParam = win32api.MAKELONG(x, y)

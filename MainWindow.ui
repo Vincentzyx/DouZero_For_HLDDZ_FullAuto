@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>677</width>
+    <width>656</width>
     <height>450</height>
    </rect>
   </property>
@@ -29,9 +29,9 @@
    <property name="geometry">
     <rect>
      <x>320</x>
-     <y>190</y>
+     <y>120</y>
      <width>121</width>
-     <height>41</height>
+     <height>51</height>
     </rect>
    </property>
    <property name="font">
@@ -78,9 +78,9 @@
   <widget class="QLabel" name="ThreeLandlordCards">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>30</x>
      <y>120</y>
-     <width>81</width>
+     <width>121</width>
      <height>51</height>
     </rect>
    </property>
@@ -97,7 +97,7 @@
     <string>地主牌</string>
    </property>
    <property name="alignment">
-    <set>Qt::AlignCenter</set>
+    <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
    </property>
   </widget>
   <widget class="QLabel" name="BidWinrate">
@@ -147,10 +147,10 @@
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>470</x>
-     <y>310</y>
-     <width>141</width>
-     <height>51</height>
+     <x>490</x>
+     <y>320</y>
+     <width>101</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="font">
@@ -199,7 +199,7 @@
     <rect>
      <x>20</x>
      <y>380</y>
-     <width>621</width>
+     <width>611</width>
      <height>41</height>
     </rect>
    </property>
@@ -715,7 +715,7 @@ background:none;
   <widget class="QLabel" name="RPlayedCard">
    <property name="geometry">
     <rect>
-     <x>484</x>
+     <x>490</x>
      <y>120</y>
      <width>102</width>
      <height>51</height>
@@ -740,8 +740,8 @@ background:none;
   <widget class="QLabel" name="PredictedCard">
    <property name="geometry">
     <rect>
-     <x>319</x>
-     <y>120</y>
+     <x>320</x>
+     <y>190</y>
      <width>121</width>
      <height>51</height>
     </rect>

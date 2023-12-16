@@ -342,7 +342,6 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     hand_cards_str = ''.join(
                         [EnvCard2RealCard[c] for c in self.env.info_sets[self.user_position].player_hand_cards])
 
-                    # if len(hand_cards_str) >= len(action_message["action"]):
                     result = helper.LocateOnScreen("play_card", region=self.PassBtnPos, confidence=0.7)
                     while result is None:
                         self.detect_start_btn()
@@ -355,6 +354,10 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     self.sleep(200)
 
                     helper.ClickOnImage("play_card", region=self.PassBtnPos, confidence=0.7)
+                    self.sleep(200)
+                    result = helper.LocateOnScreen("play_card", region=self.PassBtnPos, confidence=0.7)
+                    if result is not None:
+                        self.click_cards(action_message["action"])
 
                     ani = self.animation(action_message["action"])
                     if ani:
@@ -639,9 +642,6 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             if not self.RunGame:
                 break
             print("未找到手牌区域")
-            img, _ = helper.Screenshot()
-            img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
-            cv2.imwrite("hand_cards_debug.png", img)
             self.sleep(500)
             res1 = helper.LocateOnScreen("up_left", region=self.MyHandCardsPos, confidence=0.65)
         pos = res1[0] + 6, res1[1] + 7
@@ -672,7 +672,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 point = cars_pos[0] + 20, cars_pos[1] + 100
                 img, _ = helper.Screenshot()
                 img = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2RGB)
-                check_one = self.find_cards(img=img, pos=(cars_pos[0] - 2, 567, 50, 60), mark="m", confidence=0.8)
+                check_one = self.find_cards(img=img, pos=(cars_pos[0] - 2, 565, 60, 60), mark="m", confidence=0.8)
                 # print("系统帮你点的牌：", check_one, "你要出的牌：", i)
 
                 if check_one == i and check_one != "D" and check_one != "X":
