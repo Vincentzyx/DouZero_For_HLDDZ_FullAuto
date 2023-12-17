@@ -108,8 +108,8 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.MingpaiThreshold = 92
         # 坐标
         self.MyHandCardsPos = (180, 560, 1050, 90)  # 我的截图区域
-        self.LPlayedCardsPos = (320, 280, 500, 120)  # 左边出牌截图区域
-        self.RPlayedCardsPos = (600, 280, 500, 120)  # 右边出牌截图区域
+        self.LPlayedCardsPos = (320, 280, 400, 120)  # 左边出牌截图区域
+        self.RPlayedCardsPos = (720, 280, 400, 120)  # 右边出牌截图区域
         self.LandlordCardsPos = (600, 33, 220, 103)  # 地主底牌截图区域
         self.LPassPos = (360, 360, 120, 80)  # 左边不出截图区域
         self.RPassPos = (940, 360, 120, 80)  # 右边不出截图区域
@@ -118,15 +118,10 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.GeneralBtnPos = (200, 450, 1000, 120)  # 叫地主、抢地主、加倍按钮截图区域
         self.LandlordFlagPos = [(1247, 245, 48, 52), (12, 661, 51, 53), (123, 243, 52, 54)]  # 地主标志截图区域(右-我-左)
 
-        '''self.card_play_model_path_dict = {
+        self.card_play_model_path_dict = {
             'landlord': "baselines/resnet/resnet_landlord.ckpt",
             'landlord_up': "baselines/resnet/resnet_landlord_up.ckpt",
             'landlord_down': "baselines/resnet/resnet_landlord_down.ckpt"
-        }'''
-        self.card_play_model_path_dict = {
-            'landlord': "baselines/douzero_ADP/landlord.ckpt",
-            'landlord_up': "baselines/douzero_ADP/landlord_up.ckpt",
-            'landlord_down': "baselines/douzero_ADP/landlord_down.ckpt"
         }
 
     def game_single(self):
