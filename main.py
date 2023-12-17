@@ -231,13 +231,6 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             self.sleep(200)
             self.user_position_code = self.find_landlord(self.LandlordFlagPos)
         print("正在出牌人的代码： ", self.user_position_code)
-        if self.user_position_code is None:
-            items = ("地主上家", "地主", "地主下家")
-            item, okPressed = QInputDialog.getItem(self, "选择角色", "未识别到地主，请手动选择角色:", items, 0, False)
-            if okPressed and item:
-                self.user_position_code = items.index(item)
-            else:
-                return
         self.user_position = ['landlord_up', 'landlord', 'landlord_down'][self.user_position_code]
         print("我现在的角色是：", self.user_position)
         for player in self.Players:
@@ -741,7 +734,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
 
     def find_landlord(self, landlord_flag_pos):
         img, _ = helper.Screenshot()
-        img = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2HSV)
+        img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2HSV)
         for pos in landlord_flag_pos:
             classifier = DC.ColorClassify(debug=True)
             imgCut = img[pos[1]:pos[1] + pos[3], pos[0]:pos[0] + pos[2]]
@@ -752,7 +745,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         return landlord_flag_pos.index(pos)
             self.sleep(100)
             print("未找到地主位置")
-        print("=============================")
+        print("==============")
 
     def before_start(self):
         global win_rate
