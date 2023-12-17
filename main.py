@@ -99,10 +99,10 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.RunGame = False
         self.AutoPlay = False
         self.BidThreshold1 = 65  # 叫地主阈值
-        self.BidThreshold2 = 70  # 抢地主阈值
+        self.BidThreshold2 = 75  # 抢地主阈值
         self.JiabeiThreshold = (
-            (80, 65),  # 叫地主 超级加倍 加倍 阈值
-            (80, 70)  # 叫地主 超级加倍 加倍 阈值  (在地主是抢来的情况下)
+            (85, 65),  # 叫地主 超级加倍 加倍 阈值
+            (85, 75)  # 叫地主 超级加倍 加倍 阈值  (在地主是抢来的情况下)
         )
         self.MingpaiThreshold = 95
         # 坐标
