@@ -358,6 +358,8 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     result = helper.LocateOnScreen("play_card", region=self.PassBtnPos, confidence=0.7)
                     if result is not None:
                         self.click_cards(action_message["action"])
+                        self.sleep(500)
+                        helper.ClickOnImage("play_card", region=self.PassBtnPos, confidence=0.7)
 
                     ani = self.animation(action_message["action"])
                     if ani:
@@ -689,7 +691,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 cards_dict[i].remove(cards_dict[i][-1])
                 # print("remove_dict", remove_dict)
             img, _ = helper.Screenshot()
-            mg = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
+            img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
             check_cards = self.find_cards(img, (180, 590, 1050, 90), mark="m")
             for i in out_cards:
                 cards = cards.replace(i, "", 1)
@@ -903,14 +905,11 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             self.sleep(500)
 
         if win_rate > self.MingpaiThreshold:
-            self.sleep(1000)
-            mingpai_btn = helper.LocateOnScreen("mingpai_btn", region=self.GeneralBtnPos)
-            while mingpai_btn is None:
-                print('没找到《明牌》按钮')
-                self.sleep(200)
-                mingpai_btn = helper.LocateOnScreen("mingpai_btn", region=self.GeneralBtnPos)
-            helper.ClickOnImage("mingpai_btn", region=self.GeneralBtnPos)
             self.sleep(500)
+            mingpai_btn = helper.LocateOnScreen("mingpai_btn", region=self.GeneralBtnPos)
+            if mingpai_btn is not None:
+                helper.ClickOnImage("mingpai_btn", region=self.GeneralBtnPos)
+                self.sleep(500)
         print("加倍环节已结束")
 
     def animation(self, cards):
