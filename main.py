@@ -22,7 +22,7 @@ import numpy as np
 from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtWidgets import QTableWidgetItem, QInputDialog, QMessageBox
 from PyQt5.QtGui import QPixmap, QIcon
-from PyQt5.QtCore import QTime, QEventLoop, Qt
+from PyQt5.QtCore import QTime, QEventLoop, Qt, QFile, QTextStream
 from MainWindow import Ui_Form
 
 from douzero.env.game import GameEnv
@@ -73,9 +73,9 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                             QtCore.Qt.WindowStaysOnTopHint |  # 窗体总在最前端
                             QtCore.Qt.WindowCloseButtonHint)
         self.setWindowIcon(QIcon(':/pics/favicon.ico'))
-        self.setWindowTitle("DouZero欢乐斗地主v2.0")
+        self.setWindowTitle("DouZero欢乐斗地主v2.1")
         self.setFixedSize(self.width(), self.height())  # 固定窗体大小
-        self.move(50, 50)
+        self.move(20, 20)
         # self.setWindowIcon(QIcon('pics/favicon.ico'))
         window_pale = QtGui.QPalette()
         # window_pale.setBrush(self.backgroundRole(), QtGui.QBrush(QtGui.QPixmap("pics/bg.png")))
@@ -671,7 +671,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 # print("准备点击的牌：", cards_dict[i])
                 point = cars_pos[0] + 20, cars_pos[1] + 100
                 img, _ = helper.Screenshot()
-                img = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2RGB)
+                img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
                 check_one = self.find_cards(img=img, pos=(cars_pos[0] - 2, 565, 60, 60), mark="m", confidence=0.8)
                 # print("系统帮你点的牌：", check_one, "你要出的牌：", i)
 
@@ -689,7 +689,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 cards_dict[i].remove(cards_dict[i][-1])
                 # print("remove_dict", remove_dict)
             img, _ = helper.Screenshot()
-            img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
+            mg = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
             check_cards = self.find_cards(img, (180, 590, 1050, 90), mark="m")
             for i in out_cards:
                 cards = cards.replace(i, "", 1)
@@ -724,14 +724,6 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     remove_dict[n].remove(remove_dict[n][0])
                     # print(remove_dict)
             self.sleep(200)
-
-    '''def find_landlord(self, landlord_flag_pos):
-        for pos in landlord_flag_pos:
-            result = helper.LocateOnScreen("landlord", region=pos, confidence=0.6)
-            if result is not None:
-                return landlord_flag_pos.index(pos)
-            self.sleep(200)
-            print("没找到地主的位置")'''
 
     def find_landlord(self, landlord_flag_pos):
         img, _ = helper.Screenshot()
@@ -1019,5 +1011,9 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     main = MyPyQT_Form()
+    style_file = QFile("style.qss")
+    stream = QTextStream(style_file)
+    style_sheet = stream.readAll()
+    main.setStyleSheet(style_sheet)
     main.show()
     sys.exit(app.exec_())

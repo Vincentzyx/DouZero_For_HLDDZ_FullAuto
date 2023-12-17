@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(677, 450)
+        Form.resize(656, 450)
         font = QtGui.QFont()
         font.setFamily("Arial")
         font.setPointSize(9)
@@ -99,7 +99,7 @@ class Ui_Form(object):
         self.LPlayedCard.setAlignment(QtCore.Qt.AlignCenter)
         self.LPlayedCard.setObjectName("LPlayedCard")
         self.splitter_2 = QtWidgets.QSplitter(Form)
-        self.splitter_2.setGeometry(QtCore.QRect(20, 380, 621, 41))
+        self.splitter_2.setGeometry(QtCore.QRect(20, 380, 611, 41))
         self.splitter_2.setOrientation(QtCore.Qt.Horizontal)
         self.splitter_2.setObjectName("splitter_2")
         self.SingleButton = QtWidgets.QPushButton(self.splitter_2)

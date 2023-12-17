@@ -221,7 +221,7 @@ class MyPyQT_Form:
         return cards_real
 
     def find_my_cards(self):
-        img = cv2.imread("0.png")
+        img = cv2.imread("10.png")
         # img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
         my_cards_real = self.find_cards(img, self.MyHandCardsPos, mark="m")
         return my_cards_real
@@ -230,12 +230,11 @@ class MyPyQT_Form:
         cards = self.find_my_cards()
         num = len(cards)
         space = 45.6
-        img = cv2.imread("0.png")
+        img = cv2.imread("10.png")
         img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
         res1 = helper.LocateOnScreen("up_left", img=img, region=self.MyHandCardsPos, confidence=0.65)
-
         pos = res1[0] + 6, res1[1] + 7
-        print(pos)
+
         res2 = helper.LocateOnScreen("up_left", img=img, region=(180, 580, 1050, 90), confidence=0.65)
         if res2 is not None:
             pos = res1[0] + 6, res1[1] + 7
@@ -249,9 +248,9 @@ class MyPyQT_Form:
         # 转换为普通的字典
         cards_dict = dict(cards_dict)
         remove_dict = {key: [] for key in cards_dict.keys()}
-        print(cards_dict)
+        # print(cards_dict)
         if out_cards == "DX":
-            helper.LeftClick((cards_dict["X"][0][0] + 20, 650))
+            helper.LeftClick2((cards_dict["X"][0][0] + 20, 650))
             self.sleep(500)
 
         else:
@@ -260,24 +259,25 @@ class MyPyQT_Form:
 
                 # print("准备点击的牌：", cards_dict[i])
                 point = cars_pos[0] + 20, cars_pos[1] + 100
-                img, _ = helper.Screenshot()
-                img = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2RGB)
-                check_one = self.find_cards(img=img, pos=(cars_pos[0] - 2, 567, 45, 60), mark="m", confidence=0.8)
+                img = cv2.imread("10.png")
+                # img = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2RGB)
+                print((cars_pos[0] - 2, 565, 60, 60))
+                check_one = self.find_cards(img=img, pos=(cars_pos[0] - 2, 565, 60, 60), mark="m", confidence=0.7)
                 print("系统帮你点的牌：", check_one, "你要出的牌：", i)
 
-                if check_one == i and check_one != "D" and check_one != "X":
-                    print("腾讯自动帮你选牌：", check_one)
+                '''if check_one == i and check_one != "D" and check_one != "X":
+                    # print("腾讯自动帮你选牌：", check_one)
                     img, _ = helper.Screenshot()
                     img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
                     cv2.imwrite("debug.png", img)
 
                 else:
-                    helper.LeftClick(point)
-                    print(point)
+                    helper.LeftClick2(point)
+                    # print(point)
                     self.sleep(100)
                 remove_dict[i].append(cards_dict[i][-1])
                 cards_dict[i].remove(cards_dict[i][-1])
-                print("remove_dict", remove_dict)
+                # print("remove_dict", remove_dict)
             img, _ = helper.Screenshot()
             img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
             check_cards = self.find_cards(img, (180, 590, 1050, 90), mark="m")
@@ -289,11 +289,11 @@ class MyPyQT_Form:
                     cards = cards.replace(m, "", 1)
                 print("系统多点的牌： ", cards)
                 for n in cards:
-                    print("字典里还剩的牌： ", cards_dict)
+                    # print("字典里还剩的牌： ", cards_dict)
                     cars_pos2 = cards_dict[n][-1][0:2]
-                    print("准备点回来的牌：", cars_pos2)
+                    # print("准备点回来的牌：", cars_pos2)
                     point2 = cars_pos2[0] + 20, cars_pos2[1] + 100
-                    helper.LeftClick(point2)
+                    helper.LeftClick2(point2)
                     self.sleep(100)
                     remove_dict[n].append(cards_dict[n][-1])
                     cards_dict[n].remove(cards_dict[n][-1])
@@ -305,30 +305,18 @@ class MyPyQT_Form:
                     check_cards = check_cards.replace(m, "", 1)
                 print("系统少点的牌： ", check_cards)
                 for n in check_cards:
-                    print("删除的字典： ", remove_dict)
+                    # print("删除的字典： ", remove_dict)
                     cars_pos3 = remove_dict[n][0][0:2]
-                    print("准备再点出去的牌：", cars_pos3)
+                    # print("准备再点出去的牌：", cars_pos3)
                     point3 = cars_pos3[0] + 20, cars_pos3[1] + 100
-                    helper.LeftClick(point3)
+                    helper.LeftClick2(point3)
                     self.sleep(300)
                     remove_dict[n].remove(remove_dict[n][0])
-                    print(remove_dict)
+                    # print(remove_dict)
             self.sleep(200)
-
-    def find_landlord(self, landlord_flag_pos):
-        # img, _ = helper.Screenshot()
-        img = cv2.imread("2.png")
-        img = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2HSV)
-        for pos in landlord_flag_pos:
-            classifier = DC.ColorClassify(debug=True)
-            imgCut = img[pos[1]:pos[1] + pos[3], pos[0]:pos[0] + pos[2]]
-            result = classifier.classify(imgCut)
-            print(result)
-
-        print("==============================")
-
+'''
 
 if __name__ == '__main__':
     main = MyPyQT_Form()
     # main.test()
-    print(main.find_landlord(main.LandlordFlagPos))
+    main.click_cards("KK")
