@@ -6,6 +6,7 @@ import GameHelper as gh
 from GameHelper import GameHelper
 import os
 import sys
+import signal
 import time
 import DetermineColor as DC
 from collections import defaultdict
@@ -43,8 +44,6 @@ AllCards = ['D', 'X', '2', 'A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4'
 helper = GameHelper()
 
 
-class Cleanup(QObject):
-    finished = pyqtSignal()
 class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
     def __init__(self):
         super(MyPyQT_Form, self).__init__()
@@ -68,7 +67,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                             QtCore.Qt.WindowStaysOnTopHint |  # 窗体总在最前端
                             QtCore.Qt.WindowCloseButtonHint)
         self.setWindowIcon(QIcon(':/pics/favicon.ico'))
-        self.setWindowTitle("DouZero欢乐斗地主v2.1")
+        self.setWindowTitle("DouZero欢乐斗地主v2.2")
         self.setFixedSize(self.width(), self.height())  # 固定窗体大小
         self.move(20, 20)
         # self.setWindowIcon(QIcon('pics/favicon.ico'))
@@ -100,12 +99,12 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.RunGame = False
         self.AutoPlay = False
         self.BidThreshold1 = 65  # 叫地主阈值
-        self.BidThreshold2 = 72  # 抢地主阈值
+        self.BidThreshold2 = 70  # 抢地主阈值
         self.JiabeiThreshold = (
-            (85, 72),  # 叫地主 超级加倍 加倍 阈值
-            (85, 75)  # 叫地主 超级加倍 加倍 阈值  (在地主是抢来的情况下)
+            (80, 65),  # 叫地主 超级加倍 加倍 阈值
+            (80, 70)  # 叫地主 超级加倍 加倍 阈值  (在地主是抢来的情况下)
         )
-        self.MingpaiThreshold = 92
+        self.MingpaiThreshold = 95
         # 坐标
         self.MyHandCardsPos = (180, 560, 1050, 90)  # 我的截图区域
         self.LPlayedCardsPos = (320, 280, 400, 120)  # 左边出牌截图区域
@@ -143,6 +142,8 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             self.sleep(5000)
 
     def stop(self):
+        pid = os.getpid()  # 获取当前进程的PID
+        os.kill(pid, signal.SIGTERM)  # 主动结束指定ID的程序运行
         self.stop_sign = 1
         print("按下停止键")
         try:
@@ -152,14 +153,15 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             self.env.game_over = True
             self.env.reset()
             self.init_display()
-            self.PreWinrate.setText("局前胜率: ")
-            self.BidWinrate.setText("叫牌胜率: ")
         except AttributeError as e:
             traceback.print_exc()
+
 
     def init_display(self):
         self.WinRate.setText("评分")
         self.label.setText("游戏状态")
+        self.PreWinrate.setText("局前胜率: ")
+        self.BidWinrate.setText("叫牌胜率: ")
         self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0);')
         self.UserHandCards.setText("手牌")
         # self.LBrowser.clear()
@@ -191,15 +193,6 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         # 开局时三个玩家的手牌
         self.card_play_data_list = {}
 
-        # 识别玩家手牌
-        self.user_hand_cards_real = self.find_my_cards()
-        while len(self.user_hand_cards_real) != 17 and len(self.user_hand_cards_real) != 20:
-            self.detect_start_btn()
-            if not self.RunGame:
-                break
-            self.sleep(200)
-            self.user_hand_cards_real = self.find_my_cards()
-        self.user_hand_cards_env = [RealCard2EnvCard[c] for c in list(self.user_hand_cards_real)]
         # 识别三张底牌
         self.three_landlord_cards_real = self.find_landlord_cards()
         self.ThreeLandlordCards.setText("底牌：" + self.three_landlord_cards_real)
@@ -231,6 +224,16 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         for player in self.Players:
             player.setStyleSheet('background-color: rgba(0, 255, 0, 0);')
         self.Players[self.user_position_code].setStyleSheet('background-color: rgba(0, 255, 0, 0.5);')
+
+        # 识别玩家手牌
+        self.user_hand_cards_real = self.find_my_cards()
+        while len(self.user_hand_cards_real) != 17 and len(self.user_hand_cards_real) != 20:
+            self.detect_start_btn()
+            if not self.RunGame:
+                break
+            self.sleep(200)
+            self.user_hand_cards_real = self.find_my_cards()
+        self.user_hand_cards_env = [RealCard2EnvCard[c] for c in list(self.user_hand_cards_real)]
 
         # 整副牌减去玩家手上的牌，就是其他人的手牌,再分配给另外两个角色（如何分配对AI判断没有影响）
         for i in set(AllEnvCard):
@@ -334,7 +337,6 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     if passSign is not None:
                         self.sleep(100)
                         helper.ClickOnImage("yaobuqi", region=self.GeneralBtnPos, confidence=0.7)
-                        # helper.LeftClick((940, 640))
                     self.sleep(200)
                 else:
                     hand_cards_str = ''.join(

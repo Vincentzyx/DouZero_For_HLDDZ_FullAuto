@@ -426,7 +426,7 @@ class Ui_Form(object):
         self.LPlayedCard.setText(_translate("Form", "上家出牌区域"))
         self.SingleButton.setText(_translate("Form", "单局"))
         self.LoopButton.setText(_translate("Form", " 连续"))
-        self.StopButton.setText(_translate("Form", "停止"))
+        self.StopButton.setText(_translate("Form", "结束"))
         item = self.tableWidget.horizontalHeaderItem(0)
         item.setText(_translate("Form", "大"))
         item = self.tableWidget.horizontalHeaderItem(1)
