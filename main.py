@@ -117,15 +117,10 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.GeneralBtnPos = (200, 450, 1000, 120)  # 叫地主、抢地主、加倍按钮截图区域
         self.LandlordFlagPos = [(1247, 245, 48, 52), (12, 661, 51, 53), (123, 243, 52, 54)]  # 地主标志截图区域(右-我-左)
 
-        '''self.card_play_model_path_dict = {
+        self.card_play_model_path_dict = {
             'landlord': "baselines/resnet/resnet_landlord.ckpt",
             'landlord_up': "baselines/resnet/resnet_landlord_up.ckpt",
             'landlord_down': "baselines/resnet/resnet_landlord_down.ckpt"
-        }'''
-        self.card_play_model_path_dict = {
-            'landlord': "baselines/douzero_ADP/landlord.ckpt",
-            'landlord_up': "baselines/douzero_ADP/landlord_up.ckpt",
-            'landlord_down': "baselines/douzero_ADP/landlord_down.ckpt"
         }
 
     def game_single(self):
@@ -790,12 +785,12 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             cards_str = "".join([card[0] for card in cards])
             self.UserHandCards.setText("手牌：" + cards_str)
             print("手牌：" + cards_str)
-            win_rate = BidModel.predict(cards_str) - 5
+            win_rate = BidModel.predict(cards_str)
 
             if not HaveBid:
-                with open("cardslog.txt", "a") as f:
+                '''with open("cardslog.txt", "a") as f:
                     f.write(str(int(time.time())) + " " + cards_str + " " + str(round(win_rate, 2)) + "\n")
-                print("叫牌预估胜率：", win_rate)
+                print("叫牌预估胜率：", win_rate)'''
                 self.BidWinrate.setText("叫牌胜率：" + str(round(win_rate, 2)) + "%")
 
             if jiaodizhu_btn is not None:
@@ -871,7 +866,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         print("手牌：" + cards_str)
 
         if len(cards_str) == 20:
-            win_rate = LandlordModel.predict(cards_str) - 5
+            win_rate = LandlordModel.predict(cards_str)
             self.PreWinrate.setText("局前胜率：" + str(round(win_rate, 2)) + "%")
             print("预估地主胜率:", win_rate)
         else:
@@ -884,7 +879,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 user_position_code = self.find_landlord(self.LandlordFlagPos)
 
             user_position = ['up', 'landlord', 'down'][user_position_code]'''
-            win_rate = FarmerModel.predict(cards_str, llcards, 'up') - 5
+            win_rate = FarmerModel.predict(cards_str, llcards, 'up')
             print("预估农民胜率:", win_rate)
             self.PreWinrate.setText("局前胜率：" + str(round(win_rate, 2)) + "%")
         self.sleep(100)

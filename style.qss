@@ -1,4 +1,4 @@
-QPushButton{
+"""QPushButton{
         text-align : center;
         background-color : white;
         font: bold;
@@ -43,3 +43,4 @@ QPushButton{
         background:transparent;
         font-weight: bold;
     }
+    """
