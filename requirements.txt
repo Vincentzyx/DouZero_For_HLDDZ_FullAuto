@@ -8,3 +8,4 @@ rlcard
 pywin32
 matplotlib
 opencv-python
+collections

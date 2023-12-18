@@ -98,11 +98,11 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.SleepTime = 0.1  # 循环中睡眠时间
         self.RunGame = False
         self.AutoPlay = False
-        self.BidThreshold1 = 65  # 叫地主阈值
-        self.BidThreshold2 = 75  # 抢地主阈值
+        self.BidThreshold1 = 70  # 叫地主阈值
+        self.BidThreshold2 = 80  # 抢地主阈值
         self.JiabeiThreshold = (
-            (85, 65),  # 叫地主 超级加倍 加倍 阈值
-            (85, 75)  # 叫地主 超级加倍 加倍 阈值  (在地主是抢来的情况下)
+            (85, 70),  # 叫地主 超级加倍 加倍 阈值
+            (85, 80)  # 叫地主 超级加倍 加倍 阈值  (在地主是抢来的情况下)
         )
         self.MingpaiThreshold = 95
         # 坐标
@@ -738,7 +738,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             result = classifier.classify(imgCut)
             for b in result:
                 if b[0] == "Orange":
-                    if b[1] > 0.7:
+                    if b[1] > 0.72:
                         return landlord_flag_pos.index(pos)
             self.sleep(100)
             print("未找到地主位置")
