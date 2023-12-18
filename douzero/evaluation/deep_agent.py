@@ -47,4 +47,6 @@ class DeepAgent:
         best_action_index = np.argmax(y_pred, axis=0)[0]
         best_action = infoset.legal_actions[best_action_index]
         best_action_confidence = y_pred[best_action_index]
-        return best_action, best_action_confidence
+        action_list = [(infoset.legal_actions[i], y_pred[i]) for i in range(len(infoset.legal_actions))]
+
+        return best_action, best_action_confidence, action_list

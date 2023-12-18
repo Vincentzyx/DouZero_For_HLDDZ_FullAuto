@@ -217,3 +217,35 @@ class MovesGener(object):
         moves.extend(self.gen_type_13_4_2())
         moves.extend(self.gen_type_14_4_22())
         return moves
+
+    def gen_moves_by_type(self, mtype):
+        if mtype == 1:
+            return self.gen_type_1_single()
+        elif mtype == 2:
+            return self.gen_type_2_pair()
+        elif mtype == 3:
+            return self.gen_type_3_triple()
+        elif mtype == 4:
+            return self.gen_type_4_bomb()
+        elif mtype == 5:
+            return self.gen_type_5_king_bomb()
+        elif mtype == 6:
+            return self.gen_type_6_3_1()
+        elif mtype == 7:
+            return self.gen_type_7_3_2()
+        elif mtype == 8:
+            return self.gen_type_8_serial_single()
+        elif mtype == 9:
+            return self.gen_type_9_serial_pair()
+        elif mtype == 10:
+            return self.gen_type_10_serial_triple()
+        elif mtype == 11:
+            return self.gen_type_11_serial_3_1()
+        elif mtype == 12:
+            return self.gen_type_12_serial_3_2()
+        elif mtype == 13:
+            return self.gen_type_13_4_2()
+        elif mtype == 14:
+            return self.gen_type_14_4_22()
+        else:
+            return []

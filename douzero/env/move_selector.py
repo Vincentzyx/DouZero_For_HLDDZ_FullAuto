@@ -1,12 +1,47 @@
 # return all moves that can beat rivals, moves and rival_move should be same type
 import collections
 
+
 def common_handle(moves, rival_move):
     new_moves = list()
     for move in moves:
         if move[0] > rival_move[0]:
             new_moves.append(move)
     return new_moves
+
+
+def filter_type_n(type, moves, rival_move):
+    if type == 1:
+        return filter_type_1_single(moves, rival_move)
+    elif type == 2:
+        return filter_type_2_pair(moves, rival_move)
+    elif type == 3:
+        return filter_type_3_triple(moves, rival_move)
+    elif type == 4:
+        return filter_type_4_bomb(moves, rival_move)
+    elif type == 5:
+        return moves
+    elif type == 6:
+        return filter_type_6_3_1(moves, rival_move)
+    elif type == 7:
+        return filter_type_7_3_2(moves, rival_move)
+    elif type == 8:
+        return filter_type_8_serial_single(moves, rival_move)
+    elif type == 9:
+        return filter_type_9_serial_pair(moves, rival_move)
+    elif type == 10:
+        return filter_type_10_serial_triple(moves, rival_move)
+    elif type == 11:
+        return filter_type_11_serial_3_1(moves, rival_move)
+    elif type == 12:
+        return filter_type_12_serial_3_2(moves, rival_move)
+    elif type == 13:
+        return filter_type_13_4_2(moves, rival_move)
+    elif type == 14:
+        return filter_type_14_4_22(moves, rival_move)
+    else:
+        return []
+
 
 def filter_type_1_single(moves, rival_move):
     return common_handle(moves, rival_move)

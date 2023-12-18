@@ -1,6 +1,7 @@
 from copy import deepcopy
 from . import move_detector as md, move_selector as ms
 from .move_generator import MovesGener
+from search_utility import search_actions, select_optimal_path, check_42
 import random
 
 EnvCard2RealCard = {3: '3', 4: '4', 5: '5', 6: '6', 7: '7',
@@ -132,15 +133,66 @@ class GameEnv(object):
     def get_bomb_num(self):
         return self.bomb_num
 
+    def compare_action(self, action):
+        return action[1]
+
+    @staticmethod
+    def action_to_str(action):
+        if len(action) == 0:
+            return "Pass"
+        else:
+            return "".join([EnvCard2RealCard[card] for card in action])
+
+    def path_to_str(self, path):
+        pstr = ""
+        for action in path:
+            pstr += self.action_to_str(action) + " "
+        return pstr
+
+    @staticmethod
+    def have_bomb(cards):
+        if 20 in cards and 30 in cards:
+            return True
+        for i in [3,4,5,6,7,8,9,10,11,12,13,14,17]:
+            if cards.count(i) == 4:
+                return True
+        return False
+
     def step(self, position, action=[]):
         win_rate = 0
         if self.acting_player_position == position:
-            action, actions_confidence = self.players[1].act(self.game_infoset)
+            action, actions_confidence, action_list = self.players[1].act(self.game_infoset)
             # 计算胜率
             win_rate = actions_confidence
-            # win_rate = max(actions_confidence, -1)
-            # win_rate = min(win_rate, 1)
-            # win_rate = str(round(float((win_rate + 1) / 2), 4))
+            # 对直接出完情况做特判
+            print("正在检测可直接出完出法")
+            print()
+            if len(action) != len(self.game_infoset.player_hand_cards):
+                for l_action, l_score in action_list:
+                    if len(l_action) == len(self.game_infoset.player_hand_cards):
+                        m_type = md.get_move_type(l_action)
+                        if m_type["type"] not in [md.TYPE_14_4_22, md.TYPE_13_4_2]:
+                            action = l_action
+                            win_rate = 10000
+                            print("检测到可直接出完出法")
+                            print()
+                last_two_moves = self.get_last_two_moves()
+                rival_move = None
+                if last_two_moves[0]:
+                    rival_move = last_two_moves[0]
+                elif last_two_moves[1]:
+                    rival_move = last_two_moves[1]
+                if win_rate != 10000:
+                    path_list = []
+                    search_actions(self.game_infoset.player_hand_cards, self.game_infoset.other_hand_cards, path_list,
+                                   rival_move=rival_move)
+                    if len(path_list) > 0:
+                        path = select_optimal_path(path_list)
+                        if not check_42(path):
+                            if action != path[0]:
+                                print("检测到可直接出完路径:", self.action_to_str(action), "->", self.path_to_str(path))
+                                action = path[0]
+                                win_rate = 20000
 
         if len(action) > 0:
             self.last_pid = self.acting_player_position
