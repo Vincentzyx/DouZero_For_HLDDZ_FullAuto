@@ -117,10 +117,15 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.GeneralBtnPos = (200, 450, 1000, 120)  # 叫地主、抢地主、加倍按钮截图区域
         self.LandlordFlagPos = [(1247, 245, 48, 52), (12, 661, 51, 53), (123, 243, 52, 54)]  # 地主标志截图区域(右-我-左)
 
-        self.card_play_model_path_dict = {
+        '''self.card_play_model_path_dict = {
             'landlord': "baselines/resnet/resnet_landlord.ckpt",
             'landlord_up': "baselines/resnet/resnet_landlord_up.ckpt",
             'landlord_down': "baselines/resnet/resnet_landlord_down.ckpt"
+        }'''
+        self.card_play_model_path_dict = {
+            'landlord': "baselines/douzero_ADP/landlord.ckpt",
+            'landlord_up': "baselines/douzero_ADP/landlord_up.ckpt",
+            'landlord_down': "baselines/douzero_ADP/landlord_down.ckpt"
         }
 
     def game_single(self):
@@ -155,7 +160,6 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             self.init_display()
         except AttributeError as e:
             traceback.print_exc()
-
 
     def init_display(self):
         self.WinRate.setText("评分")
@@ -227,13 +231,22 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
 
         # 识别玩家手牌
         self.user_hand_cards_real = self.find_my_cards()
-        while len(self.user_hand_cards_real) != 17 and len(self.user_hand_cards_real) != 20:
-            self.detect_start_btn()
-            if not self.RunGame:
-                break
-            self.sleep(200)
-            self.user_hand_cards_real = self.find_my_cards()
-        self.user_hand_cards_env = [RealCard2EnvCard[c] for c in list(self.user_hand_cards_real)]
+        if self.user_position_code == 1:
+            while len(self.user_hand_cards_real) != 20:
+                self.detect_start_btn()
+                if not self.RunGame:
+                    break
+                self.sleep(200)
+                self.user_hand_cards_real = self.find_my_cards()
+            self.user_hand_cards_env = [RealCard2EnvCard[c] for c in list(self.user_hand_cards_real)]
+        else:
+            while len(self.user_hand_cards_real) != 17:
+                self.detect_start_btn()
+                if not self.RunGame:
+                    break
+                self.sleep(200)
+                self.user_hand_cards_real = self.find_my_cards()
+            self.user_hand_cards_env = [RealCard2EnvCard[c] for c in list(self.user_hand_cards_real)]
 
         # 整副牌减去玩家手上的牌，就是其他人的手牌,再分配给另外两个角色（如何分配对AI判断没有影响）
         for i in set(AllEnvCard):
@@ -249,31 +262,11 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             ['landlord_up', 'landlord', 'landlord_down'][(self.user_position_code + 2) % 3]:
                 self.other_hand_cards[0:17] if (self.user_position_code + 1) % 3 == 1 else self.other_hand_cards[17:]
         })
+
         print("开始对局")
         print("手牌:", self.user_hand_cards_real)
         print("地主牌:", self.three_landlord_cards_real)
-        # 生成手牌结束，校验手牌数量
-        if len(self.card_play_data_list["three_landlord_cards"]) != 3:
-            QMessageBox.critical(self, "底牌识别出错", "底牌必须是3张！", QMessageBox.Yes, QMessageBox.Yes)
-            self.init_display()
-            return
-        if len(self.card_play_data_list["landlord_up"]) != 17 or \
-                len(self.card_play_data_list["landlord_down"]) != 17 or \
-                len(self.card_play_data_list["landlord"]) != 20:
-            print("地主角色位置识别错误")
-            self.RunGame = False
-            self.init_display()
-            try:
-                if self.env is not None:
-                    self.env.game_over = True
-                    self.env.reset()
-                self.init_display()
-                self.PreWinrate.setText("局前胜率: ")
-                self.BidWinrate.setText("叫牌胜率: ")
-                print("程序走到这里")
-            except AttributeError as e:
-                traceback.print_exc()
-            return
+
         # 出牌顺序：0-玩家出牌, 1-玩家下家出牌, 2-玩家上家出牌
         self.play_order = 0 if self.user_position == "landlord" else 1 if self.user_position == "landlord_up" else 2
 
@@ -797,7 +790,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             cards_str = "".join([card[0] for card in cards])
             self.UserHandCards.setText("手牌：" + cards_str)
             print("手牌：" + cards_str)
-            win_rate = BidModel.predict(cards_str)
+            win_rate = BidModel.predict(cards_str) - 5
 
             if not HaveBid:
                 with open("cardslog.txt", "a") as f:
@@ -878,7 +871,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         print("手牌：" + cards_str)
 
         if len(cards_str) == 20:
-            win_rate = LandlordModel.predict(cards_str)
+            win_rate = LandlordModel.predict(cards_str) - 5
             self.PreWinrate.setText("局前胜率：" + str(round(win_rate, 2)) + "%")
             print("预估地主胜率:", win_rate)
         else:
@@ -891,7 +884,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 user_position_code = self.find_landlord(self.LandlordFlagPos)
 
             user_position = ['up', 'landlord', 'down'][user_position_code]'''
-            win_rate = FarmerModel.predict(cards_str, llcards, 'up')
+            win_rate = FarmerModel.predict(cards_str, llcards, 'up') - 5
             print("预估农民胜率:", win_rate)
             self.PreWinrate.setText("局前胜率：" + str(round(win_rate, 2)) + "%")
         self.sleep(100)
