@@ -209,7 +209,7 @@ class GameHelper:
 
         if result is not None:
             self.LeftClick(result)
-            print(result)
+            # print(result)
 
     def LeftClick(self, pos):
         x, y = pos
@@ -249,4 +249,16 @@ class GameHelper:
         pyautogui.mouseDown(x, y, button='left')
         time.sleep(0.1)
         pyautogui.mouseUp(x, y, button='left')
+
+    def MoveTo(self, pos):
+        x, y = pos
+        x = (x / 1440) * self.RealRate[0]
+        y = (y / 810) * self.RealRate[1]
+        x = int(x)
+        y = int(y)
+        self.Handle = win32gui.FindWindow("UnityWndClass", None)
+        left, top, _, _ = win32gui.GetWindowRect(self.Handle)
+        x, y = int(left + x), int(top + y)
+
+        pyautogui.moveTo(x, y)
 

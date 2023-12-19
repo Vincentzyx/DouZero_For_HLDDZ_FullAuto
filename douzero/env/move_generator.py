@@ -199,14 +199,16 @@ class MovesGener(object):
                 result.append([fc] * 4 + [i[0], i[0], i[1], i[1]])
         return result
 
+
+
     # generate all possible moves from given cards
     def gen_moves(self):
         moves = []
-        moves.extend(self.gen_type_1_single())
-        moves.extend(self.gen_type_2_pair())
-        moves.extend(self.gen_type_3_triple())
-        moves.extend(self.gen_type_4_bomb())
-        moves.extend(self.gen_type_5_king_bomb())
+        moves.extend(self.single_card_moves)
+        moves.extend(self.pair_moves)
+        moves.extend(self.triple_cards_moves)
+        moves.extend(self.bomb_moves)
+        moves.extend(self.final_bomb_moves)
         moves.extend(self.gen_type_6_3_1())
         moves.extend(self.gen_type_7_3_2())
         moves.extend(self.gen_type_8_serial_single())
@@ -249,3 +251,6 @@ class MovesGener(object):
             return self.gen_type_14_4_22()
         else:
             return []
+
+
+

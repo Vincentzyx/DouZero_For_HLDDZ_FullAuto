@@ -36,6 +36,10 @@ class DeepAgent:
         self.model = _load_model(position, model_path, self.model_type)
 
     def act(self, infoset):
+        # 只有一个合法动作时直接返回，这样会得不到胜率信息
+        # if len(infoset.legal_actions) == 1:
+        #     return infoset.legal_actions[0], 0
+
         obs = get_obs(infoset, model_type=self.model_type)
         z_batch = torch.from_numpy(obs['z_batch']).float()
         x_batch = torch.from_numpy(obs['x_batch']).float()
@@ -49,4 +53,5 @@ class DeepAgent:
         best_action_confidence = y_pred[best_action_index]
         action_list = [(infoset.legal_actions[i], y_pred[i]) for i in range(len(infoset.legal_actions))]
 
+        # print(best_action, best_action_confidence, y_pred)
         return best_action, best_action_confidence, action_list

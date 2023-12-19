@@ -8,7 +8,7 @@ Card2Column = {3: 0, 4: 1, 5: 2, 6: 3, 7: 4, 8: 5, 9: 6, 10: 7,
 
 NumOnes2Array = {0: np.array([0, 0, 0, 0]),
                  1: np.array([1, 0, 0, 0]),
-                 2: np.array([1, 1, 0, 0]),
+                 2: np.array([1,  1, 0, 0]),
                  3: np.array([1, 1, 1, 0]),
                  4: np.array([1, 1, 1, 1])}
 

@@ -1,3 +1,5 @@
+# added rank to kingbomb
+# need to add rank to 5 series 3
 from douzero.env.utils import *
 import collections
 
@@ -25,7 +27,7 @@ def get_move_type(move):
         if move[0] == move[1]:
             return {'type': TYPE_2_PAIR, 'rank': move[0]}
         elif move == [20, 30]:  # Kings
-            return {'type': TYPE_5_KING_BOMB}
+            return {'type': TYPE_5_KING_BOMB, 'rank':1} # add rank to kingbomb
         else:
             return {'type': TYPE_15_WRONG}
 

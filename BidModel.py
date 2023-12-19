@@ -6,6 +6,7 @@ from torch import nn
 from torch.utils.data import DataLoader
 from torch.utils.data.dataset import Dataset
 import time
+import torch.nn.functional as F
 
 
 def EnvToOnehot(cards):
@@ -25,6 +26,30 @@ def RealToOnehot(cards):
     for i in range(0, 15):
         Onehot[:cards.count(i),i] = 1
     return Onehot
+
+
+class Net2(nn.Module):
+    def __init__(self):
+        super().__init__()
+        # input: 1 * 60
+        self.conv1 = nn.Conv1d(1, 16, kernel_size=(3,), padding=1)  # 32 * 60
+        self.dense1 = nn.Linear(1020, 1024)
+        self.dense2 = nn.Linear(1024, 512)
+        self.dense3 = nn.Linear(512, 256)
+        self.dense4 = nn.Linear(256, 128)
+        self.dense5 = nn.Linear(128, 1)
+
+    def forward(self, xi):
+        x = xi.unsqueeze(1)
+        x = F.leaky_relu(self.conv1(x))
+        x = x.flatten(1, 2)
+        x = torch.cat((x, xi), 1)
+        x = F.leaky_relu(self.dense1(x))
+        x = F.leaky_relu(self.dense2(x))
+        x = F.leaky_relu(self.dense3(x))
+        x = F.leaky_relu(self.dense4(x))
+        x = self.dense5(x)
+        return x
 
 
 class Net(nn.Module):
@@ -54,14 +79,22 @@ class Net(nn.Module):
 UseGPU = False
 device = torch.device('cuda:0')
 net = Net()
+net2 = Net2()
 net.eval()
+net2.eval()
 if UseGPU:
     net = net.to(device)
+    net2 = net2.to(device)
 if os.path.exists("./bid_weights.pkl"):
     if torch.cuda.is_available():
         net.load_state_dict(torch.load('./bid_weights.pkl'))
     else:
         net.load_state_dict(torch.load('./bid_weights.pkl', map_location=torch.device("cpu")))
+if os.path.exists("./bid_weights_new.pkl"):
+    if torch.cuda.is_available():
+        net2.load_state_dict(torch.load('./bid_weights_new.pkl'))
+    else:
+        net2.load_state_dict(torch.load('./bid_weights_new.pkl', map_location=torch.device("cpu")))
 
 def predict(cards):
     input = RealToOnehot(cards)
@@ -70,3 +103,15 @@ def predict(cards):
     input = torch.flatten(input)
     win_rate = net(input)
     return win_rate[0].item() * 100
+
+def predict_score(cards):
+    input = RealToOnehot(cards)
+    if UseGPU:
+        input = input.to(device)
+    input = torch.flatten(input)
+    input = input.unsqueeze(0)
+    result = net2(input)
+    return result[0].item()
+
+if __name__ == "__main__":
+    print(predict_score("333444569TTJJQKK2"))

@@ -219,7 +219,8 @@ class GeneralModel(nn.Module):
             return dict(action=action, max_value=torch.max(x))
 
 
-# 用于ResNet18和34的残差块，用的是2个3x3的卷积
+
+# ResNet18 and ResNet 34
 class BasicBlock(nn.Module):
     expansion = 1
 
@@ -232,8 +233,6 @@ class BasicBlock(nn.Module):
                                stride=(1,), padding=1, bias=False)
         self.bn2 = nn.BatchNorm1d(planes)
         self.shortcut = nn.Sequential()
-        # 经过处理后的x要与x的维度相同(尺寸和深度)
-        # 如果不相同，需要添加卷积+BN来变换为同一维度
         if stride != 1 or in_planes != self.expansion * planes:
             self.shortcut = nn.Sequential(
                 nn.Conv1d(in_planes, self.expansion * planes,
@@ -355,45 +354,6 @@ model_dict_general['landlord_down'] = GeneralModel
 model_dict_general['bidding'] = BidModel
 
 
-class General_Model:
-    """
-    The wrapper for the three models. We also wrap several
-    interfaces such as share_memory, eval, etc.
-    """
-    def __init__(self, device=0):
-        self.models = {}
-        if not device == "cpu":
-            device = 'cuda:' + str(device)
-        # model = GeneralModel().to(torch.device(device))
-        self.models['landlord'] = GeneralModel1().to(torch.device(device))
-        self.models['landlord_up'] = GeneralModel1().to(torch.device(device))
-        self.models['landlord_down'] = GeneralModel1().to(torch.device(device))
-        self.models['bidding'] = BidModel().to(torch.device(device))
-
-    def forward(self, position, z, x, training=False, flags=None, debug=False):
-        model = self.models[position]
-        return model.forward(z, x, training, flags, debug)
-
-    def share_memory(self):
-        self.models['landlord'].share_memory()
-        self.models['landlord_up'].share_memory()
-        self.models['landlord_down'].share_memory()
-        self.models['bidding'].share_memory()
-
-    def eval(self):
-        self.models['landlord'].eval()
-        self.models['landlord_up'].eval()
-        self.models['landlord_down'].eval()
-        self.models['bidding'].eval()
-
-    def parameters(self, position):
-        return self.models[position].parameters()
-
-    def get_model(self, position):
-        return self.models[position]
-
-    def get_models(self):
-        return self.models
 
 class OldModel:
     """

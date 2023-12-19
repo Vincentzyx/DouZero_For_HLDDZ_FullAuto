@@ -71,12 +71,15 @@ def search_actions(my_cards, other_cards, path_list, rival_move=None, prev_moves
                 if len(move_selector.filter_type_n(mtype, other_moves, move)) == 0:
                     if rival_move is not None:
                         move_info = get_move_type(move)
-                        if "rank" in move_info and "rank" in rival_move_info and move_info["rank"] <= rival_move_info["rank"]:
-                            continue
-                        if "len" in move_info and move_info["len"] != rival_move_info["len"]:
-                            continue
-                        if rival_move_info["type"] == 5:
-                            continue
+                        if mtype != 5:                     
+                            if "rank" in move_info and "rank" in rival_move_info and move_info["rank"] <= rival_move_info["rank"]:
+                                continue
+                            if "len" in move_info and move_info["len"] != rival_move_info["len"]:
+                                continue
+                            if rival_move_info["type"] == 5:
+                                continue
+                        
+
                     new_cards = my_cards.copy()
                     for card in move:
                         new_cards.remove(card)
@@ -143,11 +146,11 @@ def check_42(path):
 
 
 if __name__ == "__main__":
-    my_cards =[5,5,5,5,6,6,6,6,7,7,8,8,9,9,13]
-    other_cards = [20, 4]
+    my_cards =[20,30,10,10]
+    other_cards = [4, 13, 5,5,5,5,8,8,8,8,12,12,13]
     st = time.time()
     paths = []
-    result = search_actions(my_cards, other_cards, paths)
+    result = search_actions(my_cards, other_cards, paths, rival_move=[13])
     print(time.time()-st)
     print(result)
     # print(paths)
@@ -156,6 +159,3 @@ if __name__ == "__main__":
     print(len(paths))
     path = select_optimal_path(paths)
     print("optimal", path)
-    mg = MovesGener([3,3,3,3,4,4,4,5])
-    print(mg.gen_moves())
-    print(mg.gen_type_11_serial_3_1())

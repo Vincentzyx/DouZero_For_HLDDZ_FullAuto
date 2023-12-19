@@ -1,8 +1,9 @@
 from copy import deepcopy
 from . import move_detector as md, move_selector as ms
 from .move_generator import MovesGener
-from search_utility import search_actions, select_optimal_path, check_42
 import random
+from search_utility import search_actions, select_optimal_path, check_42
+from .move_detector import get_move_type
 
 EnvCard2RealCard = {3: '3', 4: '4', 5: '5', 6: '6', 7: '7',
                     8: '8', 9: '9', 10: 'T', 11: 'J', 12: 'Q',
@@ -21,24 +22,10 @@ bombs = [[3, 3, 3, 3], [4, 4, 4, 4], [5, 5, 5, 5], [6, 6, 6, 6],
          [11, 11, 11, 11], [12, 12, 12, 12], [13, 13, 13, 13], [14, 14, 14, 14],
          [17, 17, 17, 17], [20, 30]]
 
-bid_infos = {
-    "landlord": [[1,1,1],
-                [1,1,1],
-                [1,1,1],
-                [1,1,1]],
-    "landlord_up": [[1,1,1],
-                [1,1,1],
-                [1,1,1],
-                [1,1,1]],
-    "landlord_down": [[1,1,1],
-                [1,1,1],
-                [1,1,1],
-                [1,1,1]]
-}
 
 class GameEnv(object):
 
-    def __init__(self, players):
+    def __init__(self, players, players2=None):
 
         self.card_play_action_seq = []
 
@@ -49,6 +36,8 @@ class GameEnv(object):
         self.player_utility_dict = None
 
         self.players = players
+        self.players2 = players2
+        self.model_type = ""
 
         self.last_move_dict = {'landlord': [],
                                'landlord_up': [],
@@ -74,16 +63,17 @@ class GameEnv(object):
         self.bomb_num = 0
         self.last_pid = 'landlord'
 
-        self.bid_info = [[1, 1, 1],
+        self.bid_info = [[1, 0.5, 1],
                          [1, 1, 1],
-                         [1, 1, 1],
+                         [1, 1, -4],
                          [1, 1, 1]]
+
+        self.multiply_info = [1, 1, 1]
         self.bid_count = 0
         self.multiply_count = {'landlord': 1,
                                'landlord_up': 1,
                                'landlord_down': 1}
         self.step_count = 0
-
 
     def card_play_init(self, card_play_data):
         self.info_sets['landlord'].player_hand_cards = \
@@ -95,7 +85,6 @@ class GameEnv(object):
         self.three_landlord_cards = card_play_data['three_landlord_cards']
         self.get_acting_player_position()
         self.game_infoset = self.get_infoset()
-
 
     def game_done(self):
         if len(self.info_sets['landlord'].player_hand_cards) == 0 or \
@@ -153,78 +142,115 @@ class GameEnv(object):
     def have_bomb(cards):
         if 20 in cards and 30 in cards:
             return True
-        for i in [3,4,5,6,7,8,9,10,11,12,13,14,17]:
+        for i in [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17]:
             if cards.count(i) == 4:
                 return True
         return False
 
-    def step(self, position, action=[]):
-        win_rate = 0
-        if self.acting_player_position == position:
-            action, actions_confidence, action_list = self.players[1].act(self.game_infoset)
-            # 计算胜率
-            win_rate = actions_confidence
-            # 对直接出完情况做特判
-            print("正在检测可直接出完出法")
-            print()
-            if len(action) != len(self.game_infoset.player_hand_cards):
-                for l_action, l_score in action_list:
-                    if len(l_action) == len(self.game_infoset.player_hand_cards):
-                        m_type = md.get_move_type(l_action)
-                        if m_type["type"] not in [md.TYPE_14_4_22, md.TYPE_13_4_2]:
-                            action = l_action
-                            win_rate = 10000
-                            print("检测到可直接出完出法")
-                            print()
-                last_two_moves = self.get_last_two_moves()
-                rival_move = None
-                if last_two_moves[0]:
-                    rival_move = last_two_moves[0]
-                elif last_two_moves[1]:
-                    rival_move = last_two_moves[1]
-                if win_rate != 10000:
-                    path_list = []
-                    search_actions(self.game_infoset.player_hand_cards, self.game_infoset.other_hand_cards, path_list,
-                                   rival_move=rival_move)
-                    if len(path_list) > 0:
-                        path = select_optimal_path(path_list)
-                        if not check_42(path):
-                            if action != path[0]:
-                                print("检测到可直接出完路径:", self.action_to_str(action), "->", self.path_to_str(path))
-                                action = path[0]
-                                win_rate = 20000
-
-        if len(action) > 0:
-            self.last_pid = self.acting_player_position
-
-        if action in bombs:
-            self.bomb_num += 1
-
-        self.last_move_dict[
-            self.acting_player_position] = action.copy()
-
-        self.card_play_action_seq.append((position, action))
-        self.update_acting_player_hand_cards(action)
-
-        self.played_cards[self.acting_player_position] += action
-
-        if self.acting_player_position == 'landlord' and \
-                len(action) > 0 and \
-                len(self.three_landlord_cards) > 0:
-            for card in action:
-                if len(self.three_landlord_cards) > 0:
-                    if card in self.three_landlord_cards:
-                        self.three_landlord_cards.remove(card)
+    def step(self, position, action=None, update=True):  # 是否更新 info set
+        if action is None:
+            action = []
+            win_rate = 0
+            action_list = []
+            if self.acting_player_position == position:
+                if self.players2 is None:
+                    action, actions_confidence, action_list = self.players[1].act(self.game_infoset)
                 else:
-                    break
-        self.game_done()
-        if not self.game_over:
-            self.get_acting_player_position()
-            self.game_infoset = self.get_infoset()
+
+                    action, actions_confidence, action_list = self.players[1].act(
+                        self.game_infoset)  # not considering wp
+                win_rate = actions_confidence
+
+                # 农民胜率低于 0.2 不允许炸
+                # print(f"Action {action} Position {position} Actions_confidence {actions_confidence}")
+                if ((action in bombs) or (30 in action and 20 in action)) and position in ["landlord_up",
+                                                                                           "landlord_down"] and actions_confidence < 0 / 8:
+                    action_list.sort(key=self.compare_action, reverse=True)
+                    action, actions_confidence = action_list[1][0], action_list[1][1]
+                    win_rate = actions_confidence
+
+                # 地主还是让炸吧，不然容易被没炸跑掉
+                # 地主胜率低于-0.2 不允许炸
+                if ((action in bombs) or (
+                        30 in action and 20 in action)) and position == "landlord" and actions_confidence < -0.2 / 8:
+                    action_list.sort(key=self.compare_action, reverse=True)
+                    action, actions_confidence = action_list[1][0], action_list[1][1]
+                    win_rate = actions_confidence
+
+                # 对直接出完情况做特判
+                print("正在检测可直接出完出法")
+                print()
+                if len(action) != len(self.game_infoset.player_hand_cards):
+                    for l_action, l_score in action_list:
+                        if len(l_action) == len(self.game_infoset.player_hand_cards):
+                            m_type = md.get_move_type(l_action)
+                            if m_type["type"] not in [md.TYPE_14_4_22, md.TYPE_13_4_2]:
+                                action = l_action
+                                win_rate = 10000
+                                print("检测到可直接出完出法")
+                                print()
+                    last_two_moves = self.get_last_two_moves()
+                    rival_move = None
+                    if last_two_moves[0]:
+                        rival_move = last_two_moves[0]
+                    elif last_two_moves[1]:
+                        rival_move = last_two_moves[1]
+                    if win_rate != 10000:
+                        path_list = []
+                        search_actions(self.game_infoset.player_hand_cards, self.game_infoset.other_hand_cards,
+                                       path_list,
+                                       rival_move=rival_move)
+                        if len(path_list) > 0:
+                            path = select_optimal_path(path_list)
+                            if not check_42(path):
+                                if action != path[0]:
+                                    print("检测到可直接出完路径:", self.action_to_str(action), "->",
+                                          self.path_to_str(path))
+                                    action = path[0]
+                                    win_rate = 20000
+                else:
+                    print("电脑走对了，一步胜利")
+        else:
+            action_list = [[action, 0]]
+            win_rate = 0
+
+        if update:
+            if len(action) > 0:
+                self.last_pid = self.acting_player_position
+
+            if action in bombs:
+                self.bomb_num += 1
+
+            self.last_move_dict[
+                self.acting_player_position] = action.copy()
+
+            self.card_play_action_seq.append((position, action))
+            self.update_acting_player_hand_cards(action)
+
+            self.played_cards[self.acting_player_position] += action
+
+            if self.acting_player_position == 'landlord' and \
+                    len(action) > 0 and \
+                    len(self.three_landlord_cards) > 0:
+                for card in action:
+                    if len(self.three_landlord_cards) > 0:
+                        if card in self.three_landlord_cards:
+                            self.three_landlord_cards.remove(card)
+                    else:
+                        break
+            self.game_done()
+            if not self.game_over:
+                self.get_acting_player_position()
+                self.game_infoset = self.get_infoset()
+
         # 返回动作和胜率,只有玩家角色会接受返回值
         action_message = {"action": str(''.join([EnvCard2RealCard[c] for c in action])),
-                          "win_rate": str(round(float(win_rate), 4))}
-        return action_message
+                          "win_rate": float(win_rate) * 8}
+        action_list.sort(key=self.compare_action, reverse=True)
+        show_action_list = [(str(''.join([EnvCard2RealCard[c] for c in action_info[0]])) if len(
+            str(''.join([EnvCard2RealCard[c] for c in action_info[0]]))) > 0 else "Pass",
+                             str(round(float(action_info[1]) * 8, 4))) for action_info in action_list]
+        return action_message, show_action_list
 
     def get_last_move(self):
         last_move = []
@@ -384,10 +410,12 @@ class GameEnv(object):
 
         self.bomb_num = 0
         self.last_pid = 'landlord'
-        self.bid_info = [[1, 1, 1],
+        self.bid_info = [[1, 0.5, 1],
                          [1, 1, 1],
-                         [1, 1, 1],
+                         [1, 1, -4],
                          [1, 1, 1]]
+
+        self.multiply_info = [1, 1, 1]
         self.bid_count = 0
         self.multiply_count = {'landlord': 0,
                                'landlord_up': 0,
@@ -437,7 +465,8 @@ class GameEnv(object):
         # 整副牌减去出过的牌和玩家手上的牌，就是其他人的手牌
         for i in set(AllEnvCard):
             self.info_sets[
-                self.acting_player_position].other_hand_cards.extend([i] * (AllEnvCard.count(i) - played_and_hand_cards.count(i)))
+                self.acting_player_position].other_hand_cards.extend(
+                [i] * (AllEnvCard.count(i) - played_and_hand_cards.count(i)))
 
         self.info_sets[self.acting_player_position].played_cards = \
             self.played_cards
@@ -451,10 +480,8 @@ class GameEnv(object):
             {pos: self.info_sets[pos].player_hand_cards
              for pos in ['landlord', 'landlord_up', 'landlord_down']}
 
-        # Custom bid info
-        self.info_sets[self.acting_player_position].bid_info = bid_infos[self.acting_player_position]
-
         return deepcopy(self.info_sets[self.acting_player_position])
+
 
 class InfoSet(object):
     """
@@ -463,6 +490,7 @@ class InfoSet(object):
     such as the hand cards of the three players, the
     historical moves, etc.
     """
+
     def __init__(self, player_position):
         # The player position, i.e., landlord, landlord_down, or landlord_up
         self.player_position = player_position
@@ -493,11 +521,26 @@ class InfoSet(object):
         # The number of bombs played so far
         self.bomb_num = None
 
-        self.bid_info = [[1, 1, 1],
+        self.bid_info = [[1, 0.5, 1],
                          [1, 1, 1],
-                         [1, 1, 1],
+                         [1, 5, -4],
                          [1, 1, 1]]
+        if player_position == 'landlord_up':
+            self.bid_info = [[1, 0.2, 1],
+                             [1, 3.5, 1],
+                             [1, 5, 4],
+                             [1.035, 1, 0.15]]
+        if player_position == 'landlord_down':
+            self.bid_info = [[1, 0.2, 1],
+                             [1, 3.5, 1],
+                             [1, 5, 4],
+                             [1.035, 1, 0.15]]
 
-        self.multiply_info = [1, 1, 1]
-
+        self.multiply_info = [1, 0.8, 1.3]
+        # self.multiply_info = [1, 1, 1]
+        # self.multiply_info = [0, 0, 0]
+        if player_position == 'landlord_up':
+            self.multiply_info = [1, 2.5, 1.3]
+        if player_position == 'landlord_down':
+            self.multiply_info = [1, 2.5, 1.3]
         self.player_id = None
