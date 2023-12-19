@@ -22,6 +22,7 @@ from MainWindow import Ui_Form
 from douzero.env.game import GameEnv
 from douzero.evaluation.deep_agent import DeepAgent
 import traceback
+from skimage.metrics import structural_similarity as ssim
 
 from cnocr import CnOcr
 
@@ -80,7 +81,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                             QtCore.Qt.WindowStaysOnTopHint |  # 窗体总在最前端
                             QtCore.Qt.WindowCloseButtonHint)
         self.setWindowIcon(QIcon(':/pics/favicon.ico'))
-        self.setWindowTitle("DouZero欢乐斗地主v3.0")
+        self.setWindowTitle("DouZero欢乐斗地主v3.1")
         self.setFixedSize(self.width(), self.height())  # 固定窗体大小
         self.move(20, 20)
         window_pale = QtGui.QPalette()
@@ -159,10 +160,19 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             self.sleep(5000)
 
     def stop(self):
-        pid = os.getpid()  # 获取当前进程的PID
-        os.kill(pid, signal.SIGTERM)  # 主动结束指定ID的程序运行
         self.stop_sign = 1
         print("结束")
+        try:
+            self.RunGame = False
+            self.loop_sign = 0
+
+            self.env.game_over = True
+            self.env.reset()
+            self.init_display()
+        except AttributeError as e:
+            traceback.print_exc()
+        pid = os.getpid()  # 获取当前进程的PID
+        os.kill(pid, signal.SIGTERM)  # 主动结束指定ID的程序运行
 
     def init_display(self):
         self.WinRate.setText("评分")
@@ -303,7 +313,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         first_run = True
         self.textEdit.append("底牌：" + self.three_landlord_cards_real)
         self.textEdit.append("手牌: " + self.user_hand_cards_real)
-        self.textEdit.append("          ----- 开始对局 -----")
+        self.textEdit.append("    ----- 开始对局 -----")
 
         self.textEdit.append("   上家       AI      下家")
         while not self.env.game_over:
@@ -419,15 +429,16 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         self.detect_start_btn()
                         if not self.RunGame:
                             break
+                        self.waitUntilNoAnimation()
                         rightOne = self.find_other_cards(self.RPlayedCardsPos)
-                        self.sleep(50)
+                        self.sleep(100)
                         rightTwo = self.find_other_cards(self.RPlayedCardsPos)
                         if rightOne == rightTwo:
                             self.other_played_cards_real = rightOne
                             if "X" in rightOne or "D" in rightOne:
                                 self.sleep(500)
                                 self.other_played_cards_real = self.find_other_cards(self.RPlayedCardsPos)
-                            ani = self.animation(rightOne)
+                            ani = self.animation(self.other_played_cards_real)
                             if ani:
                                 self.RPlayedCard.setText("等待动画")
                                 self.sleep(500)
@@ -473,8 +484,9 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         self.detect_start_btn()
                         if not self.RunGame:
                             break
+                        self.waitUntilNoAnimation()
                         leftOne = self.find_other_cards(self.LPlayedCardsPos)
-                        self.sleep(50)
+                        self.sleep(100)
                         leftTwo = self.find_other_cards(self.LPlayedCardsPos)
                         if leftOne == leftTwo:
                             self.other_played_cards_real = leftOne
@@ -482,7 +494,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                                 self.sleep(500)
                                 self.other_played_cards_real = self.find_other_cards(self.LPlayedCardsPos)
 
-                            ani = self.animation(leftOne)
+                            ani = self.animation(self.other_played_cards_real)
                             if ani:
                                 self.LPlayedCard.setText("等待动画")
                                 self.sleep(500)
@@ -751,7 +763,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             result = classifier.classify(imgCut)
             for b in result:
                 if b[0] == "Orange":
-                    if b[1] > 0.72:
+                    if b[1] > 0.75:
                         return landlord_flag_pos.index(pos)
             self.sleep(100)
 
@@ -1037,26 +1049,25 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         if move_type["type"] in animation_types or len(cards) >= 6:
             return True
 
-    def waitUntilNoAnimation(self, ms=150):
+    def waitUntilNoAnimation(self, ms=100):
         ani = self.haveAnimation(ms)
         first_run = 0
-        while ani:
-            if first_run == 0:
-                print("等待动画", end="")
-            else:
-                if first_run % 1 == 0:
-                    print(".", end="")
-            first_run += 1
-            ani = self.haveAnimation(ms)
-        print()
-        self.sleep(600)
+        if ani:
+            print("检测到炸弹、顺子、飞机 Bomb!!! Bomb!!!  Biu~~ Biu~~")
+            self.sleep(2000)
+            while ani:
+                if first_run == 0:
+                    print("等待动画", end="")
+                else:
+                    if first_run % 1 == 0:
+                        print(".", end="")
+                first_run += 1
+                ani = self.haveAnimation(ms)
 
     def haveAnimation(self, waitTime=200):
         regions = [
-            (1082, 225, 1082 + 30, 225 + 30),  # 开始游戏右上
-            (660, 420, 660 + 30, 420 + 30),  # 自家出牌上方
-            (600, 400, 1200, 630),  # 经典玩法新手场 对家使用
-            (690, 330, 690 + 20, 330 + 20)  # 炸弹时使用，正中央
+            (1030, 200, 1030 + 20, 200 + 20),  # 下家动画位置
+            (450, 200, 450 + 20, 200 + 20),  # 上家动画位置
         ]
         img, _ = helper.Screenshot()
         lastImg = img
@@ -1064,21 +1075,24 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             self.sleep(waitTime)
             img, _ = helper.Screenshot()
             for region in regions:
-                if not self.compareImage(img.crop(region), lastImg.crop(region)):
+                if self.compareImage(img.crop(region), lastImg.crop(region)):
                     return True
             lastImg = img
 
         return False
 
-    def compareImage(self, im1, im2):
-        if im1.size != im2.size:
-            return False
-        size = im1.size
-        for y in range(size[1]):
-            for x in range(size[0]):
-                if im1.getpixel((x, y)) != im2.getpixel((x, y)):
-                    return False
-        return True
+    def compareImage(self, img1, img2):
+
+        # 转换为灰度图
+        gray1 = cv2.cvtColor(np.asarray(img1), cv2.COLOR_BGR2GRAY)
+        gray2 = cv2.cvtColor(np.asarray(img2), cv2.COLOR_BGR2GRAY)
+
+        # 使用结构相似性指数（SSIM）比较相似度
+        ssim_index, _ = ssim(gray1, gray2, full=True)
+        if ssim_index < 0.99:
+            return True
+
+        return False
 
     def real_to_env(self, cards):
         env_card = [RealCard2EnvCard[c] for c in cards]
