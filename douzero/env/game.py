@@ -132,11 +132,17 @@ class GameEnv(object):
         else:
             return "".join([EnvCard2RealCard[card] for card in action])
 
+<<<<<<< Updated upstream
     def path_to_str(self, path):
         pstr = ""
         for action in path:
             pstr += self.action_to_str(action) + " "
         return pstr
+=======
+        if action in bombs:
+            self.bomb_num += 1
+        print(action)
+>>>>>>> Stashed changes
 
     @staticmethod
     def have_bomb(cards):
