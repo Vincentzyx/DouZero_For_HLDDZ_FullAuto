@@ -301,8 +301,10 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.label.setText("开始对局")
         self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0.5);')
         first_run = True
-        self.textEdit.append("----- 开始对局 -----" + "底牌：" + self.three_landlord_cards_real)
+        self.textEdit.append("底牌：" + self.three_landlord_cards_real)
         self.textEdit.append("手牌: " + self.user_hand_cards_real)
+        self.textEdit.append("          ----- 开始对局 -----")
+
         self.textEdit.append("   上家       AI      下家")
         while not self.env.game_over:
             self.detect_start_btn()
@@ -317,7 +319,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 self.UserHandCards.setText("手牌：" + str(''.join(
                     [EnvCard2RealCard[c] for c in self.env.info_sets[self.user_position].player_hand_cards]))[::-1])
                 action_list = action_list[:3]
-                action_list_str = "\n".join([ainfo[0] + " =: " + ainfo[1] for ainfo in action_list])
+                action_list_str = "\n".join([ainfo[0] + " = " + ainfo[1] for ainfo in action_list])
 
                 self.PredictedCard.setText(action_message["action"] if action_message["action"] else "不出")
                 self.PredictedCard.setStyleSheet('background-color: rgba(0, 255, 0, 0.5);')
@@ -400,11 +402,12 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 self.RPlayedCard.setStyleSheet('background-color: rgba(0, 255, 0, 0.5);')
                 pass_flag = helper.LocateOnScreen('buchu', region=self.RPassPos)
                 rightCards = self.find_other_cards(self.RPlayedCardsPos)
+                print("等待下家出牌", end="")
                 while len(rightCards) == 0 and pass_flag is None:
                     if not self.RunGame:
                         break
                     self.detect_start_btn()
-                    print("等待下家出牌")
+                    print(".", end="")
                     self.sleep(100)
                     pass_flag = helper.LocateOnScreen('buchu', region=self.RPassPos)
                     rightCards = self.find_other_cards(self.RPlayedCardsPos)
@@ -454,11 +457,12 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 self.LPlayedCard.setStyleSheet('background-color: rgba(0, 255, 0, 0.5);')
                 pass_flag = helper.LocateOnScreen('buchu', region=self.LPassPos)
                 leftCards = self.find_other_cards(self.LPlayedCardsPos)
+                print("等待上家出牌", end="")
                 while len(leftCards) == 0 and pass_flag is None:
                     self.detect_start_btn()
                     if not self.RunGame:
                         break
-                    print("等待上家出牌")
+                    print(".", end="")
                     self.sleep(100)
                     pass_flag = helper.LocateOnScreen('buchu', region=self.LPassPos)
                     leftCards = self.find_other_cards(self.LPlayedCardsPos)
@@ -771,8 +775,10 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             jiabei_btn = helper.LocateOnScreen("jiabei_btn", region=self.GeneralBtnPos)
             self.detect_start_btn()
             print("等待加倍或叫地主", end="")
-            while jiaodizhu_btn is None and qiangdizhu_btn is None and jiabei_btn is None and self.RunGame:
+            while jiaodizhu_btn is None and qiangdizhu_btn is None and jiabei_btn is None:
                 self.detect_start_btn()
+                if not self.RunGame:
+                    break
                 print(".", end="")
                 self.sleep(100)
                 jiaodizhu_btn = helper.LocateOnScreen("jiaodizhu_btn", region=self.GeneralBtnPos)
@@ -903,11 +909,11 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 print("休息前共用时:", time.time() - st)
 
                 if len(cards_str) == 17:
-                    self.sleep(2500)
-                    print("Farmer休息 2.5 秒, 观察他人加倍")
+                    self.sleep(1000)
+                    print("Farmer休息 1 秒, 观察他人加倍")
                 else:
-                    self.sleep(2500)
-                    print("Landlord休息 3 秒, 观察他人加倍")
+                    self.sleep(2000)
+                    print("Landlord休息 2 秒, 观察他人加倍")
                 #  识别加倍数
                 currentBeishu = self.get_ocr_fast()
                 print("CurrentBeishu:", currentBeishu)
@@ -996,11 +1002,8 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
         gray_img = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2GRAY)
         _, binary_image = cv2.threshold(gray_img, 128, 255, cv2.THRESH_BINARY)
-        print(11111111)
         img = img[pos[1]:pos[1] + pos[3], pos[0]:pos[0] + pos[2]]
-        print(222222222)
         result = ocr.ocr(img)
-        print(result)
         if len(result) > 0:
             result = result[0]['text']
             beishu = int(result)
