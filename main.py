@@ -80,7 +80,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                             QtCore.Qt.WindowStaysOnTopHint |  # 窗体总在最前端
                             QtCore.Qt.WindowCloseButtonHint)
         self.setWindowIcon(QIcon(':/pics/favicon.ico'))
-        self.setWindowTitle("DouZero欢乐斗地主v2.2")
+        self.setWindowTitle("DouZero欢乐斗地主v3.0")
         self.setFixedSize(self.width(), self.height())  # 固定窗体大小
         self.move(20, 550)
         window_pale = QtGui.QPalette()
