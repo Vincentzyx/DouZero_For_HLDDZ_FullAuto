@@ -3,6 +3,7 @@ from douzero.env.move_generator import MovesGener
 from douzero.env.move_detector import get_move_type
 from douzero.env import move_selector
 
+
 EnvCard2RealCard = {3: '3', 4: '4', 5: '5', 6: '6', 7: '7',
                     8: '8', 9: '9', 10: 'T', 11: 'J', 12: 'Q',
                     13: 'K', 14: 'A', 17: '2', 20: 'X', 30: 'D'}
@@ -30,6 +31,7 @@ def action_in_tree(path_list, action):
         if action == ac[0]:
             return ac
     return None
+
 
 
 def search_actions(my_cards, other_cards, path_list, rival_move=None, prev_moves=None):
@@ -69,23 +71,14 @@ def search_actions(my_cards, other_cards, path_list, rival_move=None, prev_moves
                 if len(move_selector.filter_type_n(mtype, other_moves, move)) == 0:
                     if rival_move is not None:
                         move_info = get_move_type(move)
-<<<<<<< Updated upstream
                         if mtype != 5:                     
                             if "rank" in move_info and "rank" in rival_move_info and move_info["rank"] <= rival_move_info["rank"]:
-=======
-                        if mtype != 5:
-                            if "rank" in move_info and "rank" in rival_move_info and move_info["rank"] <= \
-                                    rival_move_info["rank"]:
->>>>>>> Stashed changes
                                 continue
                             if "len" in move_info and move_info["len"] != rival_move_info["len"]:
                                 continue
                             if rival_move_info["type"] == 5:
                                 continue
-<<<<<<< Updated upstream
                         
-=======
->>>>>>> Stashed changes
 
                     new_cards = my_cards.copy()
                     for card in move:
@@ -103,8 +96,7 @@ def search_actions(my_cards, other_cards, path_list, rival_move=None, prev_moves
             else:
                 if rival_move is not None:
                     move_info = get_move_type(move)
-                    if "rank" in move_info and "rank" in rival_move_info and move_info["rank"] <= rival_move_info[
-                        "rank"]:
+                    if "rank" in move_info and "rank" in rival_move_info and move_info["rank"] <= rival_move_info["rank"]:
                         continue
                     if "len" in move_info and move_info["len"] != rival_move_info["len"]:
                         continue
@@ -154,7 +146,6 @@ def check_42(path):
 
 
 if __name__ == "__main__":
-<<<<<<< Updated upstream
     my_cards =[20,30,10,10]
     other_cards = [4, 13, 5,5,5,5,8,8,8,8,12,12,13]
     st = time.time()
@@ -163,23 +154,8 @@ if __name__ == "__main__":
     print(time.time()-st)
     print(result)
     # print(paths)
-=======
-    # my_cards = [20, 30, 10, 10]
-    my_cards = [4, 5, 6, 7]
-    other_cards = [4, 13, 5, 5, 5, 5, 8, 8, 8, 8, 12, 12, 13]
-    st = time.time()
-    paths = []
-    result = search_actions(my_cards, other_cards, paths, rival_move=[13])
-    '''# print(time.time() - st)
-    # print(result)
-    print(paths)
->>>>>>> Stashed changes
     for path in paths:
         print(path)
-    print(len(paths))'''
+    print(len(paths))
     path = select_optimal_path(paths)
-<<<<<<< Updated upstream
     print("optimal", path)
-=======
-    print("optimal", path)
->>>>>>> Stashed changes

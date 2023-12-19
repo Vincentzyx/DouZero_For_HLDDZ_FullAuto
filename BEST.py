@@ -14,7 +14,7 @@ from douzero.env.move_detector import get_move_type
 import cv2
 import numpy as np
 from PyQt5 import QtGui, QtWidgets, QtCore
-from PyQt5.QtWidgets import QTableWidgetItem
+from PyQt5.QtWidgets import QTableWidgetItem, QInputDialog, QMessageBox, QApplication
 from PyQt5.QtGui import QPixmap, QIcon
 from PyQt5.QtCore import QTime, QEventLoop, Qt, QFile, QTextStream, QObject, pyqtSignal
 from MainWindow import Ui_Form
@@ -24,7 +24,6 @@ from douzero.evaluation.deep_agent import DeepAgent
 import traceback
 
 from cnocr import CnOcr
-
 ocr = CnOcr(det_model_name='en_PP-OCRv3_det', rec_model_name='en_PP-OCRv3',
             cand_alphabet="12345678910")  # 所有参数都使用默认值
 
@@ -82,7 +81,8 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.setWindowIcon(QIcon(':/pics/favicon.ico'))
         self.setWindowTitle("DouZero欢乐斗地主v2.2")
         self.setFixedSize(self.width(), self.height())  # 固定窗体大小
-        self.move(20, 20)
+        print(self.width(), self.height())
+        self.move(20, 600)
         window_pale = QtGui.QPalette()
 
         self.setPalette(window_pale)
@@ -162,7 +162,16 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         pid = os.getpid()  # 获取当前进程的PID
         os.kill(pid, signal.SIGTERM)  # 主动结束指定ID的程序运行
         self.stop_sign = 1
-        print("结束")
+        print("按下停止键")
+        try:
+            self.RunGame = False
+            self.loop_sign = 0
+
+            self.env.game_over = True
+            self.env.reset()
+            self.init_display()
+        except AttributeError as e:
+            traceback.print_exc()
 
     def init_display(self):
         self.WinRate.setText("评分")
@@ -225,7 +234,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 break
             self.sleep(200)
             self.user_position_code = self.find_landlord(self.LandlordFlagPos)
-        # print("正在出牌人的代码： ", self.user_position_code)
+        print("正在出牌人的代码： ", self.user_position_code)
         self.user_position = ['landlord_up', 'landlord', 'landlord_down'][self.user_position_code]
         print("我现在的角色是：", self.user_position)
         for player in self.Players:
@@ -513,7 +522,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         for i in beans:
             result = helper.LocateOnScreen("over", region=i, confidence=0.9)
             if result is not None:
-                print("豆子出现，对局结束")
+                print("找到游戏结束的豆子，游戏已结束")
                 self.RunGame = False
                 self.init_display()
                 try:
@@ -704,11 +713,11 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             check_cards = self.find_cards(img, (180, 590, 1050, 90), mark="m")
             for i in out_cards:
                 cards = cards.replace(i, "", 1)
-            # print("检查剩的牌： ", check_cards, "应该剩的牌： ", cards)
+            print("检查剩的牌： ", check_cards, "应该剩的牌： ", cards)
             if len(check_cards) < len(cards):
                 for m in check_cards:
                     cards = cards.replace(m, "", 1)
-                # print("系统多点的牌： ", cards)
+                print("系统多点的牌： ", cards)
                 for n in cards:
                     # print("字典里还剩的牌： ", cards_dict)
                     cars_pos2 = cards_dict[n][-1][0:2]
@@ -724,7 +733,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 cv2.imwrite("debug2.png", img)
                 for m in cards:
                     check_cards = check_cards.replace(m, "", 1)
-                # print("系统少点的牌： ", check_cards)
+                print("系统少点的牌： ", check_cards)
                 for n in check_cards:
                     # print("删除的字典： ", remove_dict)
                     cars_pos3 = remove_dict[n][0][0:2]
@@ -748,6 +757,8 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     if b[1] > 0.72:
                         return landlord_flag_pos.index(pos)
             self.sleep(100)
+            print("未找到地主位置")
+        print("==============")
 
     def before_start(self):
         global win_rate, initialBeishu, cards_str
@@ -958,14 +969,14 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             if outterBreak:
                 break
 
-            # llcards = self.find_three_landlord_cards(self.ThreeLandlordCardsPos)
-            # while len(llcards) != 3 and self.RunGame:
-            #     print("等待地主牌", llcards)
-            #     if np.random.rand() > 0.9:
-            #         self.detect_start_btn()
-            #     else:
-            #         self.sleep(50)
-            #     llcards = self.find_three_landlord_cards(self.ThreeLandlordCardsPos)
+        # llcards = self.find_three_landlord_cards(self.ThreeLandlordCardsPos)
+        # while len(llcards) != 3 and self.RunGame:
+        #     print("等待地主牌", llcards)
+        #     if np.random.rand() > 0.9:
+        #         self.detect_start_btn()
+        #     else:
+        #         self.sleep(50)
+        #     llcards = self.find_three_landlord_cards(self.ThreeLandlordCardsPos)
             self.sleep(3000)
         if win_rate > self.MingpaiThreshold and len(cards_str) == 20 and self.initial_multiply == 4:
             # 识别加倍数
@@ -985,16 +996,14 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         print("结束")
 
     def get_ocr_fast(self):
+
         pos = (1050, 756, 120, 40)
         img, _ = helper.Screenshot()
-        img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
-        gray_img = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2GRAY)
+        gray_img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2GRAY)
         _, binary_image = cv2.threshold(gray_img, 128, 255, cv2.THRESH_BINARY)
-        print(11111111)
         img = img[pos[1]:pos[1] + pos[3], pos[0]:pos[0] + pos[2]]
-        print(222222222)
+        print(1111111111111111111)
         result = ocr.ocr(img)
-        print(result)
         if len(result) > 0:
             result = result[0]['text']
             beishu = int(result)
@@ -1044,10 +1053,10 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
 
     def haveAnimation(self, waitTime=200):
         regions = [
-            (1082, 225, 1082 + 30, 225 + 30),  # 开始游戏右上
-            (660, 420, 660 + 30, 420 + 30),  # 自家出牌上方
+            (1122, 585, 1122 + 30, 585 + 30),  # 开始游戏右上
+            (763, 625, 763 + 30, 625 + 30),  # 自家出牌上方
             (600, 400, 1200, 630),  # 经典玩法新手场 对家使用
-            (690, 330, 690 + 20, 330 + 20)  # 炸弹时使用，正中央
+            (880, 540, 880 + 20, 540 + 20)  # 炸弹时使用，正中央
         ]
         img, _ = helper.Screenshot()
         lastImg = img
