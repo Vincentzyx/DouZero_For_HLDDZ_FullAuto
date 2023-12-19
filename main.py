@@ -11,7 +11,6 @@ import time
 import DetermineColor as DC
 from collections import defaultdict
 from douzero.env.move_detector import get_move_type
-import search_utility as search
 import cv2
 import numpy as np
 from PyQt5 import QtGui, QtWidgets, QtCore
@@ -83,7 +82,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.setWindowIcon(QIcon(':/pics/favicon.ico'))
         self.setWindowTitle("DouZero欢乐斗地主v3.0")
         self.setFixedSize(self.width(), self.height())  # 固定窗体大小
-        self.move(20, 550)
+        self.move(20, 20)
         window_pale = QtGui.QPalette()
 
         self.setPalette(window_pale)
@@ -139,15 +138,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             'landlord_up': "baselines/resnet/resnet_landlord_up.ckpt",
             'landlord_down': "baselines/resnet/resnet_landlord_down.ckpt"
         }
-<<<<<<< Updated upstream
         LandlordModel.init_model(self.card_play_model_path_dict['landlord'])
-=======
-        '''self.card_play_model_path_dict = {
-            'landlord': "baselines/douzero_ADP/landlord.ckpt",
-            'landlord_up': "baselines/douzero_ADP/landlord_up.ckpt",
-            'landlord_down': "baselines/douzero_ADP/landlord_down.ckpt"
-        }'''
->>>>>>> Stashed changes
 
     def game_single(self):
         self.loop_sign = 0
@@ -1118,19 +1109,6 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             newItem = QTableWidgetItem("0")
             newItem.setTextAlignment(Qt.AlignHCenter)
             self.tableWidget.setItem(0, i, newItem)
-
-    def best_action(self):
-        action = []
-        my_cards = self.user_hand_cards_env
-        other_cards = self.other_hand_cards
-        paths = []
-        search.search_actions(my_cards, other_cards, paths, rival_move=[13])
-        path = search.select_optimal_path(paths)
-        # print("optimal", path)
-        if path is not None:
-            action = path[0]
-
-        return action
 
 
 if __name__ == '__main__':
