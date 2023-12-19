@@ -460,7 +460,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                                                                    self.other_played_cards_real)
                 # print("记牌器：", self.other_hands_cards_str)
                 self.cards_recorder(self.other_hands_cards_str)
-                self.sleep(200)
+                self.sleep(500)
                 self.play_order = 2
 
             elif self.play_order == 2:
@@ -516,7 +516,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                                                                    self.other_played_cards_real)
                 # print("记牌器：", self.other_hands_cards_str)
                 self.cards_recorder(self.other_hands_cards_str)
-                self.sleep(300)
+                self.sleep(500)
                 self.play_order = 0
 
         if self.loop_sign == 0:
@@ -705,10 +705,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 # print("系统帮你点的牌：", check_one, "你要出的牌：", i)
 
                 if check_one == i and check_one != "D" and check_one != "X":
-                    # print("腾讯自动帮你选牌：", check_one)
-                    img, _ = helper.Screenshot()
-                    img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
-                    cv2.imwrite("debug.png", img)
+                    print("腾讯自动帮你选牌：", check_one)
 
                 else:
                     helper.LeftClick2(point)
@@ -737,9 +734,6 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     remove_dict[n].append(cards_dict[n][-1])
                     cards_dict[n].remove(cards_dict[n][-1])
             elif len(check_cards) > len(cards):
-                img, _ = helper.Screenshot()
-                img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
-                cv2.imwrite("debug2.png", img)
                 for m in cards:
                     check_cards = check_cards.replace(m, "", 1)
                 # print("系统少点的牌： ", check_cards)
@@ -1054,8 +1048,14 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         first_run = 0
         if ani:
             print("检测到炸弹、顺子、飞机 Bomb!!! Bomb!!!  Biu~~ Biu~~")
-            self.sleep(2000)
+            if self.other_played_cards_real == "DX":
+                self.sleep(3000)
+            else:
+                self.sleep(1000)
             while ani:
+                self.detect_start_btn()
+                if not self.RunGame:
+                    break
                 if first_run == 0:
                     print("等待动画", end="")
                 else:
@@ -1066,8 +1066,8 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
 
     def haveAnimation(self, waitTime=200):
         regions = [
-            (1030, 200, 1030 + 20, 200 + 20),  # 下家动画位置
-            (450, 200, 450 + 20, 200 + 20),  # 上家动画位置
+            (1030, 260, 1030 + 20, 260 + 20),  # 下家动画位置
+            (450, 260, 450 + 20, 260 + 20),  # 上家动画位置
         ]
         img, _ = helper.Screenshot()
         lastImg = img
