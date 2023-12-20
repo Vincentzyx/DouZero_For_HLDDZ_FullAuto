@@ -53,6 +53,7 @@ helper = GameHelper()
 class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
     def __init__(self):
         super(MyPyQT_Form, self).__init__()
+        self.in_game_flag = None
         self.initial_mingpai = None
         self.initial_multiply = None
         self.buy_chaojijiabei_flag = None
@@ -160,19 +161,21 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             self.sleep(5000)
 
     def stop(self):
-        self.stop_sign = 1
-        print("结束")
-        try:
-            self.RunGame = False
-            self.loop_sign = 0
+        if self.loop_sign == 1:
+            pid = os.getpid()  # 获取当前进程的PID
+            os.kill(pid, signal.SIGTERM)  # 主动结束指定ID的程序运行
+        else:
+            if self.in_game_flag:
+                print("结束")
+                try:
+                    self.RunGame = False
+                    self.loop_sign = 0
+                    self.env.reset()
+                    self.init_display()
+                    self.env.game_over = True
 
-            self.env.game_over = True
-            self.env.reset()
-            self.init_display()
-        except AttributeError as e:
-            traceback.print_exc()
-        pid = os.getpid()  # 获取当前进程的PID
-        os.kill(pid, signal.SIGTERM)  # 主动结束指定ID的程序运行
+                except AttributeError as e:
+                    traceback.print_exc()
 
     def init_display(self):
         self.WinRate.setText("评分")
@@ -308,7 +311,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         # print("现在的出牌顺序是谁：0是我；1是下家；2是上家：", self.play_order)
         self.env.card_play_init(self.card_play_data_list)
         print("开始对局")
-        self.label.setText("开始对局")
+        self.label.setText("游戏开始")
         self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0.5);')
         first_run = True
         self.textEdit.append("底牌：" + self.three_landlord_cards_real)
@@ -547,8 +550,9 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         result = helper.LocateOnScreen("continue", region=(1100, 617, 200, 74))
         if result is not None:
             if self.loop_sign == 0:
-                print("检测到本局游戏已结束")
-                self.label.setText("游戏已结束")
+                print("本局游戏已结束")
+                self.label.setText("游戏结束")
+                self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0.5);')
                 self.stop()
             else:
                 self.RunGame = True
@@ -767,12 +771,30 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         GameHelper.Interrupt = True
         have_bid = False
         is_stolen = 0
+        self.in_game_flag = False
         self.initial_multiply = 0
         self.initial_mingpai = 0
         self.initial_bid_rate = 0
         self.buy_chaojijiabei_flag = False
         self.label.setText("叫地主阶段")
         self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0.5);')
+
+        in_game = helper.LocateOnScreen("chat", region=(1302, 744, 117, 56))
+        while in_game is None:
+            self.detect_start_btn()
+            if not self.RunGame:
+                break
+            self.sleep(1000)
+            print("还没进入到游戏中。。。")
+            self.label.setText("未进入游戏")
+            self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0.5);')
+            in_game = helper.LocateOnScreen("chat", region=(1302, 744, 117, 56))
+        self.in_game_flag = True
+        self.sleep(300)
+        if self.in_game_flag:
+            print(in_game, "进入到游戏中")
+            self.label.setText("游戏开始")
+            self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0.5);')
 
         while self.RunGame:
             outterBreak = False
@@ -844,6 +866,22 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 else:
                     pass
             else:
+                self.label.setText("游戏开始")
+                self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0.5);')
+                laotou = helper.LocateOnScreen("laotou", region=(761, 45, 255, 100))
+                while laotou is not None:
+                    self.detect_start_btn()
+                    if not self.RunGame:
+                        break
+                    self.sleep(200)
+                    print("在游戏里，还在抢地主。。。。")
+                    self.label.setText("在抢地主")
+                    self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0.5);')
+
+                print("底牌现身。。。")
+                self.label.setText("抢完地主")
+                self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0.5);')
+
                 st = time.time()
                 # 识别加倍数
                 initialBeishu = self.get_ocr_fast()
@@ -999,7 +1037,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 print("There are some problems with Mingpai, Please check")
                 pass
         print("结束")
-        self.label.setText("抢地主结束")
+        self.label.setText("加倍结束")
         self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0.5);')
 
     def get_ocr_fast(self):
