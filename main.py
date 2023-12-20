@@ -1087,9 +1087,9 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         if ani:
             print("检测到炸弹、顺子、飞机 Bomb!!! Bomb!!!  Biu~~ Biu~~")
             if self.other_played_cards_real == "DX":
-                self.sleep(3000)
-            else:
                 self.sleep(1000)
+            else:
+                self.sleep(600)
             while ani:
                 self.detect_start_btn()
                 if not self.RunGame:
@@ -1106,6 +1106,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         regions = [
             (1030, 260, 1030 + 20, 260 + 20),  # 下家动画位置
             (450, 260, 450 + 20, 260 + 20),  # 上家动画位置
+            (700, 390, 700 + 20, 390 + 20),  # 自己上方动画位置
         ]
         img, _ = helper.Screenshot()
         lastImg = img
