@@ -155,8 +155,10 @@ class GameHelper:
                 self.Handle = win32gui.FindWindow("UnityWndClass", None)
                 hwnd = self.Handle
                 left, top, right, bot = win32gui.GetWindowRect(hwnd)
-                width = right - left
-                height = bot - top
+                # 调整窗口大小
+                win32gui.MoveWindow(hwnd, left, top, 1440, 810, True)
+                width = 1440
+                height = 810
                 self.RealRate = (width, height)
                 width = int(width)
                 height = int(height)
