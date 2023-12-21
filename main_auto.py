@@ -13,6 +13,7 @@ from collections import defaultdict
 from douzero.env.move_detector import get_move_type
 import cv2
 import numpy as np
+import pygame
 from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtWidgets import QTableWidgetItem
 from PyQt5.QtGui import QPixmap, QIcon
@@ -142,13 +143,42 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.PassBtnPos = (200, 450, 1000, 120)  # 要不起截图区域
         self.GeneralBtnPos = (200, 450, 1000, 120)  # 叫地主、抢地主、加倍按钮截图区域
         self.LandlordFlagPos = [(1247, 245, 48, 52), (12, 661, 51, 53), (123, 243, 52, 54)]  # 地主标志截图区域(右-我-左)
+        # Game Log Variables
+        self.GameRecord = []
+        self.game_type = ""
+        self.initial_cards = ""
+        self.initial_bid_rate = ""
+        self.initial_model_rate = ""
+        self.initial_mingpai = ""
+        self.initial_multiply = ""
+        # -------------------
+        self.shouldExit = 0  # 通知上一轮记牌结束
+        self.modeType = 1  # {1: resnet, 2: WP, 3: ADP}
 
         self.card_play_model_path_dict = {
             'landlord': "baselines/resnet/resnet_landlord.ckpt",
             'landlord_up': "baselines/resnet/resnet_landlord_up.ckpt",
             'landlord_down': "baselines/resnet/resnet_landlord_down.ckpt"
         }
-        LandlordModel.init_model(self.card_play_model_path_dict['landlord'])
+        self.card_play_wp_model_path = {
+            'landlord': "baselines/douzero_WP/landlord.ckpt",
+            'landlord_up': "baselines/douzero_WP/landlord_up.ckpt",
+            'landlord_down': "baselines/douzero_WP/landlord_down.ckpt"
+        }
+        self.card_play_adp_model_path = {
+            'landlord': "baselines/douzero_ADP/landlord.ckpt",
+            'landlord_up': "baselines/douzero_ADP/landlord_up.ckpt",
+            'landlord_down': "baselines/douzero_ADP/landlord_down.ckpt"
+        }
+
+        if self.modeType == 1:
+            LandlordModel.init_model("baselines/resnet/resnet_landlord.ckpt")
+        elif self.modeType == 2:
+            LandlordModel.init_model("baselines/douzero_WP/landlord.ckpt")
+        elif self.modeType == 3:
+            LandlordModel.init_model("baselines/douzero_ADP/landlord.ckpt")
+        else:
+            LandlordModel.init_model("baselines/resnet/resnet_landlord.ckpt")
 
     def hand_game(self):
         self.auto_sign = False
@@ -195,6 +225,11 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             self.before_start()
             self.init_cards()
             self.sleep(5000)
+
+    def play_sound(self, sound_file):
+        pygame.mixer.init()
+        pygame.mixer.music.load(sound_file)
+        pygame.mixer.music.play()
 
     def stop(self):
         if self.loop_sign == 1:
@@ -456,6 +491,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     self.play_order = 1
                 else:
                     print("现在是手动模式，请手动出牌")
+                    self.play_sound("music/1.wav")
                     action_message, action_list = self.env.step(self.user_position, update=False)
                     score = float(action_message['win_rate'])
                     if "resnet" in self.card_play_model_path_dict[self.user_position]:
@@ -678,8 +714,6 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     traceback.print_exc()
                 break
             self.sleep(3000)
-
-
         if self.auto_sign:
             result = helper.LocateOnScreen("continue", region=(1100, 617, 200, 74))
             if result is not None:
@@ -699,7 +733,6 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         self.init_display()
                     except AttributeError as e:
                         traceback.print_exc()
-
 
             result = helper.LocateOnScreen("start_game", region=(720, 466, 261, 117))
             if result is not None:
