@@ -676,9 +676,8 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     print("程序走到这里")
                 except AttributeError as e:
                     traceback.print_exc()
+                self.sleep(3000)
                 break
-            self.sleep(3000)
-
 
         if self.auto_sign:
             result = helper.LocateOnScreen("continue", region=(1100, 617, 200, 74))
@@ -699,7 +698,6 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         self.init_display()
                     except AttributeError as e:
                         traceback.print_exc()
-
 
             result = helper.LocateOnScreen("start_game", region=(720, 466, 261, 117))
             if result is not None:

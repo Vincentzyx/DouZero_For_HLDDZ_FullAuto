@@ -712,8 +712,9 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     print("程序走到这里")
                 except AttributeError as e:
                     traceback.print_exc()
+                self.sleep(3000)
                 break
-            self.sleep(3000)
+
         if self.auto_sign:
             result = helper.LocateOnScreen("continue", region=(1100, 617, 200, 74))
             if result is not None:
