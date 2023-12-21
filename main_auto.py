@@ -653,7 +653,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         have_ani = self.waitUntilNoAnimation()
                         if have_ani:
                             self.LPlayedCard.setText("等待动画")
-                            self.sleep(200)
+                            self.sleep(20)
                         leftOne = self.find_other_cards(self.LPlayedCardsPos)
                         self.sleep(100)
                         leftTwo = self.find_other_cards(self.LPlayedCardsPos)
@@ -685,7 +685,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                                                                    self.other_played_cards_real)
                 # print("记牌器：", self.other_hands_cards_str)
                 self.cards_recorder(self.other_hands_cards_str)
-                self.sleep(500)
+                self.sleep(50)
                 self.play_order = 0
 
         if self.loop_sign == 0:
