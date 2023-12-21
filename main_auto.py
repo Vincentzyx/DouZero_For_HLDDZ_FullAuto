@@ -712,7 +712,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     print("程序走到这里")
                 except AttributeError as e:
                     traceback.print_exc()
-                self.sleep(3000)
+                self.sleep(1000)
                 break
 
         if self.auto_sign:
@@ -1186,7 +1186,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 #     else:
                 #         self.sleep(50)
                 #     llcards = self.find_three_landlord_cards(self.ThreeLandlordCardsPos)
-                self.sleep(3000)
+                self.sleep(1000)
             if win_rate > self.MingpaiThreshold and len(cards_str) == 20 and self.initial_multiply == 4:
                 # 识别加倍数
                 currentBeishu = self.get_ocr_fast()

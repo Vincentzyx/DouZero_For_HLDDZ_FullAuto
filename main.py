@@ -658,7 +658,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.label.setText("游戏结束")
         self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0);')
         self.init_display()
-        self.sleep(3000)
+        self.sleep(1000)
 
     def detect_start_btn(self):
         beans = [(308, 204, 254, 60), (295, 474, 264, 60), (882, 203, 230, 60)]
@@ -676,7 +676,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     print("程序走到这里")
                 except AttributeError as e:
                     traceback.print_exc()
-                self.sleep(3000)
+                self.sleep(1000)
                 break
 
         if self.auto_sign:
