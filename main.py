@@ -1017,7 +1017,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     print("三张底牌未识别", end="")
                     while len(llcards) != 3:
                         self.detect_start_btn()
-                        if not self.RunGame:
+                        if not self.RunGame or not self.auto_sign:
                             break
                         if len(llcards) > 3:
                             self.ThreeLandlordCardsConfidence += 0.05
@@ -1174,7 +1174,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             laotou = helper.LocateOnScreen("laotou", region=(761, 45, 255, 100))
             while laotou is not None:
                 self.detect_start_btn()
-                if not self.RunGame or not self.auto_sign:
+                if not self.RunGame:
                     break
                 self.sleep(200)
                 print("在游戏里，还在抢地主。。。。")
@@ -1192,7 +1192,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             while len(cards) != 17 and len(cards) != 20:
                 print(".", end="")
                 self.detect_start_btn()
-                if not self.RunGame or self.auto_sign:
+                if not self.RunGame:
                     break
                 self.sleep(200)
                 cards = self.find_my_cards()
