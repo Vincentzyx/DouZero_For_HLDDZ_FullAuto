@@ -1017,7 +1017,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     print("三张底牌未识别", end="")
                     while len(llcards) != 3:
                         self.detect_start_btn()
-                        if not self.RunGame or not self.auto_sign:
+                        if not self.RunGame:
                             break
                         if len(llcards) > 3:
                             self.ThreeLandlordCardsConfidence += 0.05
