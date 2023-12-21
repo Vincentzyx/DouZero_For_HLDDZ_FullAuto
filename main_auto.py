@@ -55,6 +55,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
     def __init__(self):
         super(MyPyQT_Form, self).__init__()
         self.firt_time = 0
+        self.my_pass_sign = None
         self.my_played_cards_env = None
         self.my_played_cards_real = None
         self.auto_sign = None
@@ -388,6 +389,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             QtWidgets.QApplication.processEvents(QEventLoop.AllEvents, 50)
 
     def start(self):
+        self.my_pass_sign = False
         self.textEdit.clear()
         # print("现在的出牌顺序是谁：0是我；1是下家；2是上家：", self.play_order)
         self.env.card_play_init(self.card_play_data_list)
@@ -440,13 +442,16 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                             passSign = helper.LocateOnScreen("yaobuqi", region=self.GeneralBtnPos, confidence=0.7)
                         self.textEdit.append("                " + "不出")
 
-                        if result is not None:
-                            helper.ClickOnImage("pass_btn", region=self.PassBtnPos, confidence=0.7)
-                            self.sleep(100)
-                        if passSign is not None:
-                            self.sleep(100)
-                            helper.ClickOnImage("yaobuqi", region=self.GeneralBtnPos, confidence=0.7)
-                        self.sleep(200)
+                        if not self.my_pass_sign:
+                            if result is not None:
+                                helper.ClickOnImage("pass_btn", region=self.PassBtnPos, confidence=0.7)
+                                self.sleep(100)
+                            if passSign is not None:
+                                self.sleep(100)
+                                helper.ClickOnImage("yaobuqi", region=self.GeneralBtnPos, confidence=0.7)
+                            self.sleep(200)
+                        else:
+                            self.my_pass_sign = False
                     else:
                         hand_cards_str = ''.join(
                             [EnvCard2RealCard[c] for c in self.env.info_sets[self.user_position].player_hand_cards])
@@ -535,12 +540,11 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                             if have_ani:
                                 self.PredictedCard.setText("等待动画")
                                 self.sleep(200)
-                            centralOne = self.find_other_cards(self.MPlayedCardsPos)
-                            self.sleep(100)
-                            centralTwo = self.find_other_cards(self.MPlayedCardsPos)
-                            if centralOne == centralTwo:
-                                self.my_played_cards_real = centralOne
-                                if "X" in centralOne or "D" in centralOne:
+                            cards = self.find_other_cards(self.MPlayedCardsPos)
+
+                            if len(cards) > 0:
+                                self.my_played_cards_real = cards
+                                if "X" in cards or "D" in cards:
                                     self.sleep(100)
                                     self.my_played_cards_real = self.find_other_cards(self.MPlayedCardsPos)
                                 # ani = self.animation(self.other_played_cards_real)
@@ -567,7 +571,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     # 更新界面
                     self.PredictedCard.setText(self.my_played_cards_real if self.my_played_cards_real else "不出")
                     self.PredictedCard.setStyleSheet('background-color: rgba(0, 255, 0, 0);')
-                    self.sleep(500)
+                    self.sleep(200)
                     self.play_order = 1
 
             elif self.play_order == 1:
@@ -595,13 +599,12 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         have_ani = self.waitUntilNoAnimation()
                         if have_ani:
                             self.RPlayedCard.setText("等待动画")
-                            self.sleep(200)
-                        rightOne = self.find_other_cards(self.RPlayedCardsPos)
-                        self.sleep(100)
-                        rightTwo = self.find_other_cards(self.RPlayedCardsPos)
-                        if rightOne == rightTwo:
-                            self.other_played_cards_real = rightOne
-                            if "X" in rightOne or "D" in rightOne:
+                            self.sleep(20)
+                        cards = self.find_other_cards(self.RPlayedCardsPos)
+
+                        if len(cards) > 0:
+                            self.other_played_cards_real = cards
+                            if "X" in cards or "D" in cards:
                                 self.sleep(100)
                                 self.other_played_cards_real = self.find_other_cards(self.RPlayedCardsPos)
                             # ani = self.animation(self.other_played_cards_real)
@@ -654,12 +657,16 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         if have_ani:
                             self.LPlayedCard.setText("等待动画")
                             self.sleep(20)
-                        leftOne = self.find_other_cards(self.LPlayedCardsPos)
-                        self.sleep(100)
-                        leftTwo = self.find_other_cards(self.LPlayedCardsPos)
-                        if leftOne == leftTwo:
-                            self.other_played_cards_real = leftOne
-                            if "X" in leftOne or "D" in leftOne:
+
+                        result = helper.LocateOnScreen('buchu', region=self.MPassPos)
+                        if result is not None:
+                            self.my_pass_sign = True
+                            print("\n**************  解决能走不走的BUG  **************")
+
+                        cards = self.find_other_cards(self.LPlayedCardsPos)
+                        self.other_played_cards_real = cards
+                        if len(cards) > 0:
+                            if "X" in cards or "D" in cards:
                                 self.sleep(100)
                                 self.other_played_cards_real = self.find_other_cards(self.LPlayedCardsPos)
 
@@ -1307,7 +1314,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             return True
         return False
 
-    def haveAnimation(self, waitTime=200):
+    def haveAnimation(self, waitTime=100):
         regions = [
             (1030, 260, 1030 + 20, 260 + 20),  # 下家动画位置
             (450, 260, 450 + 20, 260 + 20),  # 上家动画位置
@@ -1324,6 +1331,8 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             lastImg = img
 
         return False
+
+
 
     def compareImage(self, img1, img2):
 
