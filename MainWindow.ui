@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>657</width>
-    <height>498</height>
+    <width>653</width>
+    <height>482</height>
    </rect>
   </property>
   <property name="font">
@@ -494,7 +494,7 @@ background:none;
      <x>20</x>
      <y>100</y>
      <width>371</width>
-     <height>311</height>
+     <height>281</height>
     </rect>
    </property>
    <property name="widgetResizable">
@@ -506,15 +506,15 @@ background:none;
       <x>0</x>
       <y>0</y>
       <width>369</width>
-      <height>309</height>
+      <height>279</height>
      </rect>
     </property>
     <widget class="QLabel" name="UserHandCards">
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>260</y>
-       <width>311</width>
+       <y>230</y>
+       <width>331</width>
        <height>31</height>
       </rect>
      </property>
@@ -537,8 +537,8 @@ background:none;
     <widget class="QLabel" name="RPlayedCard">
      <property name="geometry">
       <rect>
-       <x>30</x>
-       <y>170</y>
+       <x>210</x>
+       <y>100</y>
        <width>141</width>
        <height>61</height>
       </rect>
@@ -559,35 +559,10 @@ background:none;
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
-    <widget class="QLabel" name="ThreeLandlordCards">
-     <property name="geometry">
-      <rect>
-       <x>200</x>
-       <y>10</y>
-       <width>131</width>
-       <height>61</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>微软雅黑</family>
-       <pointsize>10</pointsize>
-       <weight>50</weight>
-       <italic>false</italic>
-       <bold>false</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>地主牌</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
     <widget class="QLabel" name="LPlayedCard">
      <property name="geometry">
       <rect>
-       <x>30</x>
+       <x>20</x>
        <y>10</y>
        <width>141</width>
        <height>61</height>
@@ -612,8 +587,8 @@ background:none;
     <widget class="QLabel" name="PredictedCard">
      <property name="geometry">
       <rect>
-       <x>30</x>
-       <y>90</y>
+       <x>20</x>
+       <y>100</y>
        <width>141</width>
        <height>61</height>
       </rect>
@@ -646,10 +621,38 @@ background:none;
     <widget class="QLabel" name="WinRate">
      <property name="geometry">
       <rect>
-       <x>200</x>
-       <y>80</y>
-       <width>131</width>
-       <height>191</height>
+       <x>20</x>
+       <y>170</y>
+       <width>331</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>微软雅黑</family>
+       <pointsize>10</pointsize>
+       <weight>50</weight>
+       <italic>false</italic>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>评分</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="ThreeLandlordCards">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>10</y>
+       <width>141</width>
+       <height>61</height>
       </rect>
      </property>
      <property name="font">
@@ -662,10 +665,10 @@ background:none;
       </font>
      </property>
      <property name="text">
-      <string>评分</string>
+      <string>地主牌</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignHCenter|Qt::AlignTop</set>
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </widget>
@@ -743,7 +746,7 @@ background:none;
      <x>400</x>
      <y>200</y>
      <width>231</width>
-     <height>211</height>
+     <height>181</height>
     </rect>
    </property>
    <property name="widgetResizable">
@@ -755,7 +758,7 @@ background:none;
       <x>0</x>
       <y>0</y>
       <width>229</width>
-      <height>209</height>
+      <height>179</height>
      </rect>
     </property>
     <widget class="QTextEdit" name="textEdit">
@@ -764,7 +767,7 @@ background:none;
        <x>10</x>
        <y>10</y>
        <width>211</width>
-       <height>191</height>
+       <height>161</height>
       </rect>
      </property>
     </widget>
@@ -774,7 +777,7 @@ background:none;
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>420</y>
+     <y>400</y>
      <width>611</width>
      <height>61</height>
     </rect>
@@ -816,10 +819,10 @@ background:none;
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
-    <widget class="QSplitter" name="splitter_2">
+    <widget class="QSplitter" name="splitter">
      <property name="geometry">
       <rect>
-       <x>10</x>
+       <x>20</x>
        <y>10</y>
        <width>431</width>
        <height>41</height>
@@ -828,7 +831,7 @@ background:none;
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QPushButton" name="SingleButton">
+     <widget class="QPushButton" name="HandButton">
       <property name="font">
        <font>
         <family>微软雅黑</family>
@@ -839,10 +842,10 @@ background:none;
        </font>
       </property>
       <property name="text">
-       <string>单局</string>
+       <string>手动</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="LoopButton">
+     <widget class="QPushButton" name="AutoButton">
       <property name="font">
        <font>
         <family>微软雅黑</family>
@@ -853,7 +856,7 @@ background:none;
        </font>
       </property>
       <property name="text">
-       <string> 连续</string>
+       <string>自动</string>
       </property>
      </widget>
      <widget class="QPushButton" name="StopButton">
