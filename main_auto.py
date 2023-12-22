@@ -1137,11 +1137,11 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     print("休息前共用时:", time.time() - st)
 
                     if len(cards_str) == 17:
-                        self.sleep(1000)
-                        print("Farmer休息 1 秒, 观察他人加倍")
+                        self.sleep(500)
+                        print("Farmer休息 0.5 秒, 观察他人加倍")
                     else:
-                        self.sleep(2000)
-                        print("Landlord休息 2 秒, 观察他人加倍")
+                        self.sleep(1000)
+                        print("Landlord休息 1 秒, 观察他人加倍")
                     #  识别加倍数
                     currentBeishu = self.get_ocr_fast()
                     print("CurrentBeishu:", currentBeishu)
