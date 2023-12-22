@@ -89,7 +89,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                             QtCore.Qt.WindowStaysOnTopHint |  # 窗体总在最前端
                             QtCore.Qt.WindowCloseButtonHint)
         self.setWindowIcon(QIcon(':/pics/favicon.ico'))
-        self.setWindowTitle("DouZero欢乐斗地主v4.0")
+        self.setWindowTitle("DouZero欢乐斗地主v4.2")
         self.setFixedSize(self.width(), self.height())  # 固定窗体大小
         self.move(20, 20)
         window_pale = QtGui.QPalette()
@@ -539,14 +539,12 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                             if have_ani:
                                 self.PredictedCard.setText("等待动画")
                             self.sleep(100)
-                            cards = self.find_other_cards(self.MPlayedCardsPos)
-                            if cards != centralCards:
-                                self.sleep(100)
-                                cards = self.find_other_cards(self.MPlayedCardsPos)
-
-                            if len(cards) > 0:
-                                self.my_played_cards_real = cards
-                                if "X" in cards or "D" in cards:
+                            centralOne = self.find_other_cards(self.MPlayedCardsPos)
+                            self.sleep(100)
+                            centralTwo = self.find_other_cards(self.MPlayedCardsPos)
+                            if centralOne == centralTwo:
+                                self.my_played_cards_real = centralOne
+                                if "X" in centralOne or "D" in centralOne:
                                     self.sleep(100)
                                     self.my_played_cards_real = self.find_other_cards(self.MPlayedCardsPos)
                                 # ani = self.animation(self.other_played_cards_real)
@@ -603,14 +601,12 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                             self.RPlayedCard.setText("等待动画")
                         self.sleep(100)
 
-                        cards = self.find_other_cards(self.RPlayedCardsPos)
-                        if cards != rightCards:
-                            self.sleep(100)
-                            cards = self.find_other_cards(self.RPlayedCardsPos)
-
-                        if len(cards) > 0:
-                            self.other_played_cards_real = cards
-                            if "X" in cards or "D" in cards:
+                        rightOne = self.find_other_cards(self.RPlayedCardsPos)
+                        self.sleep(100)
+                        rightTwo = self.find_other_cards(self.RPlayedCardsPos)
+                        if rightOne == rightTwo:
+                            self.other_played_cards_real = rightOne
+                            if "X" in rightOne or "D" in rightOne:
                                 self.sleep(100)
                                 self.other_played_cards_real = self.find_other_cards(self.RPlayedCardsPos)
                             # ani = self.animation(self.other_played_cards_real)
@@ -635,7 +631,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                                                                    self.other_played_cards_real)
                 # print("记牌器：", self.other_hands_cards_str)
                 self.cards_recorder(self.other_hands_cards_str)
-                self.sleep(500)
+                self.sleep(200)
                 self.play_order = 2
 
             elif self.play_order == 2:
@@ -669,15 +665,12 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                             self.my_pass_sign = True
                             print("\n**************  解决能走不走的BUG  **************")
 
-                        cards = self.find_other_cards(self.LPlayedCardsPos)
-                        self.other_played_cards_real = cards
-
-                        if cards != leftCards:
-                            self.sleep(100)
-                            cards = self.find_other_cards(self.LPlayedCardsPos)
-
-                        if len(cards) > 0:
-                            if "X" in cards or "D" in cards:
+                        leftOne = self.find_other_cards(self.LPlayedCardsPos)
+                        self.sleep(100)
+                        leftTwo = self.find_other_cards(self.LPlayedCardsPos)
+                        if leftOne == leftTwo:
+                            self.other_played_cards_real = leftOne
+                            if "X" in leftOne or "D" in leftOne:
                                 self.sleep(100)
                                 self.other_played_cards_real = self.find_other_cards(self.LPlayedCardsPos)
 
