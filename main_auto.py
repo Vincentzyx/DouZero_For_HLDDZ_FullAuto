@@ -294,21 +294,16 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
 
         # 识别三张底牌
         self.three_landlord_cards_real = self.find_landlord_cards()
-        self.ThreeLandlordCards.setText("底牌：" + self.three_landlord_cards_real)
-        self.three_landlord_cards_env = [RealCard2EnvCard[c] for c in list(self.three_landlord_cards_real)]
         print("正在识别地主三张牌", end="")
-        while len(self.three_landlord_cards_env) != 3:
+        while len(self.three_landlord_cards_real) != 3:
             print(".", end="")
             self.detect_start_btn()
             if not self.RunGame:
                 break
-            if len(self.three_landlord_cards_env) > 3:
-                self.ThreeLandlordCardsConfidence += 0.05
-            elif len(self.three_landlord_cards_env) < 3:
-                self.ThreeLandlordCardsConfidence -= 0.05
+            self.sleep(200)
             self.three_landlord_cards_real = self.find_landlord_cards()
-            self.ThreeLandlordCards.setText("底牌：" + self.three_landlord_cards_real)
-            self.three_landlord_cards_env = [RealCard2EnvCard[c] for c in list(self.three_landlord_cards_real)]
+        self.ThreeLandlordCards.setText("底牌：" + self.three_landlord_cards_real)
+        self.three_landlord_cards_env = [RealCard2EnvCard[c] for c in list(self.three_landlord_cards_real)]
 
         # 识别玩家的角色
         self.sleep(500)
@@ -496,6 +491,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     self.play_order = 1
                 else:
                     print("现在是手动模式，请手动出牌")
+                    self.play_sound("music/1.wav")
                     action_message, action_list = self.env.step(self.user_position, update=False)
                     score = float(action_message['win_rate'])
                     if "resnet" in self.card_play_model_path_dict[self.user_position]:
@@ -1069,13 +1065,8 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         self.detect_start_btn()
                         if not self.RunGame or not self.auto_sign:
                             break
-                        if len(llcards) > 3:
-                            self.ThreeLandlordCardsConfidence += 0.05
-                            time.sleep(200)
-                        elif len(llcards) < 3:
-                            self.ThreeLandlordCardsConfidence -= 0.05
-                            time.sleep(200)
                         print(".", end="")
+                        self.sleep(200)
                         llcards = self.find_landlord_cards()
                     print("\n地主牌:", llcards)
                     cards = self.find_my_cards()

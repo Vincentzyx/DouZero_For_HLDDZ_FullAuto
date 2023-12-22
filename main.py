@@ -53,8 +53,8 @@ helper = GameHelper()
 class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
     def __init__(self):
         super(MyPyQT_Form, self).__init__()
-        self.my_pass_sign = None
         self.firt_time = 0
+        self.my_pass_sign = None
         self.my_played_cards_env = None
         self.my_played_cards_real = None
         self.auto_sign = None
@@ -143,13 +143,42 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.PassBtnPos = (200, 450, 1000, 120)  # 要不起截图区域
         self.GeneralBtnPos = (200, 450, 1000, 120)  # 叫地主、抢地主、加倍按钮截图区域
         self.LandlordFlagPos = [(1247, 245, 48, 52), (12, 661, 51, 53), (123, 243, 52, 54)]  # 地主标志截图区域(右-我-左)
+        # Game Log Variables
+        self.GameRecord = []
+        self.game_type = ""
+        self.initial_cards = ""
+        self.initial_bid_rate = ""
+        self.initial_model_rate = ""
+        self.initial_mingpai = ""
+        self.initial_multiply = ""
+        # -------------------
+        self.shouldExit = 0  # 通知上一轮记牌结束
+        self.modeType = 1  # {1: resnet, 2: WP, 3: ADP}
 
         self.card_play_model_path_dict = {
             'landlord': "baselines/resnet/resnet_landlord.ckpt",
             'landlord_up': "baselines/resnet/resnet_landlord_up.ckpt",
             'landlord_down': "baselines/resnet/resnet_landlord_down.ckpt"
         }
-        LandlordModel.init_model(self.card_play_model_path_dict['landlord'])
+        self.card_play_wp_model_path = {
+            'landlord': "baselines/douzero_WP/landlord.ckpt",
+            'landlord_up': "baselines/douzero_WP/landlord_up.ckpt",
+            'landlord_down': "baselines/douzero_WP/landlord_down.ckpt"
+        }
+        self.card_play_adp_model_path = {
+            'landlord': "baselines/douzero_ADP/landlord.ckpt",
+            'landlord_up': "baselines/douzero_ADP/landlord_up.ckpt",
+            'landlord_down': "baselines/douzero_ADP/landlord_down.ckpt"
+        }
+
+        if self.modeType == 1:
+            LandlordModel.init_model("baselines/resnet/resnet_landlord.ckpt")
+        elif self.modeType == 2:
+            LandlordModel.init_model("baselines/douzero_WP/landlord.ckpt")
+        elif self.modeType == 3:
+            LandlordModel.init_model("baselines/douzero_ADP/landlord.ckpt")
+        else:
+            LandlordModel.init_model("baselines/resnet/resnet_landlord.ckpt")
 
     def hand_game(self):
         self.auto_sign = False
@@ -259,21 +288,16 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
 
         # 识别三张底牌
         self.three_landlord_cards_real = self.find_landlord_cards()
-        self.ThreeLandlordCards.setText("底牌：" + self.three_landlord_cards_real)
-        self.three_landlord_cards_env = [RealCard2EnvCard[c] for c in list(self.three_landlord_cards_real)]
         print("正在识别地主三张牌", end="")
-        while len(self.three_landlord_cards_env) != 3:
+        while len(self.three_landlord_cards_real) != 3:
             print(".", end="")
             self.detect_start_btn()
             if not self.RunGame:
                 break
-            if len(self.three_landlord_cards_env) > 3:
-                self.ThreeLandlordCardsConfidence += 0.05
-            elif len(self.three_landlord_cards_env) < 3:
-                self.ThreeLandlordCardsConfidence -= 0.05
+            self.sleep(200)
             self.three_landlord_cards_real = self.find_landlord_cards()
-            self.ThreeLandlordCards.setText("底牌：" + self.three_landlord_cards_real)
-            self.three_landlord_cards_env = [RealCard2EnvCard[c] for c in list(self.three_landlord_cards_real)]
+        self.ThreeLandlordCards.setText("底牌：" + self.three_landlord_cards_real)
+        self.three_landlord_cards_env = [RealCard2EnvCard[c] for c in list(self.three_landlord_cards_real)]
 
         # 识别玩家的角色
         self.sleep(500)
@@ -1034,13 +1058,8 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         self.detect_start_btn()
                         if not self.RunGame or not self.auto_sign:
                             break
-                        if len(llcards) > 3:
-                            self.ThreeLandlordCardsConfidence += 0.05
-                            time.sleep(200)
-                        elif len(llcards) < 3:
-                            self.ThreeLandlordCardsConfidence -= 0.05
-                            time.sleep(200)
                         print(".", end="")
+                        self.sleep(200)
                         llcards = self.find_landlord_cards()
                     print("\n地主牌:", llcards)
                     cards = self.find_my_cards()
@@ -1162,7 +1181,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 #     else:
                 #         self.sleep(50)
                 #     llcards = self.find_three_landlord_cards(self.ThreeLandlordCardsPos)
-                self.sleep(3000)
+                self.sleep(1000)
             if win_rate > self.MingpaiThreshold and len(cards_str) == 20 and self.initial_multiply == 4:
                 # 识别加倍数
                 currentBeishu = self.get_ocr_fast()
@@ -1283,7 +1302,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             return True
         return False
 
-    def haveAnimation(self, waitTime=200):
+    def haveAnimation(self, waitTime=100):
         regions = [
             (1030, 260, 1030 + 20, 260 + 20),  # 下家动画位置
             (450, 260, 450 + 20, 260 + 20),  # 上家动画位置
@@ -1300,6 +1319,8 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             lastImg = img
 
         return False
+
+
 
     def compareImage(self, img1, img2):
 
