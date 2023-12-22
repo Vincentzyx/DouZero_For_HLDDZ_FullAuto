@@ -13,6 +13,7 @@ from collections import defaultdict
 from douzero.env.move_detector import get_move_type
 import cv2
 import numpy as np
+import pygame
 from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtWidgets import QTableWidgetItem
 from PyQt5.QtGui import QPixmap, QIcon
@@ -48,6 +49,22 @@ AllEnvCard = [3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7,
 AllCards = ['D', 'X', '2', 'A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3']
 
 helper = GameHelper()
+
+
+def get_ocr_fast():
+    pos = (1050, 756, 120, 40)
+    img, _ = helper.Screenshot()
+    img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
+    gray_img = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2GRAY)
+    _, binary_image = cv2.threshold(gray_img, 128, 255, cv2.THRESH_BINARY)
+    img = img[pos[1]:pos[1] + pos[3], pos[0]:pos[0] + pos[2]]
+    result = ocr.ocr(img)
+    if len(result) > 0:
+        result = result[0]['text']
+        beishu = int(result)
+    else:
+        beishu = 30
+    return beishu
 
 
 class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
@@ -88,7 +105,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                             QtCore.Qt.WindowStaysOnTopHint |  # 窗体总在最前端
                             QtCore.Qt.WindowCloseButtonHint)
         self.setWindowIcon(QIcon(':/pics/favicon.ico'))
-        self.setWindowTitle("DouZero欢乐斗地主v4.2")
+        self.setWindowTitle("DouZero欢乐斗地主v4.3")
         self.setFixedSize(self.width(), self.height())  # 固定窗体大小
         self.move(20, 20)
         window_pale = QtGui.QPalette()
@@ -242,6 +259,11 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
 
                 except AttributeError as e:
                     traceback.print_exc()
+
+    def play_sound(self, sound_file):
+        pygame.mixer.init()
+        pygame.mixer.music.load(sound_file)
+        pygame.mixer.music.play()
 
     def init_display(self):
         self.WinRate.setText("评分")
@@ -477,6 +499,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                                 print("程序走到这里")
                             except AttributeError as e:
                                 traceback.print_exc()
+                            self.sleep(1000)
                             break
 
                     self.PredictedCard.setStyleSheet('background-color: rgba(0, 255, 0, 0);')
@@ -485,6 +508,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     self.play_order = 1
                 else:
                     print("现在是手动模式，请手动出牌")
+                    self.play_sound("music/1.wav")
                     action_message, action_list = self.env.step(self.user_position, update=False)
                     score = float(action_message['win_rate'])
                     if "resnet" in self.card_play_model_path_dict[self.user_position]:
@@ -527,7 +551,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                             have_ani = self.waitUntilNoAnimation()
                             if have_ani:
                                 self.PredictedCard.setText("等待动画")
-                            self.sleep(100)
+                                self.sleep(20)
                             centralOne = self.find_other_cards(self.MPlayedCardsPos)
                             self.sleep(100)
                             centralTwo = self.find_other_cards(self.MPlayedCardsPos)
@@ -560,7 +584,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     # 更新界面
                     self.PredictedCard.setText(self.my_played_cards_real if self.my_played_cards_real else "不出")
                     self.PredictedCard.setStyleSheet('background-color: rgba(0, 255, 0, 0);')
-                    self.sleep(200)
+                    self.sleep(500)
                     self.play_order = 1
 
             elif self.play_order == 1:
@@ -588,7 +612,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         have_ani = self.waitUntilNoAnimation()
                         if have_ani:
                             self.RPlayedCard.setText("等待动画")
-                        self.sleep(100)
+                            self.sleep(20)
 
                         rightOne = self.find_other_cards(self.RPlayedCardsPos)
                         self.sleep(100)
@@ -620,7 +644,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                                                                    self.other_played_cards_real)
                 # print("记牌器：", self.other_hands_cards_str)
                 self.cards_recorder(self.other_hands_cards_str)
-                self.sleep(200)
+                self.sleep(100)
                 self.play_order = 2
 
             elif self.play_order == 2:
@@ -647,7 +671,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         have_ani = self.waitUntilNoAnimation()
                         if have_ani:
                             self.LPlayedCard.setText("等待动画")
-                        self.sleep(100)
+                            self.sleep(20)
 
                         result = helper.LocateOnScreen('buchu', region=self.MPassPos)
                         if result is not None:
@@ -685,7 +709,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                                                                    self.other_played_cards_real)
                 # print("记牌器：", self.other_hands_cards_str)
                 self.cards_recorder(self.other_hands_cards_str)
-                self.sleep(50)
+                self.sleep(100)
                 self.play_order = 0
 
         if self.loop_sign == 0:
@@ -738,6 +762,11 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             result = helper.LocateOnScreen("start_game", region=(720, 466, 261, 117))
             if result is not None:
                 helper.ClickOnImage("start_game", region=(720, 466, 261, 117))
+                self.sleep(1000)
+
+            result = helper.LocateOnScreen("tuoguan", region=(577, 613, 271, 128))
+            if result is not None:
+                helper.ClickOnImage("tuoguan", region=(577, 613, 271, 128))
                 self.sleep(1000)
 
             result = helper.LocateOnScreen("sure", region=(657, 500, 216, 72))
@@ -1008,13 +1037,18 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     landlord_requirement = True
 
                     if jiaodizhu_btn is not None:
+                        print("***** 叫地主阶段 *****")
                         have_bid = True
                         if win_rate > self.BidThresholds[0] and landlord_requirement and not (
                                 win_rate < 0 and farmer_score > 0.5):
-                            helper.ClickOnImage("jiaodizhu_btn", region=self.GeneralBtnPos, confidence=0.9)
+                            helper.ClickOnImage("jiaodizhu_btn", region=self.GeneralBtnPos)
+                            print("叫地主")
+
                         else:
                             helper.ClickOnImage("bujiao_btn", region=self.GeneralBtnPos)
+                            print("不叫地主")
                     elif qiangdizhu_btn is not None:
+                        print("***** 抢地主阶段 *****")
                         is_stolen = 1
                         if have_bid:
                             threshold_index = 1
@@ -1023,8 +1057,10 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         if win_rate > self.BidThresholds[threshold_index] and landlord_requirement and not (
                                 win_rate < 0 and farmer_score > 0.5):
                             helper.ClickOnImage("qiangdizhu_btn", region=self.GeneralBtnPos)
+                            print("抢地主")
                         else:
                             helper.ClickOnImage("buqiang_btn", region=self.GeneralBtnPos)
+                            print("不抢地主")
                         have_bid = True
                     else:
                         pass
@@ -1041,13 +1077,13 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         self.label.setText("在抢地主")
                         self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0.5);')
 
-                    print("底牌现身。。。")
+                    print("看到三张底牌")
                     self.label.setText("抢完地主")
                     self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0.5);')
 
                     st = time.time()
                     # 识别加倍数
-                    initialBeishu = self.get_ocr_fast()
+                    initialBeishu = get_ocr_fast()
                     end = time.time()
                     print("InitialBeishu:", initialBeishu)
                     print("OCR Used Time:", end - st)
@@ -1090,6 +1126,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         self.PreWinrate.setText("局前得分: " + str(round(win_rate, 3)))
                         print("预估地主得分:", round(win_rate, 3))
                     else:
+                        print("***** 加倍阶段 *****")
                         st20 = time.time()
                         '''user_position_code = self.find_landlord(self.LandlordFlagPos)
                         while user_position_code is None:
@@ -1120,8 +1157,8 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         self.sleep(1000)
                         print("Landlord休息 1 秒, 观察他人加倍")
                     #  识别加倍数
-                    currentBeishu = self.get_ocr_fast()
-                    print("CurrentBeishu:", currentBeishu)
+                    currentBeishu = get_ocr_fast()
+                    print("CurrentBeishu:", currentBeishu, "倍")
                     try:
                         if float(currentBeishu) >= 2.5 * float(initialBeishu) and win_rate < 0.7:
                             print("倍数高于2.5且我方胜率小于1，放弃加倍")
@@ -1152,15 +1189,15 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         if chaojijiabei_btn is not None and (
                                 len(cards_str) != 17 or (
                                 'DX' in cards_str or 'D22' in cards_str) or currentBeishu <= 15):
-                            print("click超级加倍")
                             helper.ClickOnImage("chaojijiabei_btn", region=self.GeneralBtnPos)
+                            print("click超级加倍")
                             self.initial_multiply = 4
                         else:
                             helper.ClickOnImage("jiabei_btn", region=self.GeneralBtnPos)
-                            print("已加倍")
+                            print("加倍")
                             self.initial_multiply = 2
                     elif win_rate > JiabeiThreshold[1]:
-                        print("已加倍")
+                        print("加倍")
                         helper.ClickOnImage("jiabei_btn", region=self.GeneralBtnPos)
                         self.initial_multiply = 2
                     else:
@@ -1184,7 +1221,8 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 self.sleep(1000)
             if win_rate > self.MingpaiThreshold and len(cards_str) == 20 and self.initial_multiply == 4:
                 # 识别加倍数
-                currentBeishu = self.get_ocr_fast()
+                currentBeishu = get_ocr_fast()
+                print("CurrentBeishu:", currentBeishu, "倍")
                 try:
                     print("InitialBeishu before Mingpai:", float(initialBeishu))
                     print("CurrentBeishu before Mingpai:", float(currentBeishu))
@@ -1202,25 +1240,11 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             self.label.setText("加倍结束")
             self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0.5);')
         else:
-            self.winrate = 0
-            self.label.setText("游戏开始")
-            self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0.5);')
-            laotou = helper.LocateOnScreen("laotou", region=(761, 45, 255, 100))
-            while laotou is not None:
-                self.detect_start_btn()
-                if not self.RunGame:
-                    break
-                self.sleep(200)
-                print("在游戏里，还在抢地主。。。。")
-                self.label.setText("在抢地主")
-                self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0.5);')
-
-            print("底牌现身。。。")
-            self.label.setText("抢完地主")
+            print("现在是手动模式，请手动 | 叫地主| 抢地主 | 加倍 |")
             self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0.5);')
             self.WinRate.setText("自己叫地主  抢地主  加倍")
             self.WinRate.setStyleSheet('background-color: rgba(255, 85, 0, 0.4);')
-            print("现在是手动模式，请手动 | 叫地主| 抢地主 | 加倍 |")
+            self.winrate = 0
             cards = self.find_my_cards()
             print("正在识别手牌", end="")
             while len(cards) != 17 and len(cards) != 20:
@@ -1237,21 +1261,62 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
 
             self.BidWinrate.setText("叫牌得分: " + str(round(win_rate, 3)))
             self.PreWinrate.setText("局前得分: " + str(round(farmer_score, 3)))
+            self.label.setText("游戏开始")
+            self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0.5);')
+            laotou = helper.LocateOnScreen("laotou", region=(761, 45, 255, 100))
+            while laotou is not None:
+                self.detect_start_btn()
+                if not self.RunGame:
+                    break
+                self.sleep(200)
+                print("在游戏里，还在抢地主。。。。")
+                self.label.setText("在抢地主")
+                self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0.5);')
 
-    def get_ocr_fast(self):
-        pos = (1050, 756, 120, 40)
-        img, _ = helper.Screenshot()
-        img = cv2.cvtColor(np.asarray(img), cv2.COLOR_RGB2BGR)
-        gray_img = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2GRAY)
-        _, binary_image = cv2.threshold(gray_img, 128, 255, cv2.THRESH_BINARY)
-        img = img[pos[1]:pos[1] + pos[3], pos[0]:pos[0] + pos[2]]
-        result = ocr.ocr(img)
-        if len(result) > 0:
-            result = result[0]['text']
-            beishu = int(result)
-        else:
-            beishu = 30
-        return beishu
+            print("看见三张底牌")
+            st30 = time.time()
+            llcards = self.find_landlord_cards()
+            print("三张底牌未识别", end="")
+            while len(llcards) != 3:
+                self.detect_start_btn()
+                if not self.RunGame:
+                    break
+                print(".", end="")
+                self.sleep(200)
+                llcards = self.find_landlord_cards()
+            print("\n地主牌:", llcards)
+            print("识别地主牌用时:", time.time() - st30)
+
+            st40 = time.time()
+            cards = self.find_my_cards()
+            while len(cards) != 17 and len(cards) != 20:
+                self.detect_start_btn()
+                if not self.RunGame or not self.auto_sign:
+                    break
+                self.sleep(200)
+                cards = self.find_my_cards()
+            cards_str = "".join([card[0] for card in cards])
+            self.UserHandCards.setText(cards_str)
+            print("识别自己的牌用时:", time.time() - st40)
+
+            self.initial_cards = cards_str
+            if len(cards_str) == 20:
+                # win_rate = LandlordModel.predict(cards_str)
+                # model_path = self.card_play_model_path_dict["landlord"]
+                # wp_model_path = self.card_play_wp_model_path["landlord"]
+                # if not self.have_bomb(cards_env):
+                #     print("地主无炸")
+                #     LandlordModel.init_model2(model_path, wp_model_path)
+                # else:
+                #     LandlordModel.init_model(model_path)
+                #     print("地主有炸")
+                # LandlordModel.init_model(model_path) # not considering wp when no bomb
+                print("cards_str, llcards", cards_str, llcards)
+                win_rate = LandlordModel.predict_by_model(cards_str, llcards)
+                self.PreWinrate.setText("局前得分: " + str(round(win_rate, 3)))
+                print("预估地主得分:", round(win_rate, 3))
+            self.winrate = win_rate
+            self.label.setText("抢完地主")
 
     def give_coffee(self, kind):
         helper.LeftClick((1000, 550))
@@ -1287,17 +1352,18 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 self.RPlayedCard.setText("等待动画")
             elif self.play_order == 2:
                 self.LPlayedCard.setText("等待动画")
-            print("检测到炸弹、顺子、飞机 Bomb!!! Bomb!!!  Biu~~ Biu~~")
+            print("检测到炸弹、顺子、飞机 Biu~~ Biu~~  Bomb!!! Bomb!!!")
             while ani:
                 self.detect_start_btn()
                 if not self.RunGame:
                     break
-                if first_run == 0:
+                print("等待动画", end="")
+                '''if first_run == 0:
                     print("等待动画", end="")
                 else:
                     if first_run % 1 == 0:
                         print(".", end="")
-                first_run += 1
+                first_run += 1'''
                 ani = self.haveAnimation(ms)
             return True
         return False
@@ -1319,8 +1385,6 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             lastImg = img
 
         return False
-
-
 
     def compareImage(self, img1, img2):
 
