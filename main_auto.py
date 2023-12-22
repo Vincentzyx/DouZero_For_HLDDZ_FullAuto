@@ -496,7 +496,6 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     self.play_order = 1
                 else:
                     print("现在是手动模式，请手动出牌")
-                    self.play_sound("music/1.wav")
                     action_message, action_list = self.env.step(self.user_position, update=False)
                     score = float(action_message['win_rate'])
                     if "resnet" in self.card_play_model_path_dict[self.user_position]:
@@ -539,8 +538,11 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                             have_ani = self.waitUntilNoAnimation()
                             if have_ani:
                                 self.PredictedCard.setText("等待动画")
-                                self.sleep(200)
+                            self.sleep(100)
                             cards = self.find_other_cards(self.MPlayedCardsPos)
+                            if cards != centralCards:
+                                self.sleep(100)
+                                cards = self.find_other_cards(self.MPlayedCardsPos)
 
                             if len(cards) > 0:
                                 self.my_played_cards_real = cards
@@ -557,7 +559,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                     else:
                         self.my_played_cards_real = ""
                         self.textEdit.append("                " + "不出")
-                    print("\n自己出牌：", self.my_played_cards_real)
+                    print("\n自己出牌：", self.my_played_cards_real if self.my_played_cards_real else "pass")
                     self.my_played_cards_env = [RealCard2EnvCard[c] for c in list(self.my_played_cards_real)]
                     self.my_played_cards_env.sort()
                     self.env.step(self.user_position, self.my_played_cards_env)
@@ -599,8 +601,12 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         have_ani = self.waitUntilNoAnimation()
                         if have_ani:
                             self.RPlayedCard.setText("等待动画")
-                            self.sleep(20)
+                        self.sleep(100)
+
                         cards = self.find_other_cards(self.RPlayedCardsPos)
+                        if cards != rightCards:
+                            self.sleep(100)
+                            cards = self.find_other_cards(self.RPlayedCardsPos)
 
                         if len(cards) > 0:
                             self.other_played_cards_real = cards
@@ -617,7 +623,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 else:
                     self.other_played_cards_real = ""
                     self.textEdit.append("                           " + "不出")
-                print("\n下家出牌：", self.other_played_cards_real)
+                print("\n下家出牌：", self.other_played_cards_real if self.other_played_cards_real else "pass")
                 self.other_played_cards_env = [RealCard2EnvCard[c] for c in list(self.other_played_cards_real)]
                 self.other_played_cards_env.sort()
                 self.env.step(self.user_position, self.other_played_cards_env)
@@ -656,7 +662,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         have_ani = self.waitUntilNoAnimation()
                         if have_ani:
                             self.LPlayedCard.setText("等待动画")
-                            self.sleep(20)
+                        self.sleep(100)
 
                         result = helper.LocateOnScreen('buchu', region=self.MPassPos)
                         if result is not None:
@@ -665,6 +671,11 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
 
                         cards = self.find_other_cards(self.LPlayedCardsPos)
                         self.other_played_cards_real = cards
+
+                        if cards != leftCards:
+                            self.sleep(100)
+                            cards = self.find_other_cards(self.LPlayedCardsPos)
+
                         if len(cards) > 0:
                             if "X" in cards or "D" in cards:
                                 self.sleep(100)
@@ -680,7 +691,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 else:
                     self.other_played_cards_real = ""
                     self.textEdit.append("   " + "不出")
-                print("\n上家出牌：", self.other_played_cards_real)
+                print("\n上家出牌：", self.other_played_cards_real if self.other_played_cards_real else "pass")
                 self.other_played_cards_env = [RealCard2EnvCard[c] for c in list(self.other_played_cards_real)]
                 self.other_played_cards_env.sort()
                 self.env.step(self.user_position, self.other_played_cards_env)
@@ -701,7 +712,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.label.setText("游戏结束")
         self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0);')
         self.init_display()
-        self.sleep(3000)
+        self.sleep(1000)
 
     def detect_start_btn(self):
         beans = [(308, 204, 254, 60), (295, 474, 264, 60), (882, 203, 230, 60)]
