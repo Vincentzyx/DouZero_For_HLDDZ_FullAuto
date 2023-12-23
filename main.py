@@ -153,16 +153,16 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.OtherFilter = 25  # 别人的牌检测结果过滤参数
         self.SleepTime = 0.1  # 循环中睡眠时间
         # ------ 阈值 ------
-        self.BidThresholds = [-0.2,  # 叫地主阈值
-                              -0.2,  # 抢地主阈值 (自己第一个叫地主)
-                              -0.2]  # 抢地主阈值 (自己非第一个叫地主)
+        self.BidThresholds = [0.3,  # 叫地主阈值
+                              0.3,  # 抢地主阈值 (自己第一个叫地主)
+                              0.5]  # 抢地主阈值 (自己非第一个叫地主)
         self.JiabeiThreshold = (
-            (0, -0.2),  # 叫地主 超级加倍 加倍 阈值
-            (0, -0.2)  # 叫地主 超级加倍 加倍 阈值  (在地主是抢来的情况下)
+            (0.75, 0.5),  # 叫地主 超级加倍 加倍 阈值
+            (0.75, 0.5)  # 叫地主 超级加倍 加倍 阈值  (在地主是抢来的情况下)
         )
-        self.FarmerJiabeiThreshold = (6, 1.2)
-        self.FarmerJiabeiThresholdLow = (1, 0.25)
-        self.MingpaiThreshold = 0.8
+        self.FarmerJiabeiThreshold = (4, 2)
+        self.FarmerJiabeiThresholdLow = (2, 1)
+        self.MingpaiThreshold = 0.5
         self.stop_when_no_chaojia = True  # 是否在没有超级加倍的时候关闭自动模式
         self.use_manual_landlord_requirements = False  # 手动规则
         self.use_manual_mingpai_requirements = True  # Manual Mingpai
@@ -250,7 +250,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 self.detect_start_btn()
                 self.before_start()
                 self.init_cards()
-                self.sleep(5000)
+                self.sleep(6000)
 
     def game_loop(self):
         self.auto_sign = True
@@ -1084,7 +1084,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         print("\n***** 叫地主阶段 *****")
                         have_bid = True
                         if win_rate > self.BidThresholds[0] and landlord_requirement and not (
-                                win_rate < 0 and farmer_score > 0.5):
+                                win_rate < 0 and farmer_score > 0.75):
                             helper.ClickOnImage("jiaodizhu_btn", region=self.GeneralBtnPos)
                             print("叫地主")
 
@@ -1099,7 +1099,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         else:
                             threshold_index = 2
                         if win_rate > self.BidThresholds[threshold_index] and landlord_requirement and not (
-                                win_rate < 0 and farmer_score > 0.5):
+                                win_rate < 0 and farmer_score > 0.75):
                             helper.ClickOnImage("qiangdizhu_btn", region=self.GeneralBtnPos)
                             print("抢地主")
                         else:
@@ -1122,7 +1122,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                         self.label.setText("在抢地主")
                         self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0.5);')
 
-                    print("看到底牌")
+                    print("底牌现身或者还未点开始游戏")
                     self.label.setText("抢完地主")
                     self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0.5);')
 
@@ -1299,16 +1299,15 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
             self.winrate = 0
             cards = self.find_my_cards()
             print("正在识别手牌", end="")
-            '''while len(cards) != 17 and len(cards) != 20:
+            while len(cards) != 17 and len(cards) != 20:
                 print(".", end="")
                 self.detect_start_btn()
                 if not self.RunGame:
                     break
                 self.sleep(200)
                 cards = self.find_my_cards()
-                '''
             cards_str = "".join([card[0] for card in cards])
-            print("手牌： ", cards_str)
+            print("\n手牌： ", cards_str)
             self.UserHandCards.setText(cards_str)
             win_rate = BidModel.predict_score(cards_str)
             farmer_score = FarmerModel.predict(cards_str, "farmer")
@@ -1327,7 +1326,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                 self.label.setText("在抢地主")
                 self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0.5);')
 
-            print("底牌翻过来了")
+            print("底牌现身或者还未点开始游戏")
             st30 = time.time()
             llcards = self.find_landlord_cards()
             print("底牌未识别", end="")
