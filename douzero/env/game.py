@@ -177,13 +177,13 @@ class GameEnv(object):
                     action, actions_confidence = action_list[1][0], action_list[1][1]
                     win_rate = actions_confidence
 
-                # 相差小于0.05时，选第二个action
+                '''# 相差小于0.05时，选第二个action
                 if len(action_list) >= 2:
-                    if abs(round(float(action_list[0][1]) * 8, 4) - round(float(action_list[1][1]) * 8, 4)) < 0.02:
+                    if abs(round(float(action_list[0][1]) * 8, 4) - round(float(action_list[1][1]) * 8, 4)) < 0.005:
                         print("选择更稳的第二种出法")
                         action_list.sort(key=self.compare_action, reverse=True)
                         action, actions_confidence = action_list[1][0], action_list[1][1]
-                        win_rate = actions_confidence
+                        win_rate = actions_confidence'''
 
                 # 对直接出完情况做特判
                 print("正在检测可直接出完出法")
