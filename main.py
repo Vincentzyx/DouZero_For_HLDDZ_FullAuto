@@ -208,7 +208,8 @@ class Worker(QThread):
             # print(data)
             f.close()
         thresholds = [data['bid1'], data['bid2'], data['bid3'], data['jiabei1'], data['jiabei2'], data['jiabei3'],
-                      data['jiabei4'], data['jiabei5'], data['jiabei6'], data['jiabei7'], data['jiabei8'], data['mingpai']]
+                      data['jiabei4'], data['jiabei5'], data['jiabei6'], data['jiabei7'], data['jiabei8'],
+                      data['mingpai']]
         print(thresholds)
 
         self.BidThresholds = [float(data['bid1']), float(data['bid2']), float(data['bid3'])]
@@ -253,9 +254,6 @@ class Worker(QThread):
                     self.label_display.emit("游戏已结束")
                     self.stop.emit(1)
                 else:
-                    self.RunGame = True
-                    helper.ClickOnImage("continue", region=(1100, 617, 200, 74))
-                    self.sleep(100)
                     try:
                         if self.env is not None:
                             self.env.game_over = True
@@ -263,6 +261,10 @@ class Worker(QThread):
                         self.int_display.emit(1)
                     except AttributeError as e:
                         traceback.print_exc()
+                        self.sleep(1000)
+                    self.RunGame = True
+                    helper.ClickOnImage("continue", region=(1100, 617, 200, 74))
+                    self.sleep(100)
 
             result = helper.LocateOnScreen("start_game", region=(720, 466, 261, 117))
             if result is not None:
