@@ -233,7 +233,14 @@ class Worker(QThread):
                     self.int_display.emit(1)
                 except AttributeError as e:
                     traceback.print_exc()
-                self.sleep(5000)
+                self.sleep(1000)
+                new_game = helper.LocateOnScreen("continue", region=(1100, 617, 200, 74))
+                print("还未重新开局", end="")
+                while new_game is None and self.auto_sign:
+                    self.sleep(500)
+                    print(".", end="")
+                    new_game = helper.LocateOnScreen("continue", region=(1100, 617, 200, 74))
+                print("\n等待开始下一局")
                 break
 
         if self.auto_sign:
@@ -1423,18 +1430,18 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.Players[result].setStyleSheet('background-color: rgba(0, 255, 0, 0.5);')
 
     def init_threshold(self):
-        self.bid_lineEdit_1.setText("0.3")
-        self.bid_lineEdit_2.setText("0.4")
-        self.bid_lineEdit_3.setText("0.5")
-        self.jiabei_lineEdit_1.setText("0.7")
-        self.jiabei_lineEdit_2.setText("0.5")
-        self.jiabei_lineEdit_3.setText("0.8")
-        self.jiabei_lineEdit_4.setText("0.6")
-        self.jiabei_lineEdit_5.setText("1.0")
-        self.jiabei_lineEdit_6.setText("0.8")
-        self.jiabei_lineEdit_7.setText("0.7")
-        self.jiabei_lineEdit_8.setText("0.5")
-        self.mingpai_lineEdit.setText("3.0")
+        self.bid_lineEdit_1.setText("-0.1")
+        self.bid_lineEdit_2.setText("0.0")
+        self.bid_lineEdit_3.setText("0.1")
+        self.jiabei_lineEdit_1.setText("0.3")
+        self.jiabei_lineEdit_2.setText("0.2")
+        self.jiabei_lineEdit_3.setText("0.4")
+        self.jiabei_lineEdit_4.setText("0.3")
+        self.jiabei_lineEdit_5.setText("0.4")
+        self.jiabei_lineEdit_6.setText("0.3")
+        self.jiabei_lineEdit_7.setText("0.3")
+        self.jiabei_lineEdit_8.setText("0.2")
+        self.mingpai_lineEdit.setText("0.8")
 
         data = {'bid1': self.bid_lineEdit_1.text(), 'bid2': self.bid_lineEdit_2.text(),
                 'bid3': self.bid_lineEdit_3.text(), 'jiabei1': self.jiabei_lineEdit_1.text(),
