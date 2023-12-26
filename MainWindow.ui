@@ -972,7 +972,7 @@ background:none;
         </font>
        </property>
        <property name="text">
-        <string>二次抢:</string>
+        <string>二 抢:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -1017,7 +1017,7 @@ background:none;
         </font>
        </property>
        <property name="text">
-        <string>一次抢:</string>
+        <string>一 抢:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -1410,7 +1410,7 @@ background:none;
        <x>490</x>
        <y>10</y>
        <width>111</width>
-       <height>87</height>
+       <height>91</height>
       </rect>
      </property>
      <property name="widgetResizable">
@@ -1422,7 +1422,7 @@ background:none;
         <x>0</x>
         <y>0</y>
         <width>109</width>
-        <height>85</height>
+        <height>89</height>
        </rect>
       </property>
       <widget class="QLineEdit" name="jiabei_lineEdit_7">
