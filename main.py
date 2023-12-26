@@ -743,7 +743,7 @@ class Worker(QThread):
                 break
             if self.play_order == 0:
                 if self.auto_sign:
-                    self.left_cards_display.emit("...")
+                    self.my_cards_display.emit("等待AI出牌")
                     action_message, action_list = self.env.step(self.user_position)
                     score = float(action_message['win_rate'])
                     if "resnet" in self.card_play_model_path_dict[self.user_position]:
