@@ -5,9 +5,10 @@ import numpy as np
 
 GameHelper = GameHelper()
 
-img = cv2.imread("1.png")
-# img = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2RGB)
-# img, _ = GameHelper.Screenshot()
-img = gh.DrawRectWithText(img, (970, 510, 1200, 630), "test")
+# img = cv2.imread("1.png")
+
+img, _ = GameHelper.Screenshot()
+img = cv2.cvtColor(np.asarray(img), cv2.COLOR_BGR2RGB)
+img = gh.DrawRectWithText(img, (180, 560, 1050, 90), "test")
 
 gh.ShowImg(img)

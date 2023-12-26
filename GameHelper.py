@@ -10,6 +10,7 @@ from ctypes import windll
 from PIL import Image
 import cv2
 import pyautogui
+import pygame
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -264,3 +265,7 @@ class GameHelper:
 
         pyautogui.moveTo(x, y)
 
+    def play_sound(self, sound_file):
+        pygame.mixer.init()
+        pygame.mixer.music.load(sound_file)
+        pygame.mixer.music.play()
