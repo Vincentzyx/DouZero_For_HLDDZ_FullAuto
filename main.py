@@ -225,7 +225,8 @@ class Worker(QThread):
             result = helper.LocateOnScreen("over", region=i, confidence=0.9)
             if result is not None:
                 print("\n豆子出现，对局结束")
-                self.RunGame = False
+                if not self.loop_sign:
+                    self.RunGame = False
                 try:
                     if self.env is not None:
                         self.env.game_over = True
