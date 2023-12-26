@@ -1428,9 +1428,9 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.jiabei_lineEdit_2.setText("0.5")
         self.jiabei_lineEdit_3.setText("1.0")
         self.jiabei_lineEdit_4.setText("0.75")
-        self.jiabei_lineEdit_5.setText("3.0")
+        self.jiabei_lineEdit_5.setText("2.0")
         self.jiabei_lineEdit_6.setText("1.5")
-        self.jiabei_lineEdit_7.setText("2.0")
+        self.jiabei_lineEdit_7.setText("1.5")
         self.jiabei_lineEdit_8.setText("1.0")
         self.mingpai_lineEdit.setText("4.0")
 
