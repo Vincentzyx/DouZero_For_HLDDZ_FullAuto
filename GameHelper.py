@@ -154,6 +154,7 @@ class GameHelper:
             try:
                 try_count -= 1
                 self.Handle = win32gui.FindWindow("UnityWndClass", None)
+                win32gui.SetActiveWindow(self.Handle)
                 hwnd = self.Handle
                 left, top, right, bot = win32gui.GetWindowRect(hwnd)
                 # 调整窗口大小

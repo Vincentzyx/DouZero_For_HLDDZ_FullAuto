@@ -231,18 +231,9 @@ class Worker(QThread):
                         self.env.game_over = True
                         self.env.reset()
                     self.int_display.emit(1)
-                    print("程序走到这里")
-                    self.sleep(1000)
                 except AttributeError as e:
                     traceback.print_exc()
                     self.sleep(1000)
-                in_game = helper.LocateOnScreen("chat", region=(1302, 744, 117, 56))
-                print("还未重新开局", end="")
-                while in_game is not None:
-                    self.sleep(500)
-                    print(".", end="")
-                    in_game = helper.LocateOnScreen("chat", region=(1302, 744, 117, 56))
-                print("\n等待开始下一局")
                 break
 
         if self.auto_sign:
@@ -261,7 +252,6 @@ class Worker(QThread):
                     except AttributeError as e:
                         traceback.print_exc()
                         self.sleep(1000)
-                    self.RunGame = True
                     helper.ClickOnImage("continue", region=(1100, 617, 200, 74))
                     self.sleep(100)
 
@@ -335,6 +325,7 @@ class Worker(QThread):
             print("\n开始游戏")
             self.label_display.emit("开始游戏")
 
+        self.RunGame = True
         if self.auto_sign:
             while self.RunGame and self.auto_sign:
                 outterBreak = False
@@ -723,19 +714,17 @@ class Worker(QThread):
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             traceback.print_tb(exc_tb)
-            print("游戏结束, 等待下一局\n")
             self.RunGame = False
             try:
                 if self.env is not None:
                     self.env.game_over = True
                     self.env.reset()
                 self.int_display.emit(1)
-                print("程序走到这里")
-                self.sleep(1000)
             except AttributeError as e:
                 traceback.print_exc()
+                print("程序走到这里")
                 self.sleep(1000)
-
+                print("游戏结束, 等待下一局\n")
 
     def game_start(self):
         self.my_pass_sign = False
@@ -836,10 +825,11 @@ class Worker(QThread):
                                     self.env.game_over = True
                                     self.env.reset()
                                 self.int_display.emit(1)
-                                print("程序走到这里")
+
                             except AttributeError as e:
                                 traceback.print_exc()
-                            self.sleep(1000)
+                                print("程序走到这里")
+                                self.sleep(1000)
                             break
 
                     self.textedit_display.emit("                  " + action_message["action"])
@@ -888,10 +878,10 @@ class Worker(QThread):
 
                     pass_flag = helper.LocateOnScreen('buchu', region=self.MPassPos)
                     if pass_flag is None:
-                        # 识别下家出牌
+                        # 识别自己出牌
                         while True:
                             self.detect_start_btn()
-                            if not self.RunGame or self.auto_sign:
+                            if not self.RunGame or self.env.game_over or self.auto_sign:
                                 break
 
                             centralOne = self.find_other_cards(self.MPlayedCardsPos)
@@ -938,7 +928,7 @@ class Worker(QThread):
                 print("等待下家出牌", end="")
 
                 while len(rightCards) == 0 and pass_flag is None:
-                    if not self.RunGame:
+                    if not self.RunGame or self.env.game_over:
                         break
                     self.detect_start_btn()
                     print(".", end="")
@@ -1005,7 +995,7 @@ class Worker(QThread):
 
                 while len(leftCards) == 0 and pass_flag is None:
                     self.detect_start_btn()
-                    if not self.RunGame:
+                    if not self.RunGame or self.env.game_over:
                         break
                     print(".", end="")
                     self.sleep(100)
@@ -1436,15 +1426,15 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.bid_lineEdit_1.setText("0.3")
         self.bid_lineEdit_2.setText("0.4")
         self.bid_lineEdit_3.setText("0.5")
-        self.jiabei_lineEdit_1.setText("0.75")
+        self.jiabei_lineEdit_1.setText("0.7")
         self.jiabei_lineEdit_2.setText("0.5")
-        self.jiabei_lineEdit_3.setText("1.0")
-        self.jiabei_lineEdit_4.setText("0.75")
-        self.jiabei_lineEdit_5.setText("2.0")
-        self.jiabei_lineEdit_6.setText("1.5")
-        self.jiabei_lineEdit_7.setText("1.5")
-        self.jiabei_lineEdit_8.setText("1.0")
-        self.mingpai_lineEdit.setText("4.0")
+        self.jiabei_lineEdit_3.setText("0.8")
+        self.jiabei_lineEdit_4.setText("0.6")
+        self.jiabei_lineEdit_5.setText("1.0")
+        self.jiabei_lineEdit_6.setText("0.8")
+        self.jiabei_lineEdit_7.setText("0.7")
+        self.jiabei_lineEdit_8.setText("0.5")
+        self.mingpai_lineEdit.setText("3.0")
 
         data = {'bid1': self.bid_lineEdit_1.text(), 'bid2': self.bid_lineEdit_2.text(),
                 'bid3': self.bid_lineEdit_3.text(), 'jiabei1': self.jiabei_lineEdit_1.text(),
