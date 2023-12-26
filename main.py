@@ -197,7 +197,7 @@ class Worker(QThread):
             self.int_display.emit(1)
             self.before_start()
             self.init_cards()
-            self.sleep(5000)
+            self.sleep(2000)
 
     def run_threshold(self):
         self.write_threshold.emit(1)
@@ -226,7 +226,6 @@ class Worker(QThread):
             if result is not None:
                 print("\n豆子出现，对局结束")
                 self.RunGame = False
-                self.int_display.emit(1)
                 try:
                     if self.env is not None:
                         self.env.game_over = True
@@ -725,7 +724,18 @@ class Worker(QThread):
             exc_type, exc_obj, exc_tb = sys.exc_info()
             traceback.print_tb(exc_tb)
             print("游戏结束, 等待下一局\n")
-            self.sleep(1000)
+            self.RunGame = False
+            try:
+                if self.env is not None:
+                    self.env.game_over = True
+                    self.env.reset()
+                self.int_display.emit(1)
+                print("程序走到这里")
+                self.sleep(1000)
+            except AttributeError as e:
+                traceback.print_exc()
+                self.sleep(1000)
+
 
     def game_start(self):
         self.my_pass_sign = False
