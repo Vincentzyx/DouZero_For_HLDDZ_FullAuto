@@ -1410,7 +1410,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
     def hand_game(self, result):
         self.thread.auto_sign = False
         self.thread.start()
-        self.AutoButton.setStyleSheet('background-color: rgba(255, 85, 255, 0);')
+        self.AutoButton.setStyleSheet('background-color: none;')
         self.HandButton.setStyleSheet('background-color: rgba(255, 85, 255, 0.5);')
 
     def auto_game(self, result):
@@ -1418,14 +1418,14 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.thread.start()
 
         self.AutoButton.setStyleSheet('background-color: rgba(255, 85, 255, 0.5);')
-        self.HandButton.setStyleSheet('background-color: rgba(255, 85, 255, 0);')
+        self.HandButton.setStyleSheet('background-color: none;')
 
     def stop(self, result):
         print("\n停止线程")
         self.thread.terminate()
         self.init_display(1)
-        self.AutoButton.setStyleSheet('background-color: rgba(255, 85, 255, 0);')
-        self.HandButton.setStyleSheet('background-color: rgba(255, 85, 255, 0);')
+        self.AutoButton.setStyleSheet('background-color: none;')
+        self.HandButton.setStyleSheet('background-color: none;')
 
     def player_display(self, result):
         for player in self.Players:
@@ -1487,11 +1487,11 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
 
     def init_display(self, result):
         self.WinRate.setText("评分")
-        self.WinRate.setStyleSheet('background-color: rgba(255, 85, 0, 0);')
+        self.WinRate.setStyleSheet('background-color: none;')
         self.label.setText("游戏状态")
         self.BidWinrate.setText("叫牌得分")
         self.PreWinrate.setText("局前得分")
-        self.label.setStyleSheet('background-color: rgba(255, 0, 0, 0);')
+        self.label.setStyleSheet('background-color: none;')
         self.UserHandCards.setText("手牌")
         self.textEdit.clear()
         self.LPlayedCard.setText("上家出牌区域")
@@ -1500,7 +1500,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.ThreeLandlordCards.setText("底牌")
         self.recorder2zero()
         for player in self.Players:
-            player.setStyleSheet('background-color: rgba(0, 255, 0, 0);')
+            player.setStyleSheet('background-color: none;')
 
     def label_display(self, result):
         self.label.setText(result)
