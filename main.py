@@ -225,8 +225,7 @@ class Worker(QThread):
             result = helper.LocateOnScreen("over", region=i, confidence=0.9)
             if result is not None:
                 print("\n豆子出现，对局结束")
-                if not self.loop_sign:
-                    self.RunGame = False
+                self.RunGame = False
                 try:
                     if self.env is not None:
                         self.env.game_over = True
@@ -234,7 +233,7 @@ class Worker(QThread):
                     self.int_display.emit(1)
                 except AttributeError as e:
                     traceback.print_exc()
-                    self.sleep(1000)
+                self.sleep(5000)
                 break
 
         if self.auto_sign:
