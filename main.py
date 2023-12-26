@@ -207,6 +207,9 @@ class Worker(QThread):
             data = json.loads(data_str)
             # print(data)
             f.close()
+        thresholds = [data['bid1'], data['bid2'], data['bid3'], data['jiabei1'], data['jiabei2'], data['jiabei3'],
+                      data['jiabei4'], data['jiabei5'], data['jiabei6'], data['jiabei7'], data['jiabei8'], data['mingpai']]
+        print(thresholds)
 
         self.BidThresholds = [float(data['bid1']), float(data['bid2']), float(data['bid3'])]
         self.JiabeiThreshold = (
@@ -740,7 +743,7 @@ class Worker(QThread):
                 break
             if self.play_order == 0:
                 if self.auto_sign:
-                    self.pre_display.emit("...")
+                    self.left_cards_display.emit("...")
                     action_message, action_list = self.env.step(self.user_position)
                     score = float(action_message['win_rate'])
                     if "resnet" in self.card_play_model_path_dict[self.user_position]:
@@ -947,7 +950,7 @@ class Worker(QThread):
                                 self.other_played_cards_real = rightOne
 
                                 if "X" in rightOne or "D" in rightOne and not ("DX" in rightOne):
-                                    self.sleep(500)
+                                    self.sleep(1000)
                                     self.other_played_cards_real = self.find_other_cards(self.RPlayedCardsPos)
                                     if self.other_played_cards_real == "DX":
                                         print("检测到王炸坏，延时0.5秒")
@@ -1018,7 +1021,7 @@ class Worker(QThread):
                                 self.other_played_cards_real = leftOne
 
                                 if ("X" in leftOne or "D" in leftOne) and not ("DX" in leftOne):
-                                    self.sleep(500)
+                                    self.sleep(1000)
                                     self.other_played_cards_real = self.find_other_cards(self.LPlayedCardsPos)
                                     if self.other_played_cards_real == "DX":
                                         print("检测到王炸，延时0.5秒")
