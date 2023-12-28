@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # DouZero_For_HLDDZ_FullAuto: 将DouZero用于欢乐斗地主自动化
 * 本项目基于[DouZero](https://github.com/kwai/DouZero) 和  [DouZero_For_Happy_DouDiZhu](https://github.com/tianqiraf/DouZero_For_HappyDouDiZhu)
 * 感谢 girgle（QQ群马云）对新版欢乐斗地主进行了适配，现在仓库代码已支持新版欢乐斗地主
@@ -53,7 +52,7 @@
 欢迎加入QQ群交流自动化相关：565142377  密码 douzero
 
 也可以在原作者[DouZero_For_Happy_DouDiZhu](https://github.com/tianqiraf/DouZero_For_HappyDouDiZhu) 的QQ群交流
-=======
+
                                                        使用说明
 
 第一步：安装完python环境之后在pycharm上运行main.py（游戏设置为窗口模式，不需要改分辨率和缩放比（注意：角色最好选用白色的衣服，不然会识别错地主）。
@@ -69,4 +68,3 @@
 第六步：点击软件的单局或连续
 
 感谢大家的理解和支持，一个人的力量有限，希望大家多多反馈BUG，确认后我会尽快处理。
->>>>>>> 37048d7e8586731f24f76a97c3f0d9a51776f8d1
