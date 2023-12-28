@@ -244,7 +244,7 @@ class GameHelper:
 
         win32gui.PostMessage(self.Handle, win32con.WM_ACTIVATE, win32con.WA_ACTIVE, 0)
         win32gui.SendMessage(self.Handle, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, tmp)
-        self.sleep(100)
+        self.sleep(200)
         win32gui.SendMessage(self.Handle, win32con.WM_LBUTTONUP, win32con.MK_LBUTTON, tmp)
 
         win32api.SetCursorPos((int(left + 1000), int(top + 550)))
@@ -269,6 +269,7 @@ class GameHelper:
         # win32gui.SendMessage(self.Handle, win32con.WM_MOUSEMOVE, win32con.MK_LBUTTON, tmp)
 
         win32gui.SendMessage(self.Handle, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, tmp)
+        self.sleep(100)
         win32gui.SendMessage(self.Handle, win32con.WM_LBUTTONUP, win32con.MK_LBUTTON, tmp)
 
     def MoveTo(self, pos):
