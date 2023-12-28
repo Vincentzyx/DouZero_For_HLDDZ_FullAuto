@@ -221,24 +221,33 @@ class GameHelper:
         y = (y / 810) * self.RealRate[1]
         x = int(x)
         y = int(y)
-        self.Handle = win32gui.FindWindow("UnityWndClass", None)
+
         left, top, _, _ = win32gui.GetWindowRect(self.Handle)
-        x, y = int(left + x), int(top + y)
+        m, n = int(left + x), int(top + y)
+        client_pos = (x, y)
 
-        pyautogui.mouseDown(x, y, button='left')
-        time.sleep(0.1)
-        pyautogui.mouseUp(x, y, button='left')
-        time.sleep(0.1)
-        pyautogui.moveTo(int(left + 1000), int(top + 550))
+        win32api.SetCursorPos((m, n))
+        # print(client_pos)
 
-        '''win32gui.SetActiveWindow(self.Handle)
-        lParam = win32api.MAKELONG(x, y)
+        tmp = win32api.MAKELONG(client_pos[0], client_pos[1])
+        '''tmp2 = win32api.MAKELONG(m, n)
 
-        win32gui.PostMessage(self.Handle, WM_ACTIVATE, WA_ACTIVE, lParam)
-        win32gui.PostMessage(self.Handle, WM_ACTIVATE, WA_ACTIVE, lParam)
-        win32gui.PostMessage(self.Handle, WM_MOUSEMOVE, MK_LBUTTON, lParam)
-        win32gui.PostMessage(self.Handle, WM_LBUTTONDOWN, MK_LBUTTON, lParam)
-        win32gui.PostMessage(self.Handle, WM_LBUTTONUP, MK_LBUTTON, lParam)'''
+        win32gui.PostMessage(self.Handle, win32con.WM_ACTIVATE, win32con.WA_ACTIVE, 0)
+        win32gui.SendMessage(self.Handle, win32con.WM_NCHITTEST, tmp2)
+
+        htclient = win32gui.DefWindowProc(self.Handle, win32con.WM_NCHITTEST, 0, tmp)
+        print(htclient)
+        win32gui.SendMessage(self.Handle, win32con.WM_SETCURSOR, self.Handle,
+                             ((htclient & 0xFFFF) | ((win32con.WM_MOUSEMOVE & 0xFFFF) << 16)))
+
+        win32gui.SendMessage(self.Handle, win32con.WM_MOUSEMOVE, 0, tmp)'''
+
+        win32gui.PostMessage(self.Handle, win32con.WM_ACTIVATE, win32con.WA_ACTIVE, 0)
+        win32gui.SendMessage(self.Handle, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, tmp)
+        self.sleep(100)
+        win32gui.SendMessage(self.Handle, win32con.WM_LBUTTONUP, win32con.MK_LBUTTON, tmp)
+
+        win32api.SetCursorPos((int(left + 1000), int(top + 550)))
 
     def LeftClick2(self, pos):
         x, y = pos
@@ -246,13 +255,21 @@ class GameHelper:
         y = (y / 810) * self.RealRate[1]
         x = int(x)
         y = int(y)
-        self.Handle = win32gui.FindWindow("UnityWndClass", None)
-        left, top, _, _ = win32gui.GetWindowRect(self.Handle)
-        x, y = int(left + x), int(top + y)
 
-        pyautogui.mouseDown(x, y, button='left')
-        time.sleep(0.1)
-        pyautogui.mouseUp(x, y, button='left')
+        left, top, _, _ = win32gui.GetWindowRect(self.Handle)
+        m, n = int(left + x), int(top + y)
+        client_pos = (x, y)
+
+        win32api.SetCursorPos((m, n))
+        # print(client_pos)
+
+        tmp = win32api.MAKELONG(client_pos[0], client_pos[1])
+        win32gui.PostMessage(self.Handle, win32con.WM_ACTIVATE, win32con.WA_ACTIVE, 0)
+        # win32gui.PostMessage(self.Handle, win32con.WM_SETCURSOR, self.Handle, tmp)
+        # win32gui.SendMessage(self.Handle, win32con.WM_MOUSEMOVE, win32con.MK_LBUTTON, tmp)
+
+        win32gui.SendMessage(self.Handle, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, tmp)
+        win32gui.SendMessage(self.Handle, win32con.WM_LBUTTONUP, win32con.MK_LBUTTON, tmp)
 
     def MoveTo(self, pos):
         x, y = pos
