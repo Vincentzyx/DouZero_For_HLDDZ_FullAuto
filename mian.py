@@ -915,6 +915,11 @@ class Worker(QThread):
                             self.initial_model_rate = round(float(action_message["win_rate"]), 3)  # win_rate at start
 
                         self.pre_cards_display.emit("等待自己出牌")
+                        have_ani = self.waitUntilNoAnimation()
+                        if have_ani:
+                            self.pre_cards_display.emit("等待动画")
+                            self.sleep(1000)
+
                         pass_flag = helper.LocateOnScreen('buchu', region=self.MPassPos)
                         centralCards = self.find_other_cards(self.MPlayedCardsPos)
                         print("等待自己出牌", end="")
@@ -967,12 +972,16 @@ class Worker(QThread):
                     print("已经出过牌")
                     self.sleep(500)
                     self.play_order = 1
+                first_run = False
                 self.detect_start_btn()
-            first_run = False
             self.detect_start_btn()
-
             if self.play_order == 1:
                 self.right_cards_display.emit("等待下家出牌")
+                have_ani = self.waitUntilNoAnimation()
+                if have_ani:
+                    self.right_cards_display.emit("等待动画")
+                    self.sleep(1000)
+
                 pass_flag = helper.LocateOnScreen('buchu', region=self.RPassPos)
                 rightCards = self.find_other_cards(self.RPlayedCardsPos)
                 print("等待下家出牌", end="")
@@ -1024,6 +1033,11 @@ class Worker(QThread):
 
             if self.play_order == 2:
                 self.left_cards_display.emit("等待上家出牌")
+                have_ani = self.waitUntilNoAnimation()
+                if have_ani:
+                    self.left_cards_display.emit("等待动画")
+                    self.sleep(1000)
+
                 pass_flag = helper.LocateOnScreen('buchu', region=self.LPassPos)
                 leftCards = self.find_other_cards(self.LPlayedCardsPos)
                 print("等待上家出牌", end="")
