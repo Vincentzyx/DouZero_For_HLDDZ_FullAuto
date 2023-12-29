@@ -810,7 +810,6 @@ class Worker(QThread):
 
                         if first_run:
                             self.initial_model_rate = round(float(action_message["win_rate"]), 3)  # win_rate at start
-                            first_run = False
 
                         print(action_list_str)
                         if action_message["action"] == "":
@@ -839,10 +838,9 @@ class Worker(QThread):
                                 if yaobuqi is not None:
                                     self.sleep(100)
                                     helper.ClickOnImage("yaobuqi", region=self.GeneralBtnPos, confidence=0.7)
-                                self.sleep(200)
                                 if buchu is not None:
                                     print("你们厉害！ 我自动不出")
-                                    self.sleep(1000)
+                                    self.sleep(100)
                             else:
                                 self.my_pass_sign = False
                             self.sleep(100)
@@ -855,7 +853,8 @@ class Worker(QThread):
                                 self.sleep(200)
                                 play_card = helper.LocateOnScreen("play_card", region=self.PassBtnPos, confidence=0.7)
                                 self.detect_start_btn()
-
+                            if first_run:
+                                self.sleep(500)
                             helper.ClickOnImage("play_card", region=self.PassBtnPos, confidence=0.7)
                             print("点击出牌按钮")
                             self.sleep(200)
@@ -914,7 +913,6 @@ class Worker(QThread):
 
                         if first_run:
                             self.initial_model_rate = round(float(action_message["win_rate"]), 3)  # win_rate at start
-                            first_run = False
 
                         self.pre_cards_display.emit("等待自己出牌")
                         pass_flag = helper.LocateOnScreen('buchu', region=self.MPassPos)
@@ -970,7 +968,9 @@ class Worker(QThread):
                     self.sleep(500)
                     self.play_order = 1
                 self.detect_start_btn()
+            first_run = False
             self.detect_start_btn()
+
             if self.play_order == 1:
                 self.right_cards_display.emit("等待下家出牌")
                 pass_flag = helper.LocateOnScreen('buchu', region=self.RPassPos)
@@ -1313,7 +1313,6 @@ class Worker(QThread):
 
     def waitUntilNoAnimation(self, ms=100):
         ani = self.haveAnimation(ms)
-        first_run = 0
         if ani:
             print("\n检测到炸弹、顺子、飞机 Biu~~ Biu~~  Bomb!!! Bomb!!!")
             return True
