@@ -222,13 +222,6 @@ class Worker(QThread):
                 except AttributeError as e:
                     traceback.print_exc()
                 self.sleep(1000)
-                new_game = helper.LocateOnScreen("continue", region=(1100, 617, 200, 74))
-                print("还未重新开局", end="")
-                while new_game is None and self.auto_sign:
-                    self.sleep(500)
-                    print(".", end="")
-                    new_game = helper.LocateOnScreen("continue", region=(1100, 617, 200, 74))
-                print("\n开始下一局")
                 break
 
         if self.auto_sign:
@@ -289,14 +282,10 @@ class Worker(QThread):
             pass
 
     def before_start(self):
-        self.RunGame = True
-        GameHelper.Interrupt = True
         self.in_game_flag = False
         print("未进入游戏", end='')
         in_game = helper.LocateOnScreen("chat", region=(1302, 744, 117, 56))
         while in_game is None:
-            if not self.RunGame:
-                break
             self.sleep(1000)
             print(".", end="")
             self.label_display.emit("未进入游戏")
@@ -309,8 +298,6 @@ class Worker(QThread):
             print("游戏未开始", end="")
             laotou = helper.LocateOnScreen("laotou", region=self.LandlordCardsPos)
             while laotou is None:
-                if not self.RunGame:
-                    break
                 self.sleep(500)
                 print(".", end="")
                 self.label_display.emit("游戏未开始")
@@ -319,8 +306,9 @@ class Worker(QThread):
 
             print("\n开始游戏")
             self.label_display.emit("开始游戏")
-        self.RunGame = True
         try:
+            self.RunGame = True
+            GameHelper.Interrupt = True
             self.choose_multiples_stage()
         except Exception as e:
             print("加倍阶段有问题")
@@ -509,12 +497,12 @@ class Worker(QThread):
                                 print("click超级加倍")
                                 self.initial_multiply = 4
                             else:
-                                helper.ClickOnImage("jiabei_btn", region=self.GeneralBtnPos)
+                                helper.ClickOnImage("jiabei_btn", region=self.GeneralBtnPos, confidence=0.9)
                                 print("加倍")
                                 self.initial_multiply = 2
                         elif win_rate > JiabeiThreshold[1]:
                             print("加倍")
-                            helper.ClickOnImage("jiabei_btn", region=self.GeneralBtnPos)
+                            helper.ClickOnImage("jiabei_btn", region=self.GeneralBtnPos, confidence=0.9)
                             self.initial_multiply = 2
                         else:
                             print("不加倍")
@@ -540,7 +528,9 @@ class Worker(QThread):
                             print("Someone Chaojiajiabei, Too risky to Mingpai")
                         else:
                             print("Going to Mingpai, Good Luck!")
+                            self.sleep(4000)
                             helper.ClickOnImage("mingpai_btn", region=self.GeneralBtnPos)
+                            print("明牌")
                             self.initial_mingpai = 1
                     except:
                         print("There are some problems with Mingpai, Please check")
@@ -795,6 +785,9 @@ class Worker(QThread):
                 if not self.RunGame:
                     break
                 cards = self.find_other_cards(self.MPlayedCardsPos)
+                if len(cards) > 0:
+                    self.sleep(500)
+                    cards = self.find_other_cards(self.MPlayedCardsPos)
                 if len(cards) == 0:
                     if self.auto_sign:
                         self.my_cards_display.emit("等待AI出牌")
@@ -840,7 +833,8 @@ class Worker(QThread):
                                 if yaobuqi is not None:
                                     helper.ClickOnImage("yaobuqi", region=self.GeneralBtnPos, confidence=0.7)
                                 if buchu is not None:
-                                    print("你们厉害！ 我自动不出")
+                                    print("你们太牛X！ 我要不起")
+                                    self.sleep(500)
                                 self.sleep(200)
                             else:
                                 self.my_pass_sign = False
@@ -1034,7 +1028,7 @@ class Worker(QThread):
                                                                    self.other_played_cards_real)
                 # print("记牌器：", self.other_hands_cards_str)
                 self.recorder_display.emit(self.other_hands_cards_str)
-                self.sleep(50)
+                self.sleep(200)
                 self.play_order = 2
 
             if self.play_order == 2:
@@ -1403,7 +1397,7 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
                             QtCore.Qt.WindowStaysOnTopHint |  # 窗体总在最前端
                             QtCore.Qt.WindowCloseButtonHint)
         self.setWindowIcon(QIcon(':/pics/favicon.ico'))
-        self.setWindowTitle("DouZero欢乐斗地主  v5.2")
+        self.setWindowTitle("DouZero欢乐斗地主  v5.3")
         self.setFixedSize(self.width(), self.height())  # 固定窗体大小
         self.move(20, 20)
         window_pale = QtGui.QPalette()
@@ -1463,18 +1457,18 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.Players[result].setStyleSheet('background-color: rgba(0, 255, 0, 0.5);')
 
     def init_threshold(self):
-        self.bid_lineEdit_1.setText("-0.1")
-        self.bid_lineEdit_2.setText("0.0")
-        self.bid_lineEdit_3.setText("0.1")
-        self.jiabei_lineEdit_1.setText("0.3")
-        self.jiabei_lineEdit_2.setText("0.2")
-        self.jiabei_lineEdit_3.setText("0.4")
-        self.jiabei_lineEdit_4.setText("0.3")
-        self.jiabei_lineEdit_5.setText("0.4")
-        self.jiabei_lineEdit_6.setText("0.3")
-        self.jiabei_lineEdit_7.setText("0.3")
-        self.jiabei_lineEdit_8.setText("0.2")
-        self.mingpai_lineEdit.setText("0.8")
+        self.bid_lineEdit_1.setText("-0.2")
+        self.bid_lineEdit_2.setText("-0.1")
+        self.bid_lineEdit_3.setText("0.0")
+        self.jiabei_lineEdit_1.setText("0.2")
+        self.jiabei_lineEdit_2.setText("0.1")
+        self.jiabei_lineEdit_3.setText("0.3")
+        self.jiabei_lineEdit_4.setText("0.2")
+        self.jiabei_lineEdit_5.setText("0.3")
+        self.jiabei_lineEdit_6.setText("0.2")
+        self.jiabei_lineEdit_7.setText("0.2")
+        self.jiabei_lineEdit_8.setText("0.1")
+        self.mingpai_lineEdit.setText("0.4")
 
         data = {'bid1': self.bid_lineEdit_1.text(), 'bid2': self.bid_lineEdit_2.text(),
                 'bid3': self.bid_lineEdit_3.text(), 'jiabei1': self.jiabei_lineEdit_1.text(),

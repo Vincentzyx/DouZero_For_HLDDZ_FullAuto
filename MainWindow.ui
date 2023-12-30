@@ -1464,7 +1464,7 @@ background:none;
         </font>
        </property>
        <property name="text">
-        <string>对方虚了，我准备加倍</string>
+        <string>地主虚了，我准备加倍</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>

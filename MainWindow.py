@@ -830,7 +830,7 @@ class Ui_Form(object):
         self.landlord_label_3.setText(_translate("Form", "农民正常加倍"))
         self.jiabei_label_6.setText(_translate("Form", "加倍:"))
         self.jiabei_label_5.setText(_translate("Form", "超级加倍:"))
-        self.landlord_label_4.setText(_translate("Form", "对方虚了，我准备加倍"))
+        self.landlord_label_4.setText(_translate("Form", "地主虚了，我准备加倍"))
         self.jiabei_label_7.setText(_translate("Form", "超级加倍:"))
         self.jiabei_label_8.setText(_translate("Form", "加倍:"))
         self.ResetButton.setText(_translate("Form", "重置"))
