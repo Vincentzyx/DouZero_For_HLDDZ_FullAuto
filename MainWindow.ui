@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>655</width>
-    <height>596</height>
+    <width>631</width>
+    <height>594</height>
    </rect>
   </property>
   <property name="font">
@@ -28,7 +28,7 @@
   <widget class="QTableWidget" name="tableWidget">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>10</x>
      <y>10</y>
      <width>611</width>
      <height>75</height>
@@ -491,7 +491,7 @@ background:none;
   <widget class="QScrollArea" name="scrollArea">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>10</x>
      <y>270</y>
      <width>371</width>
      <height>241</height>
@@ -676,7 +676,7 @@ background:none;
   <widget class="QScrollArea" name="scrollArea_2">
    <property name="geometry">
     <rect>
-     <x>400</x>
+     <x>390</x>
      <y>270</y>
      <width>231</width>
      <height>91</height>
@@ -743,7 +743,7 @@ background:none;
   <widget class="QScrollArea" name="scrollArea_3">
    <property name="geometry">
     <rect>
-     <x>400</x>
+     <x>390</x>
      <y>370</y>
      <width>231</width>
      <height>141</height>
@@ -776,7 +776,7 @@ background:none;
   <widget class="QScrollArea" name="scrollArea_4">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>10</x>
      <y>520</y>
      <width>611</width>
      <height>61</height>
@@ -879,7 +879,7 @@ background:none;
   <widget class="QScrollArea" name="scrollArea_5">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>10</x>
      <y>100</y>
      <width>611</width>
      <height>161</height>
@@ -897,164 +897,11 @@ background:none;
       <height>159</height>
      </rect>
     </property>
-    <widget class="QScrollArea" name="scrollArea_7">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>101</width>
-       <height>141</height>
-      </rect>
-     </property>
-     <property name="widgetResizable">
-      <bool>true</bool>
-     </property>
-     <widget class="QWidget" name="scrollAreaWidgetContents_6">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>99</width>
-        <height>139</height>
-       </rect>
-      </property>
-      <widget class="QLabel" name="bid_label_1">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>30</y>
-         <width>41</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <family>微软雅黑</family>
-         <pointsize>6</pointsize>
-         <weight>50</weight>
-         <italic>false</italic>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>叫地主:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="bid_lineEdit_1">
-       <property name="geometry">
-        <rect>
-         <x>60</x>
-         <y>30</y>
-         <width>31</width>
-         <height>21</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QLabel" name="bid_label_3">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>110</y>
-         <width>41</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <family>微软雅黑</family>
-         <pointsize>6</pointsize>
-         <weight>50</weight>
-         <italic>false</italic>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>二 抢:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="bid_lineEdit_2">
-       <property name="geometry">
-        <rect>
-         <x>60</x>
-         <y>70</y>
-         <width>31</width>
-         <height>21</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="bid_lineEdit_3">
-       <property name="geometry">
-        <rect>
-         <x>60</x>
-         <y>110</y>
-         <width>31</width>
-         <height>21</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QLabel" name="bid_label_2">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>70</y>
-         <width>41</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <family>微软雅黑</family>
-         <pointsize>6</pointsize>
-         <weight>50</weight>
-         <italic>false</italic>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>一 抢:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-      <widget class="QLabel" name="bid_label_4">
-       <property name="geometry">
-        <rect>
-         <x>10</x>
-         <y>0</y>
-         <width>91</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="font">
-        <font>
-         <family>微软雅黑</family>
-         <pointsize>6</pointsize>
-         <weight>50</weight>
-         <italic>false</italic>
-         <bold>false</bold>
-        </font>
-       </property>
-       <property name="text">
-        <string>初始阶段</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </widget>
-    </widget>
     <widget class="QScrollArea" name="scrollArea_8">
      <property name="geometry">
       <rect>
        <x>130</x>
-       <y>10</y>
+       <y>60</y>
        <width>101</width>
        <height>91</height>
       </rect>
@@ -1074,9 +921,9 @@ background:none;
       <widget class="QLabel" name="landlord_label_1">
        <property name="geometry">
         <rect>
-         <x>10</x>
+         <x>0</x>
          <y>0</y>
-         <width>91</width>
+         <width>101</width>
          <height>21</height>
         </rect>
        </property>
@@ -1099,7 +946,7 @@ background:none;
       <widget class="QLabel" name="jiabei_label_1">
        <property name="geometry">
         <rect>
-         <x>10</x>
+         <x>0</x>
          <y>30</y>
          <width>41</width>
          <height>21</height>
@@ -1115,7 +962,7 @@ background:none;
         </font>
        </property>
        <property name="text">
-        <string>超级加倍:</string>
+        <string>超加:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -1124,9 +971,9 @@ background:none;
       <widget class="QLineEdit" name="jiabei_lineEdit_2">
        <property name="geometry">
         <rect>
-         <x>60</x>
+         <x>40</x>
          <y>60</y>
-         <width>31</width>
+         <width>51</width>
          <height>21</height>
         </rect>
        </property>
@@ -1134,7 +981,7 @@ background:none;
       <widget class="QLabel" name="jiabei_label_2">
        <property name="geometry">
         <rect>
-         <x>10</x>
+         <x>0</x>
          <y>60</y>
          <width>41</width>
          <height>21</height>
@@ -1159,9 +1006,9 @@ background:none;
       <widget class="QLineEdit" name="jiabei_lineEdit_1">
        <property name="geometry">
         <rect>
-         <x>60</x>
+         <x>40</x>
          <y>30</y>
-         <width>31</width>
+         <width>51</width>
          <height>21</height>
         </rect>
        </property>
@@ -1172,7 +1019,7 @@ background:none;
      <property name="geometry">
       <rect>
        <x>250</x>
-       <y>10</y>
+       <y>60</y>
        <width>101</width>
        <height>91</height>
       </rect>
@@ -1192,9 +1039,9 @@ background:none;
       <widget class="QLineEdit" name="jiabei_lineEdit_4">
        <property name="geometry">
         <rect>
-         <x>60</x>
+         <x>40</x>
          <y>60</y>
-         <width>31</width>
+         <width>51</width>
          <height>21</height>
         </rect>
        </property>
@@ -1202,9 +1049,9 @@ background:none;
       <widget class="QLineEdit" name="jiabei_lineEdit_3">
        <property name="geometry">
         <rect>
-         <x>60</x>
+         <x>40</x>
          <y>30</y>
-         <width>31</width>
+         <width>51</width>
          <height>21</height>
         </rect>
        </property>
@@ -1212,9 +1059,9 @@ background:none;
       <widget class="QLabel" name="landlord_label_2">
        <property name="geometry">
         <rect>
-         <x>10</x>
+         <x>0</x>
          <y>0</y>
-         <width>91</width>
+         <width>101</width>
          <height>21</height>
         </rect>
        </property>
@@ -1237,7 +1084,7 @@ background:none;
       <widget class="QLabel" name="jiabei_label_3">
        <property name="geometry">
         <rect>
-         <x>10</x>
+         <x>0</x>
          <y>30</y>
          <width>41</width>
          <height>21</height>
@@ -1253,7 +1100,7 @@ background:none;
         </font>
        </property>
        <property name="text">
-        <string>超级加倍:</string>
+        <string>超加:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -1262,7 +1109,7 @@ background:none;
       <widget class="QLabel" name="jiabei_label_4">
        <property name="geometry">
         <rect>
-         <x>10</x>
+         <x>0</x>
          <y>60</y>
          <width>41</width>
          <height>21</height>
@@ -1290,7 +1137,7 @@ background:none;
      <property name="geometry">
       <rect>
        <x>370</x>
-       <y>10</y>
+       <y>60</y>
        <width>101</width>
        <height>91</height>
       </rect>
@@ -1335,7 +1182,7 @@ background:none;
       <widget class="QLabel" name="jiabei_label_6">
        <property name="geometry">
         <rect>
-         <x>10</x>
+         <x>0</x>
          <y>60</y>
          <width>41</width>
          <height>21</height>
@@ -1360,9 +1207,9 @@ background:none;
       <widget class="QLineEdit" name="jiabei_lineEdit_5">
        <property name="geometry">
         <rect>
-         <x>60</x>
+         <x>40</x>
          <y>30</y>
-         <width>31</width>
+         <width>51</width>
          <height>21</height>
         </rect>
        </property>
@@ -1370,9 +1217,9 @@ background:none;
       <widget class="QLineEdit" name="jiabei_lineEdit_6">
        <property name="geometry">
         <rect>
-         <x>60</x>
+         <x>40</x>
          <y>60</y>
-         <width>31</width>
+         <width>51</width>
          <height>21</height>
         </rect>
        </property>
@@ -1380,7 +1227,7 @@ background:none;
       <widget class="QLabel" name="jiabei_label_5">
        <property name="geometry">
         <rect>
-         <x>10</x>
+         <x>0</x>
          <y>30</y>
          <width>41</width>
          <height>21</height>
@@ -1396,7 +1243,7 @@ background:none;
         </font>
        </property>
        <property name="text">
-        <string>超级加倍:</string>
+        <string>超加:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -1408,7 +1255,7 @@ background:none;
      <property name="geometry">
       <rect>
        <x>490</x>
-       <y>10</y>
+       <y>60</y>
        <width>111</width>
        <height>91</height>
       </rect>
@@ -1428,9 +1275,9 @@ background:none;
       <widget class="QLineEdit" name="jiabei_lineEdit_7">
        <property name="geometry">
         <rect>
-         <x>60</x>
+         <x>40</x>
          <y>30</y>
-         <width>31</width>
+         <width>51</width>
          <height>21</height>
         </rect>
        </property>
@@ -1438,9 +1285,9 @@ background:none;
       <widget class="QLineEdit" name="jiabei_lineEdit_8">
        <property name="geometry">
         <rect>
-         <x>60</x>
+         <x>40</x>
          <y>60</y>
-         <width>31</width>
+         <width>51</width>
          <height>21</height>
         </rect>
        </property>
@@ -1450,7 +1297,7 @@ background:none;
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>101</width>
+         <width>111</width>
          <height>21</height>
         </rect>
        </property>
@@ -1464,7 +1311,7 @@ background:none;
         </font>
        </property>
        <property name="text">
-        <string>地主虚了，我准备加倍</string>
+        <string>地主怂了，我准备加倍</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -1473,7 +1320,7 @@ background:none;
       <widget class="QLabel" name="jiabei_label_7">
        <property name="geometry">
         <rect>
-         <x>10</x>
+         <x>0</x>
          <y>30</y>
          <width>41</width>
          <height>21</height>
@@ -1489,7 +1336,7 @@ background:none;
         </font>
        </property>
        <property name="text">
-        <string>超级加倍:</string>
+        <string>超加:</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -1498,7 +1345,7 @@ background:none;
       <widget class="QLabel" name="jiabei_label_8">
        <property name="geometry">
         <rect>
-         <x>10</x>
+         <x>0</x>
          <y>60</y>
          <width>41</width>
          <height>21</height>
@@ -1522,12 +1369,187 @@ background:none;
       </widget>
      </widget>
     </widget>
+    <widget class="QPushButton" name="ClassicsButton">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>111</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>微软雅黑</family>
+       <pointsize>10</pointsize>
+       <weight>50</weight>
+       <italic>false</italic>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>经典</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="CompetitionButton">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>111</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>微软雅黑</family>
+       <pointsize>10</pointsize>
+       <weight>50</weight>
+       <italic>false</italic>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>竞赛</string>
+     </property>
+    </widget>
+    <widget class="QScrollArea" name="scrollArea_7">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>10</y>
+       <width>341</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents_6">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>339</width>
+        <height>39</height>
+       </rect>
+      </property>
+      <widget class="QLabel" name="bid_label_1">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>10</y>
+         <width>41</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>微软雅黑</family>
+         <pointsize>6</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>叫地主:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="bid_lineEdit_1">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>10</y>
+         <width>51</width>
+         <height>21</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="bid_label_3">
+       <property name="geometry">
+        <rect>
+         <x>240</x>
+         <y>10</y>
+         <width>41</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>微软雅黑</family>
+         <pointsize>6</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>二 抢:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="bid_lineEdit_2">
+       <property name="geometry">
+        <rect>
+         <x>160</x>
+         <y>10</y>
+         <width>51</width>
+         <height>21</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="bid_lineEdit_3">
+       <property name="geometry">
+        <rect>
+         <x>280</x>
+         <y>10</y>
+         <width>51</width>
+         <height>21</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QLabel" name="bid_label_2">
+       <property name="geometry">
+        <rect>
+         <x>120</x>
+         <y>10</y>
+         <width>41</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="font">
+        <font>
+         <family>微软雅黑</family>
+         <pointsize>6</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>一 抢:</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </widget>
+    </widget>
     <widget class="QPushButton" name="ResetButton">
      <property name="geometry">
       <rect>
-       <x>250</x>
+       <x>10</x>
        <y>110</y>
-       <width>351</width>
+       <width>111</width>
        <height>41</height>
       </rect>
      </property>
@@ -1547,9 +1569,9 @@ background:none;
     <widget class="QScrollArea" name="scrollArea_6">
      <property name="geometry">
       <rect>
-       <x>130</x>
-       <y>110</y>
-       <width>101</width>
+       <x>490</x>
+       <y>10</y>
+       <width>111</width>
        <height>41</height>
       </rect>
      </property>
@@ -1561,16 +1583,16 @@ background:none;
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>99</width>
+        <width>109</width>
         <height>39</height>
        </rect>
       </property>
       <widget class="QLineEdit" name="mingpai_lineEdit">
        <property name="geometry">
         <rect>
-         <x>60</x>
+         <x>40</x>
          <y>10</y>
-         <width>31</width>
+         <width>51</width>
          <height>21</height>
         </rect>
        </property>
@@ -1578,7 +1600,7 @@ background:none;
       <widget class="QLabel" name="mingpai_label">
        <property name="geometry">
         <rect>
-         <x>10</x>
+         <x>0</x>
          <y>10</y>
          <width>41</width>
          <height>21</height>

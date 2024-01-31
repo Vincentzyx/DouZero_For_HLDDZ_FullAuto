@@ -27,6 +27,7 @@ class GameEnv(object):
 
     def __init__(self, players, players2=None):
 
+        self.game_infoset = None
         self.card_play_action_seq = []
 
         self.three_landlord_cards = None
@@ -156,34 +157,31 @@ class GameEnv(object):
                 if self.players2 is None:
                     action, actions_confidence, action_list = self.players[1].act(self.game_infoset)
                 else:
-
-                    action, actions_confidence, action_list = self.players2[1].act(
-                        self.game_infoset)  # not considering wp
+                    action, actions_confidence, action_list = self.players2[1].act(self.game_infoset)
                 win_rate = actions_confidence
 
-                # 农民胜率低于 0.2 不允许炸
-                # print(f"Action {action} Position {position} Actions_confidence {actions_confidence}")
-                if ((action in bombs) or (30 in action and 20 in action)) and position in ["landlord_up",
-                                                                                           "landlord_down"] and actions_confidence < 0 / 8:
-                    action_list.sort(key=self.compare_action, reverse=True)
-                    action, actions_confidence = action_list[1][0], action_list[1][1]
-                    win_rate = actions_confidence
-
-                # 地主还是让炸吧，不然容易被没炸跑掉
-                # 地主胜率低于-0.2 不允许炸
-                if ((action in bombs) or (
-                        30 in action and 20 in action)) and position == "landlord" and actions_confidence < -0.2 / 8:
-                    action_list.sort(key=self.compare_action, reverse=True)
-                    action, actions_confidence = action_list[1][0], action_list[1][1]
-                    win_rate = actions_confidence
-
-                '''# 相差小于0.05时，选第二个action
                 if len(action_list) >= 2:
-                    if abs(round(float(action_list[0][1]) * 8, 4) - round(float(action_list[1][1]) * 8, 4)) < 0.005:
+                    # 地主胜率低于-0.2 不允许炸
+                    if (((action in bombs) or (30 in action and 20 in action)) and position == "landlord"
+                            and actions_confidence < -0.6 / 8):
+                        action_list.sort(key=self.compare_action, reverse=True)
+                        action, actions_confidence = action_list[1][0], action_list[1][1]
+                        win_rate = actions_confidence
+
+                    # 农民胜率低于 -0.2 不允许炸
+                    if (((action in bombs) or (30 in action and 20 in action))
+                            and position in ["landlord_up", "landlord_down"] and actions_confidence < -0.6 / 8):
+                        action_list.sort(key=self.compare_action, reverse=True)
+                        action, actions_confidence = action_list[1][0], action_list[1][1]
+                        win_rate = actions_confidence
+
+                    # 相差小于0.05时，选第二个action
+                    if (abs(round(float(action_list[0][1]) * 8, 4) - round(float(action_list[1][1]) * 8, 4)) < 0.005
+                            and round(float(action_list[0][1]) * 8, 4) > 0.8 and action_list[0][1] == ""):
                         print("选择更稳的第二种出法")
                         action_list.sort(key=self.compare_action, reverse=True)
                         action, actions_confidence = action_list[1][0], action_list[1][1]
-                        win_rate = actions_confidence'''
+                        win_rate = actions_confidence
 
                 # 对直接出完情况做特判
                 print("正在检测可直接出完出法")
@@ -196,7 +194,6 @@ class GameEnv(object):
                                 action = l_action
                                 win_rate = 10000
                                 print("检测到可直接出完出法")
-                                print()
                     last_two_moves = self.get_last_two_moves()
                     rival_move = None
                     if last_two_moves[0]:
@@ -216,8 +213,6 @@ class GameEnv(object):
                                           self.path_to_str(path))
                                     action = path[0]
                                     win_rate = 20000
-                else:
-                    print("电脑走对了，一步胜利")
         else:
             action_list = [[action, 0]]
             win_rate = 0

@@ -3,9 +3,10 @@ import numpy as np
 
 from douzero.env.env import get_obs
 
+
 def _load_model(position, model_path, model_type):
     from douzero.dmc.models import model_dict, model_dict_resnet, model_dict_general
-    print(position, "loads", model_type, "model: ", model_path)
+    # print(position, "loads", model_type, "model: ", model_path)
     if model_type == "general":
         model = model_dict_general[position]()
     elif model_type == "resnet":
@@ -24,6 +25,7 @@ def _load_model(position, model_path, model_type):
         model.cuda()
     model.eval()
     return model
+
 
 class DeepAgent:
 
@@ -52,6 +54,4 @@ class DeepAgent:
         best_action = infoset.legal_actions[best_action_index]
         best_action_confidence = y_pred[best_action_index]
         action_list = [(infoset.legal_actions[i], y_pred[i]) for i in range(len(infoset.legal_actions))]
-
-        # print(best_action, best_action_confidence, y_pred)
         return best_action, best_action_confidence, action_list
