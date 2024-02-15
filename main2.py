@@ -1648,6 +1648,8 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
 
 
 if __name__ == '__main__':
+    QtWidgets.QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
+    QtWidgets.QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps, True)
     app = QtWidgets.QApplication(sys.argv)
     main = MyPyQT_Form()
     style_file = QFile("style.qss")
