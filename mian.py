@@ -1186,10 +1186,11 @@ class Worker(QThread):
         if len(my_cards) == 17:
             left_cards = self.find_other_cards(self.LPlayedCardsPos)
             right_cards = self.find_other_cards(self.RPlayedCardsPos)
-            if len(left_cards) > 0:
-                return 2
-            elif len(right_cards) > 0:
+            #曾经出现过右边出完牌，左边马上出牌，函数运行时，左右两边都有牌，这种情况右边是地主,所以要先右后左
+            if len(right_cards) > 0:
                 return 0
+            elif len(left_cards) > 0:
+                return 2
         elif len(my_cards) == 20:
             return 1
 
