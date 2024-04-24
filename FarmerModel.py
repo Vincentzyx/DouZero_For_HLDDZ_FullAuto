@@ -10,21 +10,22 @@ import time
 
 
 def EnvToOnehot(cards):
-    Env2IdxMap = {3:0,4:1,5:2,6:3,7:4,8:5,9:6,10:7,11:8,12:9,13:10,14:11,17:12,20:13,30:14}
+    Env2IdxMap = {3: 0, 4: 1, 5: 2, 6: 3, 7: 4, 8: 5, 9: 6, 10: 7, 11: 8, 12: 9, 13: 10, 14: 11, 17: 12, 20: 13, 30: 14}
     cards = [Env2IdxMap[i] for i in cards]
-    Onehot = torch.zeros((4,15))
+    Onehot = torch.zeros((4, 15))
     for i in range(0, 15):
-        Onehot[:cards.count(i),i] = 1
+        Onehot[:cards.count(i), i] = 1
     return Onehot
+
 
 def RealToOnehot(cards):
     RealCard2EnvCard = {'3': 0, '4': 1, '5': 2, '6': 3, '7': 4,
                         '8': 5, '9': 6, 'T': 7, 'J': 8, 'Q': 9,
                         'K': 10, 'A': 11, '2': 12, 'X': 13, 'D': 14}
     cards = [RealCard2EnvCard[c] for c in cards]
-    Onehot = torch.zeros((4,15))
+    Onehot = torch.zeros((4, 15))
     for i in range(0, 15):
-        Onehot[:cards.count(i),i] = 1
+        Onehot[:cards.count(i), i] = 1
     return Onehot
 
 
@@ -53,23 +54,24 @@ class Net(nn.Module):
 
 
 Nets = {"up": Net(), "down": Net(), "farmer": Net()}
-if os.path.exists("./landlord_up_weights_new.pkl"):
+if os.path.exists("./weights/landlord_up_weights.pkl"):
     if torch.cuda.is_available():
-        Nets["up"].load_state_dict(torch.load("./landlord_up_weights_new.pkl"))
+        Nets["up"].load_state_dict(torch.load("./weights/landlord_up_weights.pkl"))
     else:
-        Nets["up"].load_state_dict(torch.load("./landlord_up_weights_new.pkl", map_location=torch.device("cpu")))
+        Nets["up"].load_state_dict(torch.load("./weights/landlord_up_weights.pkl", map_location=torch.device("cpu")))
     Nets["up"].eval()
-if os.path.exists("./landlord_down_weights_new.pkl"):
+if os.path.exists("./weights/landlord_down_weights.pkl"):
     if torch.cuda.is_available():
-        Nets["down"].load_state_dict(torch.load("./landlord_down_weights_new.pkl"))
+        Nets["down"].load_state_dict(torch.load("./weights/landlord_down_weights.pkl"))
     else:
-        Nets["down"].load_state_dict(torch.load("./landlord_down_weights_new.pkl", map_location=torch.device("cpu")))
+        Nets["down"].load_state_dict(
+            torch.load("./weights/landlord_down_weights.pkl", map_location=torch.device("cpu")))
     Nets["down"].eval()
-if os.path.exists("./farmer_weights_new.pkl"):
+if os.path.exists("./weights/farmer_weights.pkl"):
     if torch.cuda.is_available():
-        Nets["farmer"].load_state_dict(torch.load("./farmer_weights_new.pkl"))
+        Nets["farmer"].load_state_dict(torch.load("./weights/farmer_weights.pkl"))
     else:
-        Nets["farmer"].load_state_dict(torch.load("./farmer_weights_new.pkl", map_location=torch.device("cpu")))
+        Nets["farmer"].load_state_dict(torch.load("./weights/farmer_weights.pkl", map_location=torch.device("cpu")))
     Nets["farmer"].eval()
 
 
@@ -81,5 +83,6 @@ def predict(cards, type="up"):
     y = y.squeeze().item()
     return y
 
+
 if __name__ == "__main__":
-    print(predict("33334444555567", "up"))
+    print(predict("33334444555567", "farmer"))

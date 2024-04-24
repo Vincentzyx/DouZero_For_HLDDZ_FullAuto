@@ -1,5 +1,6 @@
 <RCC>
   <qresource>
     <file>pics/favicon.ico</file>
+    <file>pics/code.png</file>
   </qresource>
 </RCC>

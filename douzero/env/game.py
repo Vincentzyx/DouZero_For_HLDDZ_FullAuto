@@ -20,7 +20,7 @@ AllEnvCard = [3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7,
 bombs = [[3, 3, 3, 3], [4, 4, 4, 4], [5, 5, 5, 5], [6, 6, 6, 6],
          [7, 7, 7, 7], [8, 8, 8, 8], [9, 9, 9, 9], [10, 10, 10, 10],
          [11, 11, 11, 11], [12, 12, 12, 12], [13, 13, 13, 13], [14, 14, 14, 14],
-         [17, 17, 17, 17], [20, 30]]
+         [17, 17, 17, 17], [30, 20]]
 
 
 class GameEnv(object):
@@ -160,32 +160,9 @@ class GameEnv(object):
                     action, actions_confidence, action_list = self.players2[1].act(self.game_infoset)
                 win_rate = actions_confidence
 
-                if len(action_list) >= 2:
-                    # 地主胜率低于-0.2 不允许炸
-                    if (((action in bombs) or (30 in action and 20 in action)) and position == "landlord"
-                            and actions_confidence < -0.6 / 8):
-                        action_list.sort(key=self.compare_action, reverse=True)
-                        action, actions_confidence = action_list[1][0], action_list[1][1]
-                        win_rate = actions_confidence
-
-                    # 农民胜率低于 -0.2 不允许炸
-                    if (((action in bombs) or (30 in action and 20 in action))
-                            and position in ["landlord_up", "landlord_down"] and actions_confidence < -0.6 / 8):
-                        action_list.sort(key=self.compare_action, reverse=True)
-                        action, actions_confidence = action_list[1][0], action_list[1][1]
-                        win_rate = actions_confidence
-
-                    # 相差小于0.05时，选第二个action
-                    if (abs(round(float(action_list[0][1]) * 8, 4) - round(float(action_list[1][1]) * 8, 4)) < 0.005
-                            and round(float(action_list[0][1]) * 8, 4) > 0.8 and action_list[0][1] == ""):
-                        print("选择更稳的第二种出法")
-                        action_list.sort(key=self.compare_action, reverse=True)
-                        action, actions_confidence = action_list[1][0], action_list[1][1]
-                        win_rate = actions_confidence
-
                 # 对直接出完情况做特判
-                print("正在检测可直接出完出法")
-                print()
+                # print("正在检测可直接出完出法")
+                # print()
                 if len(action) != len(self.game_infoset.player_hand_cards):
                     for l_action, l_score in action_list:
                         if len(l_action) == len(self.game_infoset.player_hand_cards):
@@ -246,13 +223,33 @@ class GameEnv(object):
                 self.get_acting_player_position()
                 self.game_infoset = self.get_infoset()
 
-        # 返回动作和胜率,只有玩家角色会接受返回值
+        action_list.sort(key=self.compare_action, reverse=True)
+
+        if len(action_list) >= 2:
+            if float(action_list[0][1]) < 0:
+                action_list.sort(key=self.compare_action, reverse=True)
+                action, actions_confidence = action_list[1][0], action_list[1][1]
+                win_rate = actions_confidence
+                print("【炸弹胜率低于0 不允许炸】")
+
+            if not action:
+                if float(action_list[1][1]) * 8 > 1:
+                    action_list.sort(key=self.compare_action, reverse=True)
+                    action, actions_confidence = action_list[1][0], action_list[1][1]
+                    win_rate = actions_confidence
+                    print("【第二选择胜率大于1直接出】")
+                if (position == "landlord" and (float(action_list[0][1]) - float(action_list[1][1])) * 8 < 0.2 and
+                        float(action_list[1][1]) * 8 > 0):
+                    action_list.sort(key=self.compare_action, reverse=True)
+                    action, actions_confidence = action_list[1][0], action_list[1][1]
+                    win_rate = actions_confidence
+                    print("【地主第二选择胜率大于0，且与第一选择相差小于0.2直接出】")
+
         action_message = {"action": str(''.join([EnvCard2RealCard[c] for c in action])),
                           "win_rate": float(win_rate) * 8}
-        action_list.sort(key=self.compare_action, reverse=True)
         show_action_list = [(str(''.join([EnvCard2RealCard[c] for c in action_info[0]])) if len(
             str(''.join([EnvCard2RealCard[c] for c in action_info[0]]))) > 0 else "Pass",
-                             str(round(float(action_info[1]) * 8, 4))) for action_info in action_list]
+                             str(round(float(action_info[1]) * 8, 3))) for action_info in action_list]
         return action_message, show_action_list
 
     def get_last_move(self):
@@ -262,7 +259,6 @@ class GameEnv(object):
                 last_move = self.card_play_action_seq[-2][1]
             else:
                 last_move = self.card_play_action_seq[-1][1]
-
         return last_move
 
     def get_last_two_moves(self):

@@ -86,16 +86,12 @@ net2.eval()
 if UseGPU:
     net = net.to(device)
     net2 = net2.to(device)
-if os.path.exists("./bid_weights.pkl"):
+
+if os.path.exists("./weights/bid_weights.pkl"):
     if torch.cuda.is_available():
-        net.load_state_dict(torch.load('./bid_weights.pkl'))
+        net2.load_state_dict(torch.load('./weights/bid_weights.pkl'))
     else:
-        net.load_state_dict(torch.load('./bid_weights.pkl', map_location=torch.device("cpu")))
-if os.path.exists("./bid_weights_new.pkl"):
-    if torch.cuda.is_available():
-        net2.load_state_dict(torch.load('./bid_weights_new.pkl'))
-    else:
-        net2.load_state_dict(torch.load('./bid_weights_new.pkl', map_location=torch.device("cpu")))
+        net2.load_state_dict(torch.load('./weights/bid_weights.pkl', map_location=torch.device("cpu")))
 
 
 def predict(cards):

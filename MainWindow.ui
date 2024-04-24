@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>631</width>
-    <height>594</height>
+    <width>652</width>
+    <height>578</height>
    </rect>
   </property>
   <property name="font">
@@ -28,7 +28,7 @@
   <widget class="QTableWidget" name="tableWidget">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>20</x>
      <y>10</y>
      <width>611</width>
      <height>75</height>
@@ -491,10 +491,10 @@ background:none;
   <widget class="QScrollArea" name="scrollArea">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>20</x>
      <y>270</y>
      <width>371</width>
-     <height>241</height>
+     <height>211</height>
     </rect>
    </property>
    <property name="widgetResizable">
@@ -506,34 +506,9 @@ background:none;
       <x>0</x>
       <y>0</y>
       <width>369</width>
-      <height>239</height>
+      <height>209</height>
      </rect>
     </property>
-    <widget class="QLabel" name="UserHandCards">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>200</y>
-       <width>331</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>微软雅黑</family>
-       <pointsize>10</pointsize>
-       <weight>50</weight>
-       <italic>false</italic>
-       <bold>false</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>手牌</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-     </property>
-    </widget>
     <widget class="QLabel" name="RPlayedCard">
      <property name="geometry">
       <rect>
@@ -622,7 +597,7 @@ background:none;
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>150</y>
+       <y>160</y>
        <width>331</width>
        <height>41</height>
       </rect>
@@ -676,10 +651,10 @@ background:none;
   <widget class="QScrollArea" name="scrollArea_2">
    <property name="geometry">
     <rect>
-     <x>390</x>
+     <x>400</x>
      <y>270</y>
      <width>231</width>
-     <height>91</height>
+     <height>71</height>
     </rect>
    </property>
    <property name="widgetResizable">
@@ -691,14 +666,14 @@ background:none;
       <x>0</x>
       <y>0</y>
       <width>229</width>
-      <height>89</height>
+      <height>69</height>
      </rect>
     </property>
     <widget class="QLabel" name="PreWinrate">
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>50</y>
+       <y>40</y>
        <width>161</width>
        <height>31</height>
       </rect>
@@ -720,7 +695,7 @@ background:none;
      <property name="geometry">
       <rect>
        <x>30</x>
-       <y>10</y>
+       <y>0</y>
        <width>161</width>
        <height>31</height>
       </rect>
@@ -743,10 +718,10 @@ background:none;
   <widget class="QScrollArea" name="scrollArea_3">
    <property name="geometry">
     <rect>
-     <x>390</x>
-     <y>370</y>
+     <x>400</x>
+     <y>350</y>
      <width>231</width>
-     <height>141</height>
+     <height>131</height>
     </rect>
    </property>
    <property name="widgetResizable">
@@ -758,17 +733,77 @@ background:none;
       <x>0</x>
       <y>0</y>
       <width>229</width>
-      <height>139</height>
+      <height>129</height>
      </rect>
     </property>
-    <widget class="QTextEdit" name="textEdit">
+    <widget class="QLabel" name="code_label">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>211</width>
+       <width>141</width>
        <height>111</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">image: url(:/pics/code.png);</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>10</y>
+       <width>72</width>
+       <height>81</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>华文琥珀</family>
+       <pointsize>9</pointsize>
+       <weight>50</weight>
+       <italic>false</italic>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>开 扫
+源 码
+不 求
+易 赞
+</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_3">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>100</y>
+       <width>72</width>
+       <height>15</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>华文新魏</family>
+       <pointsize>9</pointsize>
+       <weight>50</weight>
+       <italic>false</italic>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>马  云</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </widget>
@@ -776,8 +811,8 @@ background:none;
   <widget class="QScrollArea" name="scrollArea_4">
    <property name="geometry">
     <rect>
-     <x>10</x>
-     <y>520</y>
+     <x>20</x>
+     <y>500</y>
      <width>611</width>
      <height>61</height>
     </rect>
@@ -879,7 +914,7 @@ background:none;
   <widget class="QScrollArea" name="scrollArea_5">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>20</x>
      <y>100</y>
      <width>611</width>
      <height>161</height>
@@ -1375,7 +1410,7 @@ background:none;
        <x>10</x>
        <y>10</y>
        <width>111</width>
-       <height>41</height>
+       <height>61</height>
       </rect>
      </property>
      <property name="font">
@@ -1388,32 +1423,7 @@ background:none;
       </font>
      </property>
      <property name="text">
-      <string>经典</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="CompetitionButton">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>60</y>
-       <width>111</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>微软雅黑</family>
-       <pointsize>10</pointsize>
-       <weight>50</weight>
-       <italic>false</italic>
-       <bold>false</bold>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true"/>
-     </property>
-     <property name="text">
-      <string>竞赛</string>
+      <string>经典场</string>
      </property>
     </widget>
     <widget class="QScrollArea" name="scrollArea_7">
@@ -1548,9 +1558,9 @@ background:none;
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>110</y>
+       <y>100</y>
        <width>111</width>
-       <height>41</height>
+       <height>51</height>
       </rect>
      </property>
      <property name="font">

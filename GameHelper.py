@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
-# Created by: Vincentzyx
+# @Time : 2024/2/14 17:06
+# @Author : MaYun
+# @File : GameHelper.py
+# @Software: PyCharm
 import ctypes
-
+import json
 import win32gui
 import win32ui
 import win32api
@@ -15,13 +18,26 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import time
-from win32con import WM_LBUTTONDOWN, MK_LBUTTON, WM_LBUTTONUP, WM_MOUSEMOVE, WM_ACTIVATE, WA_ACTIVE
 
 from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtCore import QTime, QEventLoop
 from skimage.metrics import structural_similarity as ssim
 
 Pics = {}
+
+
+def read_json():
+    with open('data.json', 'r') as f:
+        content = f.read()
+        data = json.loads(content)
+        f.close()
+    return data
+
+
+def write_json(data):
+    with open('data.json', 'w') as f:
+        json.dump(data, f)
+        f.close()
 
 
 def compare_images(image1, image2):
@@ -123,6 +139,12 @@ def LocateAllOnImage(image, template, region=None, confidence=0.8):
     return points
 
 
+def play_sound(sound_file):
+    pygame.mixer.init()
+    pygame.mixer.music.load(sound_file)
+    pygame.mixer.music.play()
+
+
 class GameHelper:
     def __init__(self):
         self.ScreenZoomRate = None
@@ -216,31 +238,14 @@ class GameHelper:
             # print(result)
 
     def LeftClick(self, pos):
-        x, y = pos
-        x = (x / 1440) * self.RealRate[0]
-        y = (y / 810) * self.RealRate[1]
-        x = int(x)
-        y = int(y)
+        x = int((pos[0] / 1440) * self.RealRate[0])
+        y = int((pos[1] / 810) * self.RealRate[1])
 
         left, top, _, _ = win32gui.GetWindowRect(self.Handle)
         m, n = int(left + x), int(top + y)
         client_pos = (x, y)
-
         win32api.SetCursorPos((m, n))
-        # print(client_pos)
-
         tmp = win32api.MAKELONG(client_pos[0], client_pos[1])
-        '''tmp2 = win32api.MAKELONG(m, n)
-
-        win32gui.PostMessage(self.Handle, win32con.WM_ACTIVATE, win32con.WA_ACTIVE, 0)
-        win32gui.SendMessage(self.Handle, win32con.WM_NCHITTEST, tmp2)
-
-        htclient = win32gui.DefWindowProc(self.Handle, win32con.WM_NCHITTEST, 0, tmp)
-        print(htclient)
-        win32gui.SendMessage(self.Handle, win32con.WM_SETCURSOR, self.Handle,
-                             ((htclient & 0xFFFF) | ((win32con.WM_MOUSEMOVE & 0xFFFF) << 16)))
-
-        win32gui.SendMessage(self.Handle, win32con.WM_MOUSEMOVE, 0, tmp)'''
 
         win32gui.PostMessage(self.Handle, win32con.WM_ACTIVATE, win32con.WA_ACTIVE, 0)
         win32gui.SendMessage(self.Handle, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, tmp)
@@ -249,40 +254,27 @@ class GameHelper:
         win32api.SetCursorPos((int(left + 1000), int(top + 550)))
 
     def LeftClick2(self, pos):
-        x, y = pos
-        x = (x / 1440) * self.RealRate[0]
-        y = (y / 810) * self.RealRate[1]
-        x = int(x)
-        y = int(y)
+        x = int((pos[0] / 1440) * self.RealRate[0])
+        y = int((pos[1] / 810) * self.RealRate[1])
 
         left, top, _, _ = win32gui.GetWindowRect(self.Handle)
         m, n = int(left + x), int(top + y)
         client_pos = (x, y)
 
         win32api.SetCursorPos((m, n))
-        # print(client_pos)
-
         tmp = win32api.MAKELONG(client_pos[0], client_pos[1])
         win32gui.PostMessage(self.Handle, win32con.WM_ACTIVATE, win32con.WA_ACTIVE, 0)
-        # win32gui.PostMessage(self.Handle, win32con.WM_SETCURSOR, self.Handle, tmp)
-        # win32gui.SendMessage(self.Handle, win32con.WM_MOUSEMOVE, win32con.MK_LBUTTON, tmp)
-
         win32gui.SendMessage(self.Handle, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, tmp)
         win32gui.SendMessage(self.Handle, win32con.WM_LBUTTONUP, win32con.MK_LBUTTON, tmp)
 
     def MoveTo(self, pos):
-        x, y = pos
-        x = (x / 1440) * self.RealRate[0]
-        y = (y / 810) * self.RealRate[1]
-        x = int(x)
-        y = int(y)
-        self.Handle = win32gui.FindWindow("UnityWndClass", None)
+        x = int((pos[0] / 1440) * self.RealRate[0])
+        y = int((pos[1] / 810) * self.RealRate[1])
         left, top, _, _ = win32gui.GetWindowRect(self.Handle)
         x, y = int(left + x), int(top + y)
-
         pyautogui.moveTo(x, y)
 
-    def play_sound(self, sound_file):
-        pygame.mixer.init()
-        pygame.mixer.music.load(sound_file)
-        pygame.mixer.music.play()
+    @staticmethod
+    def MouseScroll(amount):
+        # 发送鼠标滚轮事件
+        win32api.mouse_event(win32con.MOUSEEVENTF_WHEEL, 0, 0, amount, 0)
