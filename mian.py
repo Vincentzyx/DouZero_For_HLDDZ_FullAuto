@@ -327,7 +327,9 @@ class Worker(QThread):
 
             result = helper.LocateOnScreen("chacha", region=(1036, 65, 300, 230))
             if result is not None:
-                helper.ClickOnImage("chacha", region=(1036, 65, 300, 230))
+                #helper.ClickOnImage("chacha", region=(1036, 65, 300, 230))
+                #有些情况下弹窗关闭失败，这种情况下使用LeftClick2可以关闭弹窗
+                helper.LeftClick2((result[0] + 20, result[1] + 20))
                 time.sleep(1)
         else:
             pass
