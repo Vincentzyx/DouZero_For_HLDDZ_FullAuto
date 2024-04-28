@@ -637,6 +637,8 @@ class Worker(QThread):
 
         # 识别三张底牌
         print("正在识别底牌", end="")
+        #Fix TypeError : object of type ' NoneType' has no len ()
+        self.three_cards_real = self.find_three_cards()
         while len(self.three_cards_real) != 3:
             print(".", end="")
             if not self.RunGame:
