@@ -1415,6 +1415,7 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     main = MyPyQT_Form()
     style_file = QFile("style.qss")
+    style_file.open(QFile.ReadOnly | QFile.Text)
     stream = QTextStream(style_file)
     style_sheet = stream.readAll()
     main.setStyleSheet(style_sheet)
