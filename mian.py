@@ -388,7 +388,7 @@ class Worker(QThread):
                     self.detect_start_btn()
                 print("前6张牌：", cards)
 
-                if "DX222" in cards or "D2222" in cards:
+                if "DX222" in cards:
                     ming_btn = helper.LocateOnScreen("ming_btn", region=self.GeneralBtnPos)
                     if ming_btn is not None:
                         helper.ClickOnImage("ming_btn", region=self.GeneralBtnPos)
