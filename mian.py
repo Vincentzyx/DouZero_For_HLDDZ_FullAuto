@@ -196,13 +196,12 @@ class Worker(QThread):
         self.LandlordFlagPos = [(1247, 245, 48, 52), (12, 661, 51, 53), (123, 243, 52, 54)]  # 地主标志截图区域(右-我-左)
         self.blue_cards_num = [(273, 388, 33, 42), (1117, 387, 33, 44)]  # 加倍阶段上家和下家的牌数显示区域
 
-        # https://github.com/EdwardPooh/douzero-resnet-2.0 best model
         self.model_path_dict = {
-            'landlord': "baselines/resnet/best/landlord.ckpt",
-            'landlord_up': "baselines/resnet/best/landlord_up.ckpt",
-            'landlord_down': "baselines/resnet/best/landlord_down.ckpt"
+            'landlord': "baselines/resnet/resnet_landlord.ckpt",
+            'landlord_up': "baselines/resnet/resnet_landlord_up.ckpt",
+            'landlord_down': "baselines/resnet/resnet_landlord_down.ckpt"
         }
-        LandlordModel.init_model("baselines/resnet/best/landlord.ckpt")
+        LandlordModel.init_model("baselines/resnet/resnet_landlord.ckpt")
 
     def run(self):
         if self.auto_sign:
