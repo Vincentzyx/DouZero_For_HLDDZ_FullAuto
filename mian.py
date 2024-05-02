@@ -328,7 +328,7 @@ class Worker(QThread):
             result = helper.LocateOnScreen("chacha", region=(1036, 65, 300, 230))
             if result is not None:
                 # helper.ClickOnImage("chacha", region=(1036, 65, 300, 230))
-                # 有些情况下弹窗关闭失败，这种情况下使用LeftClick2可以关闭弹窗
+                #有些情况下弹窗关闭失败，这种情况下使用LeftClick2可以关闭弹窗
                 helper.LeftClick2((result[0] + 20, result[1] + 20))
                 time.sleep(1)
         else:
@@ -1190,7 +1190,7 @@ class Worker(QThread):
         if len(my_cards) == 17:
             left_cards = self.find_other_cards(self.LPlayedCardsPos)
             right_cards = self.find_other_cards(self.RPlayedCardsPos)
-            # 曾经出现过右边出完牌，左边马上出牌，函数运行时，左右两边都有牌，这种情况右边是地主,所以要先右后左
+            #曾经出现过右边出完牌，左边马上出牌，函数运行时，左右两边都有牌，这种情况右边是地主,所以要先右后左
             if len(right_cards) > 0:
                 return 0
             elif len(left_cards) > 0:
@@ -1414,6 +1414,7 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     main = MyPyQT_Form()
     style_file = QFile("style.qss")
+    # Fix: QIODevice::read (QFile, "style.qss"): device not open
     style_file.open(QFile.ReadOnly | QFile.Text)
     stream = QTextStream(style_file)
     style_sheet = stream.readAll()
