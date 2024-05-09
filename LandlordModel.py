@@ -9,6 +9,7 @@ from douzero.dmc.models import model_dict_resnet
 import time
 from douzero.env.game import GameEnv
 from douzero.evaluation.deep_agent import DeepAgent
+from install import resource_path
 
 
 def EnvToOnehot(cards):
@@ -57,11 +58,11 @@ class Net(nn.Module):
 
 net = Net()
 net.eval()
-if os.path.exists("./weights/landlord_weights.pkl"):
+if os.path.exists(resource_path("./weights/landlord_weights.pkl")):
     if torch.cuda.is_available():
-        net.load_state_dict(torch.load('./weights/landlord_weights.pkl'))
+        net.load_state_dict(torch.load(resource_path('./weights/landlord_weights.pkl')))
     else:
-        net.load_state_dict(torch.load('./weights/landlord_weights.pkl', map_location=torch.device("cpu")))
+        net.load_state_dict(torch.load(resource_path('./weights/landlord_weights.pkl'), map_location=torch.device("cpu")))
 else:
     print("landlord_weights.pkl not found")
 

@@ -7,6 +7,7 @@ from torch.utils.data import DataLoader
 from torch.utils.data.dataset import Dataset
 import time
 import torch.nn.functional as F
+from install import resource_path
 
 
 def EnvToOnehot(cards):
@@ -87,11 +88,11 @@ if UseGPU:
     net = net.to(device)
     net2 = net2.to(device)
 
-if os.path.exists("./weights/bid_weights.pkl"):
+if os.path.exists(resource_path("./weights/bid_weights.pkl")):
     if torch.cuda.is_available():
-        net2.load_state_dict(torch.load('./weights/bid_weights.pkl'))
+        net2.load_state_dict(torch.load(resource_path('./weights/bid_weights.pkl')))
     else:
-        net2.load_state_dict(torch.load('./weights/bid_weights.pkl', map_location=torch.device("cpu")))
+        net2.load_state_dict(torch.load(resource_path('./weights/bid_weights.pkl'), map_location=torch.device("cpu")))
 
 
 def predict(cards):
