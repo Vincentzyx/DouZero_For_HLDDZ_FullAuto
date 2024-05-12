@@ -1414,7 +1414,6 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     main = MyPyQT_Form()
-    style_file = QFile("style.qss")
     style_file = QFile(resource_path("style.qss"))
     # Fix: QIODevice::read (QFile, "style.qss"): device not open
     style_file.open(QFile.ReadOnly | QFile.Text)
