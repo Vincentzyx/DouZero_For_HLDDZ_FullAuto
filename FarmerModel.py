@@ -7,6 +7,7 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader
 from torch.utils.data.dataset import Dataset
 import time
+from install import resource_path
 
 
 def EnvToOnehot(cards):
@@ -54,24 +55,24 @@ class Net(nn.Module):
 
 
 Nets = {"up": Net(), "down": Net(), "farmer": Net()}
-if os.path.exists("./weights/landlord_up_weights.pkl"):
+if os.path.exists(resource_path("./weights/landlord_up_weights.pkl")):
     if torch.cuda.is_available():
-        Nets["up"].load_state_dict(torch.load("./weights/landlord_up_weights.pkl"))
+        Nets["up"].load_state_dict(torch.load(resource_path("./weights/landlord_up_weights.pkl")))
     else:
-        Nets["up"].load_state_dict(torch.load("./weights/landlord_up_weights.pkl", map_location=torch.device("cpu")))
+        Nets["up"].load_state_dict(torch.load(resource_path("./weights/landlord_up_weights.pkl"), map_location=torch.device("cpu")))
     Nets["up"].eval()
-if os.path.exists("./weights/landlord_down_weights.pkl"):
+if os.path.exists(resource_path("./weights/landlord_down_weights.pkl")):
     if torch.cuda.is_available():
-        Nets["down"].load_state_dict(torch.load("./weights/landlord_down_weights.pkl"))
+        Nets["down"].load_state_dict(torch.load(resource_path("./weights/landlord_down_weights.pkl")))
     else:
         Nets["down"].load_state_dict(
-            torch.load("./weights/landlord_down_weights.pkl", map_location=torch.device("cpu")))
+            torch.load(resource_path("./weights/landlord_down_weights.pkl"), map_location=torch.device("cpu")))
     Nets["down"].eval()
-if os.path.exists("./weights/farmer_weights.pkl"):
+if os.path.exists(resource_path("./weights/farmer_weights.pkl")):
     if torch.cuda.is_available():
-        Nets["farmer"].load_state_dict(torch.load("./weights/farmer_weights.pkl"))
+        Nets["farmer"].load_state_dict(torch.load(resource_path("./weights/farmer_weights.pkl")))
     else:
-        Nets["farmer"].load_state_dict(torch.load("./weights/farmer_weights.pkl", map_location=torch.device("cpu")))
+        Nets["farmer"].load_state_dict(torch.load(resource_path("./weights/farmer_weights.pkl"), map_location=torch.device("cpu")))
     Nets["farmer"].eval()
 
 
