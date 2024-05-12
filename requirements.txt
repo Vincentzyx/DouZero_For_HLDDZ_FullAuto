@@ -3,7 +3,7 @@ numpy~=1.23.5
 Pillow~=10.2.0
 PyAutoGUI~=0.9.54
 pygame~=2.5.2
-pywin32~=306
+pywin32==306
 rlcard~=1.2.0
 torch~=2.0.1
 opencv-python~=4.9.0.80
