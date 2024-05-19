@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # Created by: CallMeCore
+#pyinstaller --onefile  "./mian.py" --distpath ./ --uac-admin --icon "./pics/favicon.ico" --name "DouZero欢乐斗地主_v5.7.3"  --add-data "./data.json;." --add-data "./style.qss;." --add-data "./baselines;baselines/" --add-data "./music;music/" --add-data "./pics;pics/" --add-data "./weights;weights/"  
 
 import sys, os
 
