@@ -28,6 +28,7 @@ from skimage.metrics import structural_similarity as ssim
 import BidModel
 import LandlordModel
 import FarmerModel
+from install import resource_path
 
 helper = GameHelper()
 
@@ -197,11 +198,11 @@ class Worker(QThread):
         self.blue_cards_num = [(273, 388, 33, 42), (1117, 387, 33, 44)]  # 加倍阶段上家和下家的牌数显示区域
 
         self.model_path_dict = {
-            'landlord': "baselines/resnet/resnet_landlord.ckpt",
-            'landlord_up': "baselines/resnet/resnet_landlord_up.ckpt",
-            'landlord_down': "baselines/resnet/resnet_landlord_down.ckpt"
+            'landlord': resource_path("baselines/resnet/resnet_landlord.ckpt"),
+            'landlord_up': resource_path("baselines/resnet/resnet_landlord_up.ckpt"),
+            'landlord_down': resource_path("baselines/resnet/resnet_landlord_down.ckpt")
         }
-        LandlordModel.init_model("baselines/resnet/resnet_landlord.ckpt")
+        LandlordModel.init_model(resource_path("baselines/resnet/resnet_landlord.ckpt"))
 
     def run(self):
         if self.auto_sign:
@@ -636,6 +637,8 @@ class Worker(QThread):
 
         # 识别三张底牌
         print("正在识别底牌", end="")
+        # Fix TypeError : object of type ' NoneType' has no len () because of initial value of None
+        self.three_cards_real = self.find_three_cards()
         while len(self.three_cards_real) != 3:
             print(".", end="")
             if not self.RunGame:
@@ -857,7 +860,7 @@ class Worker(QThread):
 
                     if not self.auto_sign:
                         print("现在是手动模式，请手动出牌")
-                        play_sound("music/1.wav")
+                        play_sound(resource_path("music/1.wav"))
                         if action_message["action"] == "":
                             self.pre_cards_display.emit("推荐：pass")
                         else:
@@ -1235,9 +1238,9 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
         self.setWindowFlags(QtCore.Qt.WindowMinimizeButtonHint |  # 使能最小化按钮
                             QtCore.Qt.WindowStaysOnTopHint |  # 窗体总在最前端
                             QtCore.Qt.WindowCloseButtonHint)
-        self.setWindowIcon(QIcon(':/pics/favicon.ico'))
+        self.setWindowIcon(QIcon(resource_path(':/pics/favicon.ico')))
         self.setWindowTitle("DouZero欢乐斗地主  v5.7")
-        play_sound("music/2.wav")
+        play_sound(resource_path("music/2.wav"))
         self.setFixedSize(self.width(), self.height())  # 固定窗体大小
         self.move(20, 20)
         window_pale = QtGui.QPalette()
@@ -1411,7 +1414,9 @@ class MyPyQT_Form(QtWidgets.QWidget, Ui_Form):
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     main = MyPyQT_Form()
-    style_file = QFile("style.qss")
+    style_file = QFile(resource_path("style.qss"))
+    # Fix: QIODevice::read (QFile, "style.qss"): device not open
+    style_file.open(QFile.ReadOnly | QFile.Text)
     stream = QTextStream(style_file)
     style_sheet = stream.readAll()
     main.setStyleSheet(style_sheet)
