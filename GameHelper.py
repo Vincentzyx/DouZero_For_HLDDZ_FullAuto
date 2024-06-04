@@ -22,12 +22,13 @@ import time
 from PyQt5 import QtGui, QtWidgets, QtCore
 from PyQt5.QtCore import QTime, QEventLoop
 from skimage.metrics import structural_similarity as ssim
+from install import resource_path
 
 Pics = {}
 
 
 def read_json():
-    with open('data.json', 'r') as f:
+    with open(resource_path('data.json'), 'r') as f:
         content = f.read()
         data = json.loads(content)
         f.close()
@@ -35,7 +36,7 @@ def read_json():
 
 
 def write_json(data):
-    with open('data.json', 'w') as f:
+    with open(resource_path('data.json'), 'w') as f:
         json.dump(data, f)
         f.close()
 
@@ -156,11 +157,11 @@ class GameHelper:
         self.Interrupt = False
         self.RealRate = (1440, 810)
         self.GetZoomRate()
-        for file in os.listdir("./pics"):
+        for file in os.listdir(resource_path("./pics")):
             info = file.split(".")
             if info[1] == "png":
-                tmpImage = Image.open("./pics/" + file)
-                imgCv = cv2.imread("./pics/" + file)
+                tmpImage = Image.open(resource_path("./pics/" + file))
+                imgCv = cv2.imread(resource_path("./pics/" + file))
                 self.Pics.update({info[0]: tmpImage})
                 self.PicsCV.update({info[0]: imgCv})
 
